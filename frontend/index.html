@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🌾 Agri Twin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    font-family: "Inter", Arial, sans-serif;
+    background: #f4f9f4;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #4CAF50;
+    color: white;
+    padding: 18px 36px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: left;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  main {
+    max-width: 1250px;
+    margin: 30px auto;
+    padding: 0 24px;
+  }
+  h2 {
+    color: #2e7d32;
+    font-weight: 600;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2d3436;
+  }
+  .label {
+    font-size: 14px;
+    color: #666;
+    margin-top: 6px;
+  }
+  .chart-container {
+    margin-top: 40px;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  #crop-suggestion {
+    margin-top: 40px;
+    padding: 26px;
+    background: #e8f5e9;
+    border-left: 6px solid #43a047;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #1b5e20;
+    text-align: center;
+  }
+  #weather-box {
+    margin-top: 30px;
+    background: #e3f2fd;
+    padding: 20px;
+    border-left: 6px solid #1976d2;
+    border-radius: 12px;
+    font-size: 18px;
+  }
+  #irrigation-alert {
+    margin-top: 20px;
+    background: #fff3e0;
+    padding: 20px;
+    border-left: 6px solid #fb8c00;
+    border-radius: 12px;
+    font-size: 18px;
+  }
+  footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 14px;
+    color: #555;
+    margin-top: 40px;
+  }
+
+  /* Top right buttons container */
+  .top-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+  }
+  .top-buttons button {
+    padding: 10px 16px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+  }
+  #enable-alerts { background: #0b721d; }
+  #yield-btn { background: #1976d2; }
+  #market-btn { background: #6a1b9a; } /* New Button Style */
+  .top-buttons button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+</style>
+</head>
+<body>
+<header>🌱 Agri Twin Dashboard</header>
+
+<!-- ✅ Button container aligned at top right -->
+<div class="top-buttons">
+  <button id="enable-alerts">🔊 Enable Alerts</button>
+  <button id="yield-btn" onclick="window.location.href='yield.html'">🌾 Crop Yield Prediction</button>
+  <button id="market-btn" onclick="window.location.href='market.html'">📊 Market Insights</button> <!-- ✅ NEW BUTTON -->
+</div>
+
+<main>
+  <h2>📡 Live Sensor Overview</h2>
+  <div class="cards">
+    <div class="card"><div class="value" id="N">--</div><div class="label">Nitrogen (N)</div></div>
+    <div class="card"><div class="value" id="P">--</div><div class="label">Phosphorus (P)</div></div>
+    <div class="card"><div class="value" id="K">--</div><div class="label">Potassium (K)</div></div>
+    <div class="card"><div class="value" id="rainfall">-- mm</div><div class="label">Rainfall</div></div>
+    <div class="card"><div class="value" id="temp">--°C</div><div class="label">Temperature</div></div>
+    <div class="card"><div class="value" id="humidity">--%</div><div class="label">Humidity</div></div>
+    <div class="card"><div class="value" id="ph">--</div><div class="label">Soil pH</div></div>
+    <div class="card"><div class="value" id="soil_moisture">--%</div><div class="label">Soil Moisture</div></div>
+  </div>
+
+  <div class="chart-container">
+    <h2>📈 Real-Time Sensor Trends</h2>
+    <canvas id="sensorChart"></canvas>
+  </div>
+
+  <div id="crop-suggestion">🌾 Predicted Crop: --</div>
+  <div id="weather-box">🌦️ Weather: Loading...</div>
+  <div id="irrigation-alert">💧 Irrigation Alert: Loading...</div>
+</main>
+
+<audio id="irrigation-alert-sound" src="alert.mp3" preload="auto"></audio>
+<footer>Developed by <strong>Vikas</strong> | Powered by FastAPI + ML 🌿</footer>
+
+<script>
+const API_BASE = "http://127.0.0.1:8000";
+let chart;
+let soundEnabled = false;
+const alertSound = document.getElementById("irrigation-alert-sound");
+
+document.getElementById("enable-alerts").addEventListener("click", () => {
+  soundEnabled = true;
+  alertSound.play().catch(() => {});
+});
+
+function initChart() {
+  const ctx = document.getElementById("sensorChart").getContext("2d");
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [],
+      datasets: [
+        { label: "Temperature (°C)", data: [], borderColor: "#ff7043", tension: 0.4 },
+        { label: "Humidity (%)", data: [], borderColor: "#29b6f6", tension: 0.4 },
+        { label: "Rainfall (mm)", data: [], borderColor: "#42a5f5", tension: 0.4 },
+        { label: "pH", data: [], borderColor: "#8e24aa", tension: 0.4 },
+        { label: "Soil Moisture (%)", data: [], borderColor: "#ffa726", tension: 0.4 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: "bottom" } },
+      scales: {
+        x: { title: { display: true, text: "Time" } },
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
+
+async function fetchData() {
+  try {
+    const res = await fetch(`${API_BASE}/predict`);
+    const data = await res.json();
+    if (!data || data.error) return;
+
+    const t = data.telemetry_data;
+    const crop = data.recommended_crop;
+
+    document.getElementById("N").innerText = (t.N ?? 0).toFixed(0);
+    document.getElementById("P").innerText = (t.P ?? 0).toFixed(0);
+    document.getElementById("K").innerText = (t.K ?? 0).toFixed(0);
+    document.getElementById("rainfall").innerText = (t.rainfall ?? 0).toFixed(1) + " mm";
+    document.getElementById("temp").innerText = (t.temperature ?? 0).toFixed(1) + "°C";
+    document.getElementById("humidity").innerText = (t.humidity ?? 0).toFixed(1) + "%";
+    document.getElementById("ph").innerText = (t.ph ?? 0).toFixed(1);
+    document.getElementById("soil_moisture").innerText = (t.soil_moisture ?? 0).toFixed(1) + "%";
+
+    document.getElementById("crop-suggestion").innerText = "🌾 Predicted Crop: " + (crop || "Analyzing...");
+    updateChart(new Date().toLocaleTimeString(), t);
+  } catch (err) { console.error("Error fetching data:", err); }
+}
+
+function updateChart(time, t) {
+  chart.data.labels.push(time);
+  chart.data.datasets[0].data.push(t.temperature ?? 0);
+  chart.data.datasets[1].data.push(t.humidity ?? 0);
+  chart.data.datasets[2].data.push(t.rainfall ?? 0);
+  chart.data.datasets[3].data.push(t.ph ?? 0);
+  chart.data.datasets[4].data.push(t.soil_moisture ?? 0);
+  if (chart.data.labels.length > 15) {
+    chart.data.labels.shift();
+    chart.data.datasets.forEach(ds => ds.data.shift());
+  }
+  chart.update();
+}
+
+async function fetchWeather() {
+  try {
+    const res = await fetch(`${API_BASE}/weather`);
+    const data = await res.json();
+    document.getElementById("weather-box").innerText =
+      `🌦️ Weather in ${data.city}: ${data.temperature}°C | Humidity: ${data.humidity}% | Rainfall: ${data.rainfall}mm | Condition: ${data.condition}`;
+  } catch (err) {
+    console.error("Weather fetch error:", err);
+    document.getElementById("weather-box").innerText = "⚠️ Weather data not available";
+  }
+}
+
+async function fetchIrrigationAlert() {
+  try {
+    const res = await fetch(`${API_BASE}/irrigation-alert`);
+    const data = await res.json();
+    document.getElementById("irrigation-alert").innerText = `💧 Irrigation Alert: ${data.alert_message}`;
+    if (soundEnabled && data.alert_level === "critical") {
+      alertSound.play().catch(() => {});
+    }
+  } catch (err) {
+    console.error("Irrigation alert fetch error:", err);
+    document.getElementById("irrigation-alert").innerText = "⚠️ Irrigation alert unavailable";
+  }
+}
+
+window.onload = () => {
+  initChart();
+  fetchData();
+  fetchWeather();
+  fetchIrrigationAlert();
+  setInterval(fetchData, 3000);
+  setInterval(fetchWeather, 60000);
+  setInterval(fetchIrrigationAlert, 60000);
+};
+</script>
+</body>
+</html>

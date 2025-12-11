@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🌾 Market Insights Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { background: #effef3; font-family: "Poppins", sans-serif; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,.1); }
+    th { position: sticky; top: 0; background: #059669; color: white; }
+    /* Give canvases a visible height so charts render reliably */
+    #modalPriceChart, #rangeChart { width: 100%; height: 320px; display: block; }
+  </style>
+</head>
+<body class="p-6">
+  <h1 class="text-3xl font-bold text-green-700 text-center mb-6">🌾 Market Insights Dashboard</h1>
+
+  <!-- FILTERS -->
+  <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-4 mb-4" role="region" aria-labelledby="filters-heading">
+    <h2 id="filters-heading" class="sr-only">Filters</h2>
+
+    <div>
+      <!-- label explicitly tied via for -->
+      <label for="stateSelect" class="block font-semibold mb-1">State</label>
+      <select id="stateSelect" class="w-full border border-green-400 px-3 py-2 rounded-lg"
+              aria-label="Select state" title="Select state">
+        <option value="ALL">All States</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="districtSelect" class="block font-semibold mb-1">District</label>
+      <select id="districtSelect" class="w-full border border-green-400 px-3 py-2 rounded-lg"
+              aria-label="Select district" title="Select district">
+        <option value="ALL">All Districts</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="commoditySelect" class="block font-semibold mb-1">Commodity</label>
+      <select id="commoditySelect" class="w-full border border-green-400 px-3 py-2 rounded-lg"
+              aria-label="Select commodity" title="Select commodity">
+        <option value="ALL">All Commodities</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="dateFrom" class="block font-semibold mb-1">From</label>
+      <input id="dateFrom" type="date" class="w-full border border-green-400 px-3 py-2 rounded-lg"
+             aria-label="Filter from date" title="Filter from date" />
+    </div>
+
+    <div>
+      <label for="dateTo" class="block font-semibold mb-1">To</label>
+      <input id="dateTo" type="date" class="w-full border border-green-400 px-3 py-2 rounded-lg"
+             aria-label="Filter to date" title="Filter to date" />
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto flex items-center gap-3 mb-4">
+    <button id="apply" type="button"
+            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            aria-label="Apply filters" title="Apply filters">Apply Filters</button>
+    <span id="status" class="text-sm text-gray-700" role="status" aria-live="polite"></span>
+  </div>
+
+  <!-- Charts -->
+  <div class="max-w-5xl mx-auto card mb-6" role="region" aria-labelledby="modal-chart-heading">
+    <h2 id="modal-chart-heading" class="text-xl font-semibold text-green-700 mb-3">📊 Modal Price Comparison</h2>
+    <!-- role and aria-label for accessibility -->
+    <canvas id="modalPriceChart" role="img" aria-label="Bar chart of modal prices"></canvas>
+  </div>
+
+  <div class="max-w-5xl mx-auto card mb-6" role="region" aria-labelledby="range-chart-heading">
+    <h2 id="range-chart-heading" class="text-xl font-semibold text-green-700 mb-3">📈 Min–Max Price Range</h2>
+    <canvas id="rangeChart" role="img" aria-label="Line chart of min and max price ranges"></canvas>
+  </div>
+
+  <!-- Table -->
+  <div class="max-w-5xl mx-auto card" role="region" aria-labelledby="table-heading">
+    <div class="flex items-center justify-between mb-3">
+      <h2 id="table-heading" class="text-xl font-semibold text-green-700">📑 Market Details</h2>
+      <div class="flex items-center gap-2" role="navigation" aria-label="Table pagination">
+        <button id="prev" type="button" class="px-3 py-1 bg-gray-200 rounded" aria-label="Previous page" title="Previous page">← Prev</button>
+        <span id="pageinfo" class="text-sm" aria-live="polite"></span>
+        <button id="next" type="button" class="px-3 py-1 bg-gray-200 rounded" aria-label="Next page" title="Next page">Next →</button>
+      </div>
+    </div>
+    <div style="max-height:65vh; overflow:auto;">
+      <table class="min-w-full border border-green-300 rounded-lg overflow-hidden" role="table" aria-describedby="table-heading">
+        <thead>
+          <tr>
+            <th scope="col" class="px-3 py-2">State</th>
+            <th scope="col" class="px-3 py-2">District</th>
+            <th scope="col" class="px-3 py-2">Market</th>
+            <th scope="col" class="px-3 py-2">Commodity</th>
+            <th scope="col" class="px-3 py-2">Variety</th>
+            <th scope="col" class="px-3 py-2">Min</th>
+            <th scope="col" class="px-3 py-2">Max</th>
+            <th scope="col" class="px-3 py-2">Modal</th>
+            <th scope="col" class="px-3 py-2">Date</th>
+          </tr>
+        </thead>
+        <tbody id="marketBody" role="rowgroup"></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+/**
+ * Defensive, accessible frontend for /market_meta and /market_insights.
+ * - Labels use 'for' attributes
+ * - Selects/inputs have title + aria-label
+ * - Buttons have type="button"
+ * - Chart canvases have role="img" and aria-label
+ */
+
+const API = "http://127.0.0.1:8000";
+let currentPage = 1, pageSize = 100;
+let modalChart = null, rangeChart = null;
+
+function fetchWithTimeout(url, ms = 15000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return fetch(url, { signal: controller.signal })
+    .then(res => {
+      clearTimeout(timer);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .catch(err => {
+      clearTimeout(timer);
+      throw err;
+    });
+}
+
+function safeGetById(id) {
+  const el = document.getElementById(id);
+  if (!el) console.warn(`Element #${id} not found in DOM.`);
+  return el;
+}
+
+async function loadMeta() {
+  const statusEl = safeGetById("status");
+  if (statusEl) statusEl.textContent = "Loading filters...";
+  let meta = null;
+
+  try {
+    meta = await fetchWithTimeout(`${API}/market_meta`);
+  } catch (err) {
+    console.error("Failed to load /market_meta:", err);
+    if (statusEl) statusEl.textContent = "Failed to load filters (check backend).";
+    return;
+  }
+
+  if (!meta) {
+    if (statusEl) statusEl.textContent = "No metadata received.";
+    return;
+  }
+
+  const states = Array.isArray(meta.states) ? meta.states : (meta.states || []);
+  const districts = Array.isArray(meta.districts) ? meta.districts : (meta.districts || []);
+  const commodities = Array.isArray(meta.commodities) ? meta.commodities : (meta.commodities || []);
+  const dateMin = meta.date_min || "";
+  const dateMax = meta.date_max || "";
+
+  const selState = safeGetById("stateSelect");
+  const selDistrict = safeGetById("districtSelect");
+  const selCommodity = safeGetById("commoditySelect");
+  const inputFrom = safeGetById("dateFrom");
+  const inputTo = safeGetById("dateTo");
+
+  function appendOption(selectEl, value, label) {
+    if (!selectEl) return;
+    const opt = document.createElement("option");
+    opt.value = value;
+    opt.textContent = label;
+    selectEl.appendChild(opt);
+  }
+
+  states.forEach(s => appendOption(selState, s, s));
+  districts.forEach(d => appendOption(selDistrict, d, d));
+  commodities.forEach(c => appendOption(selCommodity, c, c));
+
+  if (inputFrom && dateMin) inputFrom.value = dateMin;
+  if (inputTo && dateMax) inputTo.value = dateMax;
+
+  if (statusEl) statusEl.textContent = "Filters ready.";
+}
+
+async function loadPage() {
+  const statusEl = safeGetById("status");
+  if (statusEl) statusEl.textContent = "Loading data...";
+
+  const selState = safeGetById("stateSelect");
+  const selDistrict = safeGetById("districtSelect");
+  const selCommodity = safeGetById("commoditySelect");
+  const inputFrom = safeGetById("dateFrom");
+  const inputTo = safeGetById("dateTo");
+
+  const selStateVal = selState ? selState.value : "ALL";
+  const selDistrictVal = selDistrict ? selDistrict.value : "ALL";
+  const selCommodityVal = selCommodity ? selCommodity.value : "ALL";
+  const fromVal = inputFrom ? inputFrom.value : "";
+  const toVal = inputTo ? inputTo.value : "";
+
+  const params = new URLSearchParams({
+    page: String(currentPage),
+    page_size: String(pageSize)
+  });
+  if (selStateVal) params.set("state", selStateVal);
+  if (selDistrictVal) params.set("district", selDistrictVal);
+  if (selCommodityVal) params.set("commodity", selCommodityVal);
+  if (fromVal) params.set("date_from", fromVal);
+  if (toVal) params.set("date_to", toVal);
+
+  let payload = null;
+  try {
+    payload = await fetchWithTimeout(`${API}/market_insights?` + params.toString());
+  } catch (err) {
+    console.error("Failed to load /market_insights:", err);
+    if (statusEl) statusEl.textContent = "Failed to load data (check backend).";
+    return;
+  }
+
+  if (!payload || !Array.isArray(payload.rows)) {
+    if (statusEl) statusEl.textContent = "No data returned.";
+    return;
+  }
+
+  renderTable(payload.rows);
+  renderCharts(payload.rows);
+
+  const pageInfo = safeGetById("pageinfo");
+  if (pageInfo) pageInfo.textContent = `Page ${payload.page} — showing ${payload.rows.length} of ${payload.total}`;
+  if (statusEl) statusEl.textContent = "OK";
+}
+
+function renderTable(rows) {
+  const body = safeGetById("marketBody");
+  if (!body) return;
+  body.innerHTML = "";
+  const frag = document.createDocumentFragment();
+
+  for (const r of rows) {
+    const tr = document.createElement("tr");
+    tr.className = "border-b hover:bg-green-50";
+
+    const cols = [
+      r?.State ?? "",
+      r?.District ?? "",
+      r?.Market ?? "",
+      r?.Commodity ?? "",
+      r?.Variety ?? "",
+      r?.Min_Price ?? "",
+      r?.Max_Price ?? "",
+      r?.Modal_Price ?? "",
+      r?.Arrival_Date ?? ""
+    ];
+
+    for (const c of cols) {
+      const td = document.createElement("td");
+      td.className = "px-3 py-2";
+      td.textContent = (c !== null && c !== undefined) ? c : "";
+      tr.appendChild(td);
+    }
+
+    frag.appendChild(tr);
+  }
+
+  body.appendChild(frag);
+}
+
+function renderCharts(rows) {
+  const cleaned = rows.filter(r =>
+    r && r.Market && r.Commodity &&
+    !isNaN(Number(r.Modal_Price)) &&
+    !isNaN(Number(r.Min_Price)) &&
+    !isNaN(Number(r.Max_Price))
+  );
+
+  const MAX_POINTS = 50;
+  const sample = cleaned.slice(0, MAX_POINTS);
+
+  const labels = sample.map(r => `${r.Market} (${r.Commodity})`);
+  const modal = sample.map(r => Number(r.Modal_Price));
+  const minv = sample.map(r => Number(r.Min_Price));
+  const maxv = sample.map(r => Number(r.Max_Price));
+
+  try { if (modalChart) modalChart.destroy(); } catch(e){ /* ignore */ }
+  try { if (rangeChart) rangeChart.destroy(); } catch(e){ /* ignore */ }
+
+  const modalCtx = document.getElementById("modalPriceChart");
+  const rangeCtx = document.getElementById("rangeChart");
+  if (modalCtx) {
+    modalChart = new Chart(modalCtx, {
+      type: "bar",
+      data: { labels, datasets: [{ label: "Modal Price (₹)", data: modal }] },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: true } },
+        scales: { x: { ticks: { autoSkip: true, maxRotation: 0 } } }
+      }
+    });
+  }
+  if (rangeCtx) {
+    rangeChart = new Chart(rangeCtx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          { label: "Min Price (₹)", data: minv, tension: 0.2 },
+          { label: "Max Price (₹)", data: maxv, tension: 0.2 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: true } },
+        scales: { x: { ticks: { autoSkip: true, maxRotation: 0 } } }
+      }
+    });
+  }
+}
+
+/* Event wiring with safe element checks */
+const btnApply = safeGetById("apply");
+if (btnApply) btnApply.addEventListener("click", () => { currentPage = 1; loadPage(); });
+
+const btnPrev = safeGetById("prev");
+if (btnPrev) btnPrev.addEventListener("click", () => { if (currentPage > 1) { currentPage--; loadPage(); } });
+
+const btnNext = safeGetById("next");
+if (btnNext) btnNext.addEventListener("click", () => { currentPage++; loadPage(); });
+
+/* Init */
+(async function init(){
+  try {
+    await loadMeta();
+    await loadPage();
+  } catch (err) {
+    console.error("Init error:", err);
+    const statusEl = safeGetById("status");
+    if (statusEl) statusEl.textContent = "Initialization failed. See console.";
+  }
+})();
+</script>
+</body>
+</html>

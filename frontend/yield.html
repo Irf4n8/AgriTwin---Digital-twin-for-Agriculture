@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🌾 Crop Yield Prediction</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: "Inter", sans-serif; background: #f3f9f6; margin: 0; padding: 0; }
+  header { background: linear-gradient(90deg, #2e7d32, #43a047); color: white; padding: 20px; font-size: 24px; font-weight: 600; text-align: center; }
+  main { max-width: 600px; margin: 40px auto; background: white; padding: 28px; border-radius: 18px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+  label { display: block; margin-top: 14px; font-weight: 600; color: #2e7d32; }
+  input, select {
+    width: 100%; padding: 10px; margin-top: 6px;
+    border-radius: 8px; border: 1px solid #ccc;
+    font-size: 15px;
+    transition: 0.2s ease;
+  }
+  input:focus { border-color: #2e7d32; outline: none; box-shadow: 0 0 5px rgba(46,125,50,0.3); }
+  button {
+    margin-top: 24px; padding: 14px;
+    background: linear-gradient(90deg, #2e7d32, #43a047);
+    color: white; border: none; border-radius: 10px;
+    cursor: pointer; width: 100%; font-size: 17px;
+    font-weight: 600; letter-spacing: 0.5px;
+    transition: 0.3s ease;
+  }
+  button:hover { background: linear-gradient(90deg, #43a047, #2e7d32); transform: scale(1.02); }
+  #result {
+    margin-top: 24px; padding: 18px;
+    background: #e8f5e9; border-left: 5px solid #2e7d32;
+    font-size: 18px; text-align: center;
+    border-radius: 10px; font-weight: 500;
+    white-space: pre-line;
+  }
+  .back-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #43a047;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: 0.3s ease;
+  }
+  .back-btn:hover { background: #2e7d32; transform: scale(1.05); }
+  .autofill-banner {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+</style>
+</head>
+<body>
+<header>🌱 Crop Yield Prediction</header>
+<button class="back-btn" onclick="window.location.href='index.html'">⬅ Back</button>
+
+<main>
+  <div class="autofill-banner">🌿 Auto-filled from your sensor & weather data</div>
+
+  <label for="crop">Crop:</label>
+  <input type="text" id="crop" readonly>
+
+  <label for="state">State:</label>
+  <input type="text" id="state" readonly>
+
+  <label for="season">Season:</label>
+  <input type="text" id="season" readonly>
+
+  <label for="area">Area (hectares):</label>
+  <input type="number" id="area" placeholder="Enter cultivated area">
+
+  <label for="rainfall">Rainfall (mm):</label>
+  <input type="number" id="rainfall" readonly>
+
+  <label for="fertilizer">Fertilizer (kg):</label>
+  <input type="number" id="fertilizer" readonly>
+
+  <label for="pesticide">Pesticide (kg):</label>
+  <input type="number" id="pesticide" readonly>
+
+  <button onclick="predictYield()">🌾 Predict Yield</button>
+  <div id="result">📊 Waiting for data...</div>
+</main>
+
+<script>
+const API_BASE = "http://127.0.0.1:8000";
+
+async function autoFillData() {
+  try {
+    const res = await fetch(`${API_BASE}/latest-sensor-data`);
+    const data = await res.json();
+    document.getElementById("crop").value = data.crop || "";
+    document.getElementById("state").value = data.state || "";
+    document.getElementById("season").value = data.season || "";
+    document.getElementById("rainfall").value = data.rainfall || "";
+    document.getElementById("fertilizer").value = data.fertilizer || "";
+    document.getElementById("pesticide").value = data.pesticide || "";
+    document.getElementById("result").innerText = "✅ Sensor & weather data loaded.";
+  } catch (err) {
+    console.error("Failed to auto-fill data", err);
+    document.getElementById("result").innerText = "⚠️ Failed to load sensor data.";
+  }
+}
+
+async function predictYield() {
+  const crop = document.getElementById("crop").value;
+  const state = document.getElementById("state").value;
+  const season = document.getElementById("season").value;
+  const area = document.getElementById("area").value;
+  const rainfall = document.getElementById("rainfall").value;
+  const fertilizer = document.getElementById("fertilizer").value;
+  const pesticide = document.getElementById("pesticide").value;
+
+  if (!crop || !state || !season || !area) {
+    alert("Please fill the required area field.");
+    return;
+  }
+
+  const url = `${API_BASE}/yield-predict?crop=${encodeURIComponent(crop)}&state=${encodeURIComponent(state)}&season=${encodeURIComponent(season)}&area=${area}&rainfall=${rainfall}&fertilizer=${fertilizer}&pesticide=${pesticide}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (res.ok) {
+      document.getElementById("result").innerText =
+        `🌾 Predicted Yield: ${data.predicted_yield} ${data.yield_unit}\n` +
+        `🏭 Estimated Total Production: ${data.total_production} ${data.production_unit}`;
+    } else {
+      document.getElementById("result").innerText = `⚠️ Error: ${data.detail}`;
+    }
+  } catch (err) {
+    document.getElementById("result").innerText = "⚠️ Prediction failed. Check console.";
+    console.error(err);
+  }
+}
+
+window.onload = autoFillData;
+</script>
+</body>
+</html>
