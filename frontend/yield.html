@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌾 Crop Yield Prediction</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    // ✅ Tailwind Dark Mode Config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#151f32',
+            }
+          }
+        }
+      }
+    }
+    // ✅ Init Theme
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    body,
+    div,
+    nav,
+    button,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    input,
+    label {
+      transition-property: background-color, border-color, color;
+      transition-duration: 300ms;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+
+  <!-- Navigation -->
+  <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+          <span class="text-2xl">🌱</span>
+          <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="index.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
+          <a href="market.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Market
+            Insights</a>
+          <a href="map.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
+            Map</a>
+          <a href="simulation.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Simulation</a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle"
+            class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+    <div class="mb-8 text-center">
+      <h1 class="text-3xl font-bold text-slate-800 dark:text-white">Crop Yield Prediction</h1>
+      <p class="text-slate-500 dark:text-slate-400 mt-2">Estimate production based on current telemetric data.</p>
+    </div>
+
+    <div
+      class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+
+      <!-- Smart Banner -->
+      <div
+        class="bg-indigo-50 dark:bg-indigo-900/30 border-b border-indigo-100 dark:border-indigo-800 p-4 flex items-center justify-center gap-2 text-indigo-700 dark:text-indigo-300 text-sm font-medium">
+        <span>✨</span> Auto-filled from live sensor & weather data
+      </div>
+
+      <div class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Group 1 -->
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Recommended Crop</label>
+            <input type="text" id="crop" readonly
+              class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-600 dark:text-slate-300 focus:outline-none cursor-not-allowed font-medium">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">State Region</label>
+            <input type="text" id="state" readonly
+              class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-600 dark:text-slate-300 focus:outline-none cursor-not-allowed">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Season</label>
+            <input type="text" id="season" readonly
+              class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-600 dark:text-slate-300 focus:outline-none cursor-not-allowed">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Rainfall (mm)</label>
+            <input type="number" id="rainfall" readonly
+              class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-600 dark:text-slate-300 focus:outline-none cursor-not-allowed">
+          </div>
+
+          <!-- Inputs -->
+          <div class="md:col-span-2 border-t border-slate-100 dark:border-slate-700 my-2"></div>
+
+          <div>
+            <label for="area" class="block text-sm font-bold text-slate-800 dark:text-white mb-2">Cultivation Area
+              (Hectares) <span class="text-red-500">*</span></label>
+            <input type="number" id="area" placeholder="e.g. 2.5"
+              class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-800 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition shadow-sm">
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Fertilizer (kg)</label>
+            <input type="number" id="fertilizer" readonly
+              class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-600 dark:text-slate-300 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Pesticide (kg)</label>
+            <input type="number" id="pesticide" readonly
+              class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-600 dark:text-slate-300 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Action -->
+        <button onclick="predictYield()"
+          class="mt-8 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-200 dark:shadow-none transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+          <span>🚜</span> Calculate Yield Prediction
+        </button>
+
+        <!-- Result -->
+        <div id="result-container" class="mt-6 hidden">
+          <div
+            class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-6 text-center">
+            <h3 class="text-emerald-800 dark:text-emerald-300 font-bold text-lg mb-2">Prediction Result</h3>
+            <div id="result" class="text-slate-700 dark:text-slate-300 whitespace-pre-line"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
+
+    // --- Theme Logic ---
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    function updateIcons() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
+      } else {
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      }
+    }
+    updateIcons();
+
+    themeToggleBtn.addEventListener('click', function () {
+      if (localStorage.theme === 'dark') {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+      updateIcons();
+    });
+
+    async function autoFillData() {
+      try {
+        const res = await fetch(`${API_BASE}/latest-sensor-data`);
+        const data = await res.json();
+        document.getElementById("crop").value = data.crop || "Rice";
+        document.getElementById("state").value = data.state || "Tamil Nadu";
+        document.getElementById("season").value = data.season || "Kharif";
+        document.getElementById("rainfall").value = (data.rainfall ?? 0).toFixed(1);
+        document.getElementById("fertilizer").value = data.fertilizer || 0;
+        document.getElementById("pesticide").value = data.pesticide || 0;
+      } catch (err) {
+        console.error("Failed to auto-fill data", err);
+      }
+    }
+
+    async function predictYield() {
+      const crop = document.getElementById("crop").value;
+      const state = document.getElementById("state").value;
+      const season = document.getElementById("season").value;
+      const area = document.getElementById("area").value;
+      const rainfall = document.getElementById("rainfall").value;
+      const fertilizer = document.getElementById("fertilizer").value;
+      const pesticide = document.getElementById("pesticide").value;
+
+      const resultBox = document.getElementById("result-container");
+      const resultText = document.getElementById("result");
+
+      if (!area) {
+        alert("Please enter the Cultivation Area.");
+        return;
+      }
+
+      const url = `${API_BASE}/yield-predict?crop=${encodeURIComponent(crop)}&state=${encodeURIComponent(state)}&season=${encodeURIComponent(season)}&area=${area}&rainfall=${rainfall}&fertilizer=${fertilizer}&pesticide=${pesticide}`;
+
+      resultBox.classList.remove("hidden");
+      resultText.innerHTML = '<span class="animate-pulse">Analyzing...</span>';
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        if (res.ok) {
+          resultText.innerHTML =
+            `<div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 my-2">${data.predicted_yield} ${data.yield_unit}</div>` +
+            `<div class="text-sm text-slate-500 dark:text-slate-400">Total Production Est: <strong>${data.total_production} ${data.production_unit}</strong></div>`;
+        } else {
+          resultText.innerText = `⚠️ Error: ${data.detail}`;
+        }
+      } catch (err) {
+        resultText.innerText = "⚠️ Prediction failed. Check backend connection.";
+        console.error(err);
+      }
+    }
+
+    window.onload = autoFillData;
+  </script>
+</body>
+
+</html>

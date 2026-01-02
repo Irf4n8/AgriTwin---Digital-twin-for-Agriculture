@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 Digital Twin Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { slate: { 850: '#151f32' } } } }
+        }
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+            background: #45322E;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
+            aspect-ratio: 1/1;
+        }
+
+        .tree {
+            width: 100%;
+            padding-top: 100%;
+            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='s' height='130%25'%3E%3CfeGaussianBlur in='SourceAlpha' stdDeviation='3'/%3E%3CfeOffset dx='1' dy='3' result='offsetblur'/%3E%3CfeMerge%3E%3CfeMergeNode/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3Cfilter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='4' stdDeviation='4' flood-opacity='0.25'/%3E%3C/filter%3E%3Ccircle cx='50' cy='52' r='42' fill='%23166534' filter='url(%23s)'/%3E%3Ccircle cx='50' cy='45' r='35' fill='%2322c55e'/%3E%3Ccircle cx='35' cy='35' r='10' fill='%2386efac' opacity='0.3'/%3E%3C/svg%3E");
+            background-size: cover;
+            border-radius: 50%;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .tree:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .tree.stressed {
+            filter: hue-rotate(-40deg) saturate(1.5) brightness(1.1);
+        }
+
+        .tree.critical {
+            filter: hue-rotate(-100deg) saturate(1.2) brightness(0.9);
+        }
+
+        .tree.dead {
+            filter: grayscale(1) brightness(0.5);
+            opacity: 0.6;
+        }
+
+        .tree span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            pointer-events: none;
+        }
+
+        .key {
+            color: #93c5fd;
+        }
+
+        .string {
+            color: #86efac;
+        }
+
+        .number {
+            color: #fca5a5;
+        }
+
+        .boolean {
+            color: #f9a8d4;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                    <span class="text-2xl">🌱</span>
+                    <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
+                    <a href="market.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Market
+                        Insights</a>
+                    <a href="map.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
+                        Map</a>
+                    class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium
+                    shadow-sm">Simulation</a>
+                    <a href="disease.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
+                        Lab</a>
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle"
+                        class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none">
+                        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main
+        class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full h-[calc(100vh-64px)] overflow-hidden flex flex-col">
+
+        <!-- Header Controls -->
+        <div
+            class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-xl">
+                    🧬</div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-800 dark:text-white">Crop Digital Twin</h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Day <span id="day-counter"
+                            class="font-mono font-bold text-indigo-600 dark:text-indigo-400">0</span> of Simulation</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-lg">
+                    <button id="playBtn"
+                        class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded-md transition text-emerald-600 dark:text-emerald-400"
+                        title="Play">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <button id="pauseBtn"
+                        class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded-md transition text-amber-600 dark:text-amber-400"
+                        title="Pause">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <button id="resetBtn"
+                        class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded-md transition text-red-600 dark:text-red-400"
+                        title="Reset">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="h-8 w-px bg-slate-200 dark:bg-slate-600"></div>
+
+                <select id="speedSelect"
+                    class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-sm p-2 rounded-lg font-medium text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    <option value="1000">1x Speed</option>
+                    <option value="500">2x Speed</option>
+                    <option value="100">10x Speed</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 2 Column Layout -->
+        <div class="flex flex-col lg:flex-row gap-6 flex-grow overflow-hidden">
+
+            <!-- Left: Visual Grid -->
+            <div
+                class="lg:w-5/12 xl:w-4/12 flex flex-col h-full bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <div
+                    class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-black/10">
+                    <h2 class="font-bold text-slate-700 dark:text-slate-200">🌱 Field View</h2>
+                    <span
+                        class="text-xs font-medium bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">Live
+                        Monitor</span>
+                </div>
+                <div class="flex-grow p-4 flex items-center justify-center bg-slate-50 dark:bg-slate-900 overflow-auto">
+                    <div class="grid-container w-full max-w-md" id="farmGrid"></div>
+                </div>
+            </div>
+
+            <!-- Right: Data Panes -->
+            <div class="lg:w-7/12 xl:w-8/12 flex flex-col gap-6 h-full overflow-y-auto pr-1">
+
+                <!-- Top Row: Stats & Health -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[300px]">
+                    <!-- JSON State -->
+                    <div
+                        class="bg-slate-900 text-slate-300 rounded-xl shadow-sm overflow-hidden flex flex-col border border-slate-700 h-80">
+                        <div class="p-3 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
+                            <h3 class="font-mono text-sm font-semibold text-slate-400">STATE_LOG.json</h3>
+                            <div class="flex gap-1.5">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 font-mono text-xs overflow-auto custom-scroll flex-grow" id="jsonViewer"></div>
+                    </div>
+
+                    <!-- Health Donut -->
+                    <div
+                        class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col relative h-80">
+                        <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-2">Crop Health Distribution</h3>
+                        <div class="flex-grow relative w-full h-full">
+                            <canvas id="healthChart"></canvas>
+                        </div>
+                        <div
+                            class="mt-4 flex justify-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-green-500"></span> Healthy</span>
+                            <span class="flex items-center gap-1"><span
+                                    class="w-2 h-2 rounded-full bg-yellow-400"></span> Stressed</span>
+                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span>
+                                Critical</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom: Yield Graph -->
+                <div
+                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex-grow min-h-[250px] flex flex-col">
+                    <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2">
+                        <span>🚜</span> Projected Yield Timeline
+                    </h3>
+                    <div class="flex-grow w-full relative">
+                        <canvas id="yieldChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- Theme Toggle ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                darkIcon.classList.remove('hidden'); lightIcon.classList.add('hidden');
+            } else {
+                lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden');
+            }
+        }
+        updateIcons();
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            updateIcons();
+            healthChart.update();
+            yieldChart.update();
+        });
+
+
+        // --- Simulation State ---
+        const TOTAL_TREES = 100;
+        let day = 0, isRunning = false, speed = 1000, timer = null;
+        let state = {
+            id: "DT-FARM-001", status: "Active", day: 0,
+            weather: { temp: 24.5, condition: "Sunny" },
+            stats: { healthy: TOTAL_TREES, stressed: 0, critical: 0, dead: 0, projected_yield_kg: 0 }
+        };
+        let trees = new Array(TOTAL_TREES).fill(0);
+
+        const gridEl = document.getElementById('farmGrid');
+        const jsonEl = document.getElementById('jsonViewer');
+        const dayEl = document.getElementById('day-counter');
+
+        // --- Charts ---
+        Chart.defaults.color = () => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
+
+        const ctxHealth = document.getElementById('healthChart').getContext('2d');
+        const healthChart = new Chart(ctxHealth, {
+            type: 'doughnut',
+            data: {
+                labels: ['Healthy', 'Stressed', 'Critical', 'Dead'],
+                datasets: [{
+                    data: [100, 0, 0, 0],
+                    backgroundColor: ['#22c55e', '#facc15', '#ef4444', '#64748b'], borderWidth: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: false } }
+        });
+
+        const ctxYield = document.getElementById('yieldChart').getContext('2d');
+        const yieldChart = new Chart(ctxYield, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Yield (kg)', data: [], borderColor: '#6366f1',
+                    backgroundColor: (ctx) => {
+                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
+                        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
+                        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
+                        return gradient;
+                    }, fill: true, tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                scales: {
+                    x: { display: false },
+                    y: {
+                        display: true,
+                        grid: { color: () => document.documentElement.classList.contains('dark') ? '#334155' : '#f1f5f9' }
+                    }
+                },
+                plugins: { legend: false }
+            }
+        });
+
+        // --- Logic ---
+        function initGrid() {
+            gridEl.innerHTML = '';
+            trees.forEach((_, i) => {
+                const div = document.createElement('div');
+                div.className = 'tree'; div.id = `tree-${i}`;
+                div.innerHTML = `<span>${i + 1}</span>`;
+                div.onclick = () => affectTree(i);
+                gridEl.appendChild(div);
+            });
+            updateGridVisuals();
+        }
+        function affectTree(index) {
+            trees[index] = (trees[index] + 1) % 4;
+            updateGridVisuals(); updateStats();
+        }
+        function updateGridVisuals() {
+            trees.forEach((status, i) => {
+                const el = document.getElementById(`tree-${i}`);
+                el.className = 'tree';
+                if (status === 1) el.classList.add('stressed');
+                if (status === 2) el.classList.add('critical');
+                if (status === 3) el.classList.add('dead');
+            });
+        }
+        function updateStats() {
+            const counts = [0, 0, 0, 0];
+            trees.forEach(t => counts[t]++);
+            state.stats.healthy = counts[0]; state.stats.stressed = counts[1];
+            state.stats.critical = counts[2]; state.stats.dead = counts[3];
+            state.stats.projected_yield_kg = (counts[0] * 10) + (counts[1] * 5);
+            dayEl.innerText = state.day;
+
+            // JSON
+            jsonEl.innerHTML = syntaxHighlight(state);
+
+            // Charts
+            healthChart.data.datasets[0].data = counts; healthChart.update();
+            if (yieldChart.data.labels.length > 30) {
+                yieldChart.data.labels.shift(); yieldChart.data.datasets[0].data.shift();
+            }
+            yieldChart.data.labels.push(state.day);
+            yieldChart.data.datasets[0].data.push(state.stats.projected_yield_kg);
+            yieldChart.update('none');
+        }
+        function simulationStep() {
+            state.day++;
+            if (Math.random() < 0.08) {
+                const target = Math.floor(Math.random() * TOTAL_TREES);
+                if (trees[target] < 3) trees[target]++;
+            } else if (Math.random() > 0.95) {
+                const target = Math.floor(Math.random() * TOTAL_TREES);
+                if (trees[target] > 0) trees[target]--;
+            }
+            state.weather.temp = (24 + Math.sin(state.day / 10) * 5 + Math.random()).toFixed(1);
+            state.weather.condition = Math.random() > 0.7 ? "Cloudy" : "Sunny";
+            updateGridVisuals(); updateStats();
+        }
+        function startSim() { if (isRunning) return; isRunning = true; timer = setInterval(simulationStep, speed); }
+        function pauseSim() { isRunning = false; clearInterval(timer); }
+        function resetSim() { pauseSim(); state.day = 0; trees.fill(0); yieldChart.data.labels = []; yieldChart.data.datasets[0].data = []; initGrid(); updateStats(); }
+
+        function syntaxHighlight(json) {
+            let jsonStr = JSON.stringify(json, undefined, 4);
+            return jsonStr.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) { cls = (/:$/.test(match)) ? 'key' : 'string'; }
+                else if (/true|false/.test(match)) cls = 'boolean';
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        document.getElementById('playBtn').onclick = startSim;
+        document.getElementById('pauseBtn').onclick = pauseSim;
+        document.getElementById('resetBtn').onclick = resetSim;
+        document.getElementById('speedSelect').onchange = (e) => {
+            speed = parseInt(e.target.value); if (isRunning) { pauseSim(); startSim(); }
+        };
+
+        initGrid(); updateStats();
+    </script>
+</body>
+
+</html>

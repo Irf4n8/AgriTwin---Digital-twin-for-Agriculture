@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en" class="light"> <!-- Default to light, script will update -->
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌾 Agri Twin Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- PDF Generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    // ✅ Tailwind Dark Mode Config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#151f32', // Custom dark shade
+            }
+          }
+        }
+      }
+    }
+
+    // ✅ Init Theme Immediately to prevent flash
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Smooth transitions for theme switch */
+    body,
+    div,
+    nav,
+    button,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      transition-property: background-color, border-color, color;
+      transition-duration: 300ms;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+
+  <!-- Navigation -->
+  <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <!-- Logo -->
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+          <span class="text-2xl">🌱</span>
+          <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+        </div>
+
+        <!-- Links -->
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="index.html"
+            class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium shadow-sm">Dashboard</a>
+          <a href="market.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Market
+            Insights</a>
+          <a href="map.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
+            Map</a>
+          <a href="simulation.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Simulation</a>
+          <a href="disease.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
+            Lab</a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle"
+            class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+            title="Toggle Theme">
+            <!-- Sun Icon -->
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <!-- Moon Icon -->
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Error Banner -->
+  <div id="connection-error" class="hidden bg-red-600 text-white text-center py-2 px-4 font-bold shadow-md">
+    ⚠️ Cannot connect to server. Please run <code>python backend/main.py</code>
+  </div>
+
+  <!-- Main Content -->
+  <main id="dashboard-content" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+    <!-- Top Header & Actions -->
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-800 dark:text-white">Live Farm Overview</h1>
+        <p class="text-slate-500 dark:text-slate-400 mt-1">Real-time telemetry from your IoT sensors.</p>
+      </div>
+      <div class="flex gap-3" data-html2pdf-ignore="true">
+        <button onclick="downloadReport()"
+          class="flex items-center gap-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
+          <span>📄</span> Download Report
+        </button>
+        <button id="enable-alerts"
+          class="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-4 py-2 rounded-lg font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors">
+          <span>🔊</span> Enable Alerts
+        </button>
+        <button onclick="window.location.href='yield.html'"
+          class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 shadow-md transition-all hover:-translate-y-0.5">
+          🌾 Yield Prediction
+        </button>
+      </div>
+    </div>
+
+    <!-- Sensor Grid -->
+    <section>
+      <h2 class="text-xl font-semibold text-emerald-800 dark:text-emerald-400 mb-4 flex items-center gap-2">
+        📡 Sensor Readings
+      </h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <!-- Reusable Sensor Card Structure -->
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Nitrogen (N)</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-slate-700 dark:text-slate-200" id="N">--</span>
+            <span class="text-sm text-slate-400">ppm</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Phosphorus (P)</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-slate-700 dark:text-slate-200" id="P">--</span>
+            <span class="text-sm text-slate-400">ppm</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Potassium (K)</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-slate-700 dark:text-slate-200" id="K">--</span>
+            <span class="text-sm text-slate-400">ppm</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Soil pH</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-purple-600 dark:text-purple-400" id="ph">--</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Rainfall</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-blue-500 dark:text-blue-400" id="rainfall">--</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Temperature</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-orange-500 dark:text-orange-400" id="temp">--</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Humidity</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-cyan-500 dark:text-cyan-400" id="humidity">--</span>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Soil Moisture</div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-3xl font-bold text-amber-600 dark:text-amber-400" id="soil_moisture">--</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Dashboard Body -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+
+      <!-- Left Column (Chart) -->
+      <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200">📈 Sensor Trends</h2>
+            <span
+              class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Live</span>
+          </div>
+          <!-- Relative container for chart responsiveness -->
+          <div class="relative w-full h-80">
+            <canvas id="sensorChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Weather Block -->
+        <div
+          class="mt-8 bg-gradient-to-r from-blue-500 to-cyan-400 dark:from-blue-700 dark:to-cyan-600 rounded-xl p-6 text-white shadow-lg shadow-blue-200 dark:shadow-none">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl">🌦️</span>
+            <h3 class="text-lg font-bold">Local Weather</h3>
+          </div>
+          <div id="weather-box" class="text-blue-50 font-medium text-lg">
+            Loading weather data...
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column (Insights) -->
+      <div class="flex flex-col gap-6">
+
+        <!-- Crop Prediction -->
+        <div
+          class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border-l-4 border-emerald-500 dark:border-emerald-600">
+          <h3 class="text-slate-400 text-sm font-bold uppercase tracking-wide mb-2">AI Recommendation</h3>
+          <div id="crop-suggestion" class="text-2xl font-bold text-emerald-700 dark:text-emerald-400">
+            🌾 Analyzing...
+          </div>
+          <p class="text-slate-500 text-sm mt-2">Based on current NPK and soil conditions. (Updates every 10s)</p>
+        </div>
+
+        <!-- Irrigation Alert -->
+        <div
+          class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border-l-4 border-orange-500 dark:border-orange-600">
+          <h3 class="text-slate-400 text-sm font-bold uppercase tracking-wide mb-2">Irrigation Status</h3>
+          <div id="irrigation-alert" class="text-xl font-bold text-orange-700 dark:text-orange-400">
+            💧 Checking...
+          </div>
+          <p class="text-slate-500 text-sm mt-2">Real-time soil moisture analysis.</p>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-slate-800 dark:bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-700"
+          data-html2pdf-ignore="true">
+          <h3 class="text-white font-bold mb-4">Quick Navigation</h3>
+          <div class="flex flex-col gap-3">
+            <button onclick="window.location.href='map.html'"
+              class="flex items-center justify-between p-3 bg-slate-700 dark:bg-slate-800 rounded-lg hover:bg-slate-600 dark:hover:bg-slate-700 transition">
+              <span>🌍 View Satellite Map</span>
+              <span>→</span>
+            </button>
+            <button onclick="window.location.href='simulation.html'"
+              class="flex items-center justify-between p-3 bg-slate-700 dark:bg-slate-800 rounded-lg hover:bg-slate-600 dark:hover:bg-slate-700 transition">
+              <span>🧬 Run Simulation</span>
+              <span>→</span>
+            </button>
+            <button onclick="window.location.href='disease.html'"
+              class="flex items-center justify-between p-3 bg-emerald-700 dark:bg-emerald-800 rounded-lg hover:bg-emerald-600 dark:hover:bg-emerald-700 transition shadow-md">
+              <span>🩺 Identify Plant Disease</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer
+    class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 mt-12 py-8 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 dark:text-slate-400 text-sm">
+      <p>Developed by <strong>Vikas</strong> | Powered by FastAPI + ML 🌿</p>
+      <p class="mt-2 text-slate-400 dark:text-slate-500">© 2026 Agri-Twin Project</p>
+    </div>
+  </footer>
+
+  <audio id="irrigation-alert-sound" src="alert.mp3" preload="auto"></audio>
+
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
+    let chart;
+    let soundEnabled = false;
+    const alertSound = document.getElementById("irrigation-alert-sound");
+
+    // --- Theme Logic ---
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    function updateIcons() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
+      } else {
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      }
+    }
+    updateIcons();
+
+    themeToggleBtn.addEventListener('click', function () {
+      if (localStorage.theme === 'dark') {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+      updateIcons();
+      if (chart) chart.update(); // Update chart colors
+    });
+
+
+    // --- Alerts ---
+    document.getElementById("enable-alerts").addEventListener("click", () => {
+      soundEnabled = true;
+      alertSound.play().catch(() => { });
+      const btn = document.getElementById("enable-alerts");
+      btn.innerHTML = "<span>🔊</span> Alerts On";
+      btn.classList.add("ring-2", "ring-emerald-500");
+    });
+
+    // --- Chart ---
+    function initChart() {
+      const ctx = document.getElementById("sensorChart").getContext("2d");
+
+      // Plugin to handle dark mode colors dynamically
+      Chart.defaults.color = () => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
+      Chart.defaults.borderColor = () => document.documentElement.classList.contains('dark') ? '#334155' : '#e2e8f0';
+
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            { label: "Temp (°C)", data: [], borderColor: "#f97316", tension: 0.4, borderWidth: 2, pointRadius: 0 },
+            { label: "Humidity (%)", data: [], borderColor: "#06b6d4", tension: 0.4, borderWidth: 2, pointRadius: 0 },
+            { label: "Rain (mm)", data: [], borderColor: "#3b82f6", tension: 0.4, borderWidth: 2, pointRadius: 0 },
+            { label: "pH", data: [], borderColor: "#9333ea", tension: 0.4, borderWidth: 2, pointRadius: 0 },
+            { label: "Moisture (%)", data: [], borderColor: "#d97706", tension: 0.4, borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              title: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { borderDash: [4, 4] }
+            }
+          }
+        }
+      });
+    }
+
+    // --- Error Handling Wrapper ---
+    function showError(msg) {
+      const banner = document.getElementById('connection-error');
+      banner.classList.remove('hidden');
+      banner.innerHTML = `⚠️ ${msg}`;
+
+      // Also set visible state in cards
+      ["N", "P", "K", "rainfall", "temp", "humidity", "ph", "soil_moisture"].forEach(id => {
+        document.getElementById(id).innerText = "!";
+      });
+      document.getElementById("crop-suggestion").innerText = "⚠️ Offline";
+      document.getElementById("weather-box").innerHTML = "⚠️ Offline";
+    }
+
+    function hideError() {
+      document.getElementById('connection-error').classList.add('hidden');
+    }
+
+    // --- Data Fetching ---
+    async function fetchSensorData() {
+      try {
+        const res = await fetch(`${API_BASE}/latest`);
+        if (!res.ok) throw new Error("Sensor Error");
+        const t = await res.json();
+
+        hideError();
+
+        document.getElementById("N").innerText = (t.N ?? 0).toFixed(0);
+        document.getElementById("P").innerText = (t.P ?? 0).toFixed(0);
+        document.getElementById("K").innerText = (t.K ?? 0).toFixed(0);
+        document.getElementById("rainfall").innerText = (t.rainfall ?? 0).toFixed(1) + " mm";
+        document.getElementById("temp").innerText = (t.temperature ?? 0).toFixed(1) + "°C";
+        document.getElementById("humidity").innerText = (t.humidity ?? 0).toFixed(1) + "%";
+        document.getElementById("ph").innerText = (t.ph ?? 0).toFixed(1);
+        document.getElementById("soil_moisture").innerText = (t.soil_moisture ?? 0).toFixed(1) + "%";
+
+        updateChart(new Date().toLocaleTimeString('en-US', { hour12: false }), t);
+      } catch (err) {
+        console.error("Sensor fetch fail", err);
+        showError("Cannot connect to backend. Is it running?");
+      }
+    }
+
+    async function fetchPrediction() {
+      try {
+        // Re-using fetch logic but only for the recommendation part
+        const res = await fetch(`${API_BASE}/predict`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const crop = data.recommended_crop;
+        document.getElementById("crop-suggestion").innerText = "🌾 " + (crop || "Analyzing...");
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+
+    function updateChart(time, t) {
+      chart.data.labels.push(time);
+      chart.data.datasets[0].data.push(t.temperature ?? 0);
+      chart.data.datasets[1].data.push(t.humidity ?? 0);
+      chart.data.datasets[2].data.push(t.rainfall ?? 0);
+      chart.data.datasets[3].data.push(t.ph ?? 0);
+      chart.data.datasets[4].data.push(t.soil_moisture ?? 0);
+      if (chart.data.labels.length > 20) {
+        chart.data.labels.shift();
+        chart.data.datasets.forEach(ds => ds.data.shift());
+      }
+      chart.update('none');
+    }
+
+    async function fetchWeather() {
+      try {
+        const res = await fetch(`${API_BASE}/weather`);
+        if (!res.ok) throw new Error("Weather Error");
+        const data = await res.json();
+        document.getElementById("weather-box").innerHTML =
+          `<div>
+                <div class="text-3xl font-bold">${data.temperature}°C</div>
+                <div class="text-blue-100">${data.condition} · ${data.city}</div>
+                <div class="text-sm mt-2 opacity-80">Humidity: ${data.humidity}% | Rain: ${data.rainfall}mm</div>
+            </div>`;
+      } catch (err) {
+        // Fallback or just ignore (main error banner handles critical stuff)
+        document.getElementById("weather-box").innerText = "⚠️ Weather Unavailable";
+      }
+    }
+
+    async function fetchIrrigationAlert() {
+      try {
+        const res = await fetch(`${API_BASE}/irrigation-alert`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const alertBox = document.getElementById("irrigation-alert");
+        alertBox.innerText = `💧 ${data.alert_message}`;
+
+        // Remove old classes
+        const p = alertBox.parentElement;
+        p.className = ""; // Reset
+
+        if (data.alert_level === "critical") {
+          p.className = "bg-red-50 dark:bg-red-900/20 p-6 rounded-xl shadow-sm border-l-4 border-red-500 dark:border-red-600";
+          alertBox.className = "text-xl font-bold text-red-700 dark:text-red-400";
+          if (soundEnabled) alertSound.play().catch(() => { });
+        } else {
+          p.className = "bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border-l-4 border-orange-500 dark:border-orange-600";
+          alertBox.className = "text-xl font-bold text-orange-700 dark:text-orange-400";
+        }
+
+      } catch (err) { }
+    }
+
+    // --- Report Generation ---
+    function downloadReport() {
+      const element = document.getElementById('dashboard-content');
+      const opt = {
+        margin: 0.5,
+        filename: 'AgriTwin_Report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
+    window.onload = () => {
+      initChart();
+      // Initial fetch attempts
+      fetchSensorData();
+      fetchPrediction();
+      fetchWeather();
+      fetchIrrigationAlert();
+
+      // Update Sensors every 3s (keep visuals fast)
+      setInterval(fetchSensorData, 3000);
+
+      // Update Prediction every 10s (stable recommendation)
+      setInterval(fetchPrediction, 10000);
+
+      setInterval(fetchWeather, 60000);
+      setInterval(fetchIrrigationAlert, 10000);
+    };
+  </script>
+</body>
+
+</html>

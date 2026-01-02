@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌾 Market Insights Dashboard</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    // ✅ Tailwind Dark Mode Config
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            slate: {
+              850: '#151f32',
+            }
+          }
+        }
+      }
+    }
+    // ✅ Init Theme
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Transitions */
+    body,
+    div,
+    nav,
+    button,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    table,
+    th,
+    td,
+    input,
+    select {
+      transition-property: background-color, border-color, color;
+      transition-duration: 300ms;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+
+  <!-- Navigation -->
+  <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+          <span class="text-2xl">🌱</span>
+          <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="index.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
+          <a href="market.html"
+            class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium shadow-sm">Market
+            Insights</a>
+          <a href="map.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
+            Map</a>
+          <a href="simulation.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Simulation</a>
+          <a href="disease.html"
+            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
+            Lab</a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle"
+            class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                clip-rule="evenodd"></path>
+            </svg>
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+    <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+      <div>
+        <h1 class="text-3xl font-bold text-slate-800 dark:text-white">Market Insights</h1>
+        <p class="text-slate-500 dark:text-slate-400 mt-1">Real-time agricultural commodity prices &amp; trends.</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 mb-8"
+      role="region" aria-labelledby="filters-heading">
+      <h2 id="filters-heading" class="sr-only">Filters</h2>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+        <div>
+          <label for="stateSelect"
+            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">State</label>
+          <div class="relative">
+            <select id="stateSelect"
+              class="w-full appearance-none bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+              <option value="ALL">All States</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="districtSelect"
+            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">District</label>
+          <div class="relative">
+            <select id="districtSelect"
+              class="w-full appearance-none bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+              <option value="ALL">All Districts</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="commoditySelect"
+            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Commodity</label>
+          <div class="relative">
+            <select id="commoditySelect"
+              class="w-full appearance-none bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+              <option value="ALL">All Commodities</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="dateFrom" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">From</label>
+          <input id="dateFrom" type="date"
+            class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+        </div>
+
+        <div>
+          <label for="dateTo" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">To</label>
+          <input id="dateTo" type="date"
+            class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+        </div>
+      </div>
+
+      <div
+        class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-700 pt-6">
+        <span id="status" class="text-sm text-slate-500 dark:text-slate-400 font-medium">Ready</span>
+        <button id="apply" type="button"
+          class="bg-emerald-600 dark:bg-emerald-700 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-emerald-700 dark:hover:bg-emerald-600 shadow-md transition-all active:scale-95 flex items-center gap-2">
+          Apply Filters
+        </button>
+      </div>
+    </div>
+
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <!-- Modal Price Chart -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📊 Modal Price Comparison</h2>
+        <div class="h-80 w-full relative">
+          <canvas id="modalPriceChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Range Chart -->
+      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
+        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📈 Price Range Analysis</h2>
+        <div class="h-80 w-full relative">
+          <canvas id="rangeChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div
+      class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+      <div
+        class="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row items-center justify-between gap-4">
+        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200">📑 Market Data Details</h2>
+        <div
+          class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-600">
+          <button id="prev" type="button"
+            class="px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-emerald-600 hover:bg-white dark:hover:bg-slate-700 rounded-md text-sm font-medium transition">←
+            Prev</button>
+          <span id="pageinfo" class="text-sm font-medium text-slate-500 dark:text-slate-400 px-2">Page 1</span>
+          <button id="next" type="button"
+            class="px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-emerald-600 hover:bg-white dark:hover:bg-slate-700 rounded-md text-sm font-medium transition">Next
+            →</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+          <thead
+            class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-600">
+            <tr>
+              <th scope="col" class="px-6 py-4 font-bold">State</th>
+              <th scope="col" class="px-6 py-4 font-bold">District</th>
+              <th scope="col" class="px-6 py-4 font-bold">Market</th>
+              <th scope="col" class="px-6 py-4 font-bold">Commodity</th>
+              <th scope="col" class="px-6 py-4 font-bold">Variety</th>
+              <th scope="col" class="px-6 py-4 font-bold text-right text-emerald-600 dark:text-emerald-400">Min Price
+              </th>
+              <th scope="col" class="px-6 py-4 font-bold text-right text-red-600 dark:text-red-400">Max Price</th>
+              <th scope="col" class="px-6 py-4 font-bold text-right text-blue-600 dark:text-blue-400">Modal</th>
+              <th scope="col" class="px-6 py-4 font-bold text-right">Date</th>
+            </tr>
+          </thead>
+          <tbody id="marketBody" class="divide-y divide-slate-100 dark:divide-slate-700">
+            <!-- Rows will be injected here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API = "http://127.0.0.1:8000";
+    let currentPage = 1, pageSize = 50;
+    let modalChart = null, rangeChart = null;
+
+    // --- Theme Logic ---
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    function updateIcons() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        darkIcon.classList.remove('hidden');
+        lightIcon.classList.add('hidden');
+      } else {
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      }
+    }
+    updateIcons();
+
+    themeToggleBtn.addEventListener('click', function () {
+      if (localStorage.theme === 'dark') {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+      updateIcons();
+      // Re-render charts to update colors
+      if (modalChart) modalChart.update();
+      if (rangeChart) rangeChart.update();
+    });
+
+
+    function fetchWithTimeout(url, ms = 15000) {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), ms);
+      return fetch(url, { signal: controller.signal })
+        .then(res => {
+          clearTimeout(timer);
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .catch(err => {
+          clearTimeout(timer);
+          throw err;
+        });
+    }
+
+    function safeGetById(id) {
+      return document.getElementById(id);
+    }
+
+    async function loadMeta() {
+      const statusEl = safeGetById("status");
+      if (statusEl) statusEl.textContent = "Loading filters...";
+      let meta = null;
+
+      try {
+        meta = await fetchWithTimeout(`${API}/market_meta`);
+      } catch (err) {
+        console.error("Failed to load /market_meta:", err);
+        if (statusEl) statusEl.textContent = "Failed to load filters (check backend).";
+        return;
+      }
+
+      const states = meta?.states || [];
+      const districts = meta?.districts || [];
+      const commodities = meta?.commodities || [];
+      const dateMin = meta?.date_min || "";
+      const dateMax = meta?.date_max || "";
+
+      function appendOption(selectEl, value, label) {
+        if (!selectEl) return;
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = label;
+        selectEl.appendChild(opt);
+      }
+
+      const selState = safeGetById("stateSelect");
+      const selDistrict = safeGetById("districtSelect");
+      const selCommodity = safeGetById("commoditySelect");
+
+      // Clear existing (except ALL)
+      while (selState.options.length > 1) selState.remove(1);
+      while (selDistrict.options.length > 1) selDistrict.remove(1);
+      while (selCommodity.options.length > 1) selCommodity.remove(1);
+
+      states.forEach(s => appendOption(selState, s, s));
+      districts.forEach(d => appendOption(selDistrict, d, d));
+      commodities.forEach(c => appendOption(selCommodity, c, c));
+
+      const inputFrom = safeGetById("dateFrom");
+      const inputTo = safeGetById("dateTo");
+      if (inputFrom && dateMin) inputFrom.value = dateMin;
+      if (inputTo && dateMax) inputTo.value = dateMax;
+
+      if (statusEl) statusEl.textContent = "Filters ready.";
+    }
+
+    async function loadPage() {
+      const statusEl = safeGetById("status");
+      if (statusEl) statusEl.textContent = "Loading data...";
+
+      const params = new URLSearchParams({
+        page: String(currentPage),
+        page_size: String(pageSize),
+        state: safeGetById("stateSelect").value,
+        district: safeGetById("districtSelect").value,
+        commodity: safeGetById("commoditySelect").value,
+      });
+
+      const fromVal = safeGetById("dateFrom").value;
+      const toVal = safeGetById("dateTo").value;
+      if (fromVal) params.set("date_from", fromVal);
+      if (toVal) params.set("date_to", toVal);
+
+      let payload = null;
+      try {
+        payload = await fetchWithTimeout(`${API}/market_insights?` + params.toString());
+      } catch (err) {
+        if (statusEl) statusEl.textContent = "Connection failed. Is backend running?";
+        return;
+      }
+
+      if (!payload || !Array.isArray(payload.rows)) {
+        if (statusEl) statusEl.textContent = "No data returned.";
+        return;
+      }
+
+      renderTable(payload.rows);
+      renderCharts(payload.rows);
+
+      const pageInfo = safeGetById("pageinfo");
+      if (pageInfo) pageInfo.textContent = `Page ${payload.page} — showing ${payload.rows.length} of ${payload.total}`;
+      if (statusEl) statusEl.textContent = "Data Updated";
+    }
+
+    function renderTable(rows) {
+      const body = safeGetById("marketBody");
+      if (!body) return;
+      body.innerHTML = "";
+      const frag = document.createDocumentFragment();
+
+      for (const r of rows) {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors";
+
+        const cols = [
+          { t: r?.State, a: 'text-left font-medium text-slate-900 dark:text-slate-100' },
+          { t: r?.District, a: 'text-left' },
+          { t: r?.Market, a: 'text-left' },
+          { t: r?.Commodity, a: 'text-left' },
+          { t: r?.Variety, a: 'text-left text-slate-400 text-xs' },
+          { t: r?.Min_Price, a: 'text-right font-mono text-emerald-600 dark:text-emerald-400' },
+          { t: r?.Max_Price, a: 'text-right font-mono text-red-600 dark:text-red-400' },
+          { t: r?.Modal_Price, a: 'text-right font-mono text-blue-600 dark:text-blue-400 font-bold' },
+          { t: r?.Arrival_Date, a: 'text-right text-slate-400 text-xs' }
+        ];
+
+        cols.forEach(col => {
+          const td = document.createElement("td");
+          td.className = `px-6 py-3 whitespace-nowrap ${col.a || ''}`;
+          td.textContent = (col.t !== null && col.t !== undefined) ? col.t : "-";
+          tr.appendChild(td);
+        });
+
+        frag.appendChild(tr);
+      }
+      body.appendChild(frag);
+    }
+
+    function renderCharts(rows) {
+      const cleaned = rows.filter(r => r && r.Modal_Price);
+      const sample = cleaned.slice(0, 30);
+
+      const labels = sample.map(r => `${r.Market.substring(0, 10)}..`);
+      const modal = sample.map(r => Number(r.Modal_Price));
+      const minv = sample.map(r => Number(r.Min_Price));
+      const maxv = sample.map(r => Number(r.Max_Price));
+
+      try { if (modalChart) modalChart.destroy(); } catch (e) { }
+      try { if (rangeChart) rangeChart.destroy(); } catch (e) { }
+
+      const modalCtx = document.getElementById("modalPriceChart");
+      const rangeCtx = document.getElementById("rangeChart");
+
+      // Chart Theme Helpers
+      Chart.defaults.color = () => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
+      Chart.defaults.borderColor = () => document.documentElement.classList.contains('dark') ? '#334155' : '#e2e8f0';
+
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { autoSkip: true, maxRotation: 0 }
+          },
+          y: { beginAtZero: true }
+        }
+      };
+
+      if (modalCtx) {
+        modalChart = new Chart(modalCtx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [{
+              label: "Modal Price (₹)",
+              data: modal,
+              backgroundColor: '#10b981',
+              borderRadius: 4
+            }]
+          },
+          options: commonOptions
+        });
+      }
+      if (rangeCtx) {
+        rangeChart = new Chart(rangeCtx, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+              {
+                label: "Min Price (₹)",
+                data: minv,
+                borderColor: '#059669',
+                backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                fill: true, tension: 0.3
+              },
+              {
+                label: "Max Price (₹)",
+                data: maxv,
+                borderColor: '#ef4444',
+                borderDash: [5, 5], tension: 0.3
+              }
+            ]
+          },
+          options: commonOptions
+        });
+      }
+    }
+
+    const btnApply = safeGetById("apply");
+    if (btnApply) btnApply.addEventListener("click", () => { currentPage = 1; loadPage(); });
+
+    const btnPrev = safeGetById("prev");
+    if (btnPrev) btnPrev.addEventListener("click", () => { if (currentPage > 1) { currentPage--; loadPage(); } });
+
+    const btnNext = safeGetById("next");
+    if (btnNext) btnNext.addEventListener("click", () => { currentPage++; loadPage(); });
+
+    (async function init() {
+      await loadMeta();
+      await loadPage();
+    })();
+  </script>
+</body>
+
+</html>

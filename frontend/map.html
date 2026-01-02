@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Soil Health Map - Agri Twin</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { slate: { 850: '#151f32' } } } }
+        }
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                    <span class="text-2xl">🌱</span>
+                    <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="index.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
+                    <a href="market.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Market
+                        Insights</a>
+                    <a href="map.html"
+                        class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium shadow-sm">Soil
+                        Map</a>
+                    <a href="simulation.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Simulation</a>
+                    <a href="disease.html"
+                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
+                        Lab</a>
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle"
+                        class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none">
+                        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor"
+                            viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="flex-grow relative flex flex-col">
+
+        <!-- Controls Overlay / Header -->
+        <div class="absolute top-4 left-4 z-[400]">
+            <div
+                class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md p-4 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 max-w-sm transition-colors">
+                <h1 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    🌍 Satellite Soil Analysis
+                </h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    Click anywhere on the map to analyze soil surface temperature and moisture content via satellite
+                    data.
+                </p>
+            </div>
+        </div>
+
+        <!-- Map -->
+        <div id="map" class="flex-grow w-full h-[calc(100vh-64px)] bg-slate-200 dark:bg-slate-800"></div>
+
+        <!-- Info Panel (Floating) -->
+        <div class="absolute bottom-8 left-8 z-[1000] hidden w-80" id="info-panel">
+            <div
+                class="bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl p-5 rounded-2xl shadow-2xl border border-white/20 dark:border-slate-600 slide-up transition-colors">
+
+                <div
+                    class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100 dark:border-slate-700">
+                    <h3 class="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-2">
+                        <span>🌱</span> Soil Data
+                    </h3>
+                    <button onclick="closePanel()" class="text-slate-400 hover:text-emerald-500 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="panel-content" class="space-y-3">
+                    <!-- Dynamic content injected here -->
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Theme Toggle ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+        function updateIcons() {
+            if (document.documentElement.classList.contains('dark')) {
+                darkIcon.classList.remove('hidden'); lightIcon.classList.add('hidden');
+            } else {
+                lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden');
+            }
+        }
+        updateIcons();
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+            updateIcons();
+        });
+
+
+        // Initialize Map
+        const map = L.map('map', { zoomControl: false }).setView([11.0168, 76.9558], 15);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri'
+        }).addTo(map);
+
+        L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-labels/{z}/{x}/{y}{r}.{ext}', {
+            attribution: 'Map tiles by Stamen', subdomains: 'abcd', minZoom: 0, maxZoom: 20, ext: 'png', opacity: 0.75
+        }).addTo(map);
+
+        let currentMarker = null;
+        const API_BASE = "http://127.0.0.1:8000";
+
+        map.on('click', async function (e) {
+            const { lat, lng } = e.latlng;
+            if (currentMarker) map.removeLayer(currentMarker);
+            currentMarker = L.marker([lat, lng]).addTo(map);
+
+            const panel = document.getElementById('info-panel');
+            const content = document.getElementById('panel-content');
+            panel.classList.remove('hidden');
+
+            content.innerHTML = `
+                <div class="text-center py-4 text-slate-500 dark:text-slate-400">
+                    <div class="animate-spin inline-block w-6 h-6 border-4 border-emerald-500 border-t-transparent rounded-full mb-2"></div>
+                    <p class="text-sm font-medium">Analyzing satellite data...</p>
+                </div>
+            `;
+
+            try {
+                const res = await fetch(`${API_BASE}/soil-data?lat=${lat}&lon=${lng}`);
+                const data = await res.json();
+                if (data) {
+                    currentMarker.bindPopup(`<b>Temp:</b> ${data.surface_temp}°C`).openPopup();
+                    content.innerHTML = `
+                         <div class="flex items-center justify-between p-3 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg">
+                            <span class="text-sm font-medium text-slate-600 dark:text-slate-300">Surface Temp</span>
+                            <span class="text-lg font-bold text-emerald-700 dark:text-emerald-400">${data.surface_temp}°C</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                            <span class="text-sm font-medium text-slate-600 dark:text-slate-300">Sub-surface (10cm)</span>
+                            <span class="text-lg font-bold text-blue-700 dark:text-blue-400">${data.temp_10cm}°C</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-amber-50 dark:bg-amber-900/30 rounded-lg">
+                            <span class="text-sm font-medium text-slate-600 dark:text-slate-300">Soil Moisture</span>
+                            <span class="text-lg font-bold text-amber-700 dark:text-amber-400">${data.moisture} m³/m³</span>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700 flex justify-between text-xs text-slate-400 font-mono">
+                            <span>Lat: ${lat.toFixed(4)}</span><span>Lon: ${lng.toFixed(4)}</span>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                content.innerHTML = `
+                    <div class="text-center py-4 text-red-500">
+                        <p class="font-bold">❌ Analysis Failed</p>
+                        <p class="text-xs mt-1">Could not fetch satellite data</p>
+                    </div>`;
+            }
+        });
+
+        function closePanel() { document.getElementById('info-panel').classList.add('hidden'); }
+    </script>
+</body>
+
+</html>
