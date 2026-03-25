@@ -5,7 +5,9 @@ import joblib
 import os
 
 # Load dataset
-dataset_path = "../dataset/Crop_recommendation.csv"
+# Load dataset
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+dataset_path = os.path.join(BASE_DIR, "../dataset/Crop_recommendation.csv")
 if not os.path.exists(dataset_path):
     raise FileNotFoundError(f"{dataset_path} not found. Please download the dataset.")
 
@@ -23,5 +25,7 @@ model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Save model
-joblib.dump(model, "model.pkl")
-print("✅ Model trained and saved as model.pkl successfully!")
+# Save model
+model_path = os.path.join(BASE_DIR, "model.pkl")
+joblib.dump(model, model_path)
+print("Model trained and saved as model.pkl successfully!")

@@ -4,276 +4,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧬 Digital Twin Simulation</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>🧬 What-If Simulation - Agri Twin</title>
+
+    <link rel="stylesheet" href="tailwind.min.css">
+  <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: { extend: { colors: { slate: { 850: '#151f32' } } } }
+
+    <style>
+        
+
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
         }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #16a34a;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+
+        
+
+        .simulation-card {
+            transition: all 0.3s ease;
+        }
+
+        .simulation-card:hover {
+            transform: translateY(-2px);
+        }
+    
+#chatbot-fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      cursor: pointer;
+      z-index: 9999;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #chatbot-fab:hover {
+      transform: scale(1.1);
+    }
+
+    #chatbot-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 9998;
+      overflow: hidden;
+      transform-origin: bottom right;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    
+
+    #chatbot-window.open {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #chatbot-header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 16px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chat-msg p {
+      margin-bottom: 8px;
+    }
+
+    .chat-msg p:last-child {
+      margin-bottom: 0;
+    }
+
+    .chat-user {
+      align-self: flex-end;
+      background: #10b981;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-bot {
+      align-self: flex-start;
+      background: #f3f4f6;
+      color: #1f2937;
+      border-bottom-left-radius: 4px;
+    }
+
+    
+
+    #chatbot-input-container {
+      padding: 12px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 8px;
+    }
+
+    
+
+    #chatbot-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      background: #f9fafb;
+    }
+
+    
+
+    #chatbot-send {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #chatbot-send:hover {
+      background: #059669;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      width: fit-content;
+    }
+
+    
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #9ca3af;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+</style>
+    <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
     </script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .custom-scroll::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .custom-scroll::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-
-        .custom-scroll::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 6px;
-            background: #45322E;
-            padding: 16px;
-            border-radius: 12px;
-            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
-            aspect-ratio: 1/1;
-        }
-
-        .tree {
-            width: 100%;
-            padding-top: 100%;
-            position: relative;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='s' height='130%25'%3E%3CfeGaussianBlur in='SourceAlpha' stdDeviation='3'/%3E%3CfeOffset dx='1' dy='3' result='offsetblur'/%3E%3CfeMerge%3E%3CfeMergeNode/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3Cfilter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeDropShadow dx='0' dy='4' stdDeviation='4' flood-opacity='0.25'/%3E%3C/filter%3E%3Ccircle cx='50' cy='52' r='42' fill='%23166534' filter='url(%23s)'/%3E%3Ccircle cx='50' cy='45' r='35' fill='%2322c55e'/%3E%3Ccircle cx='35' cy='35' r='10' fill='%2386efac' opacity='0.3'/%3E%3C/svg%3E");
-            background-size: cover;
-            border-radius: 50%;
-            transition: transform 0.2s;
-            cursor: pointer;
-        }
-
-        .tree:hover {
-            transform: scale(1.1);
-            z-index: 10;
-        }
-
-        .tree.stressed {
-            filter: hue-rotate(-40deg) saturate(1.5) brightness(1.1);
-        }
-
-        .tree.critical {
-            filter: hue-rotate(-100deg) saturate(1.2) brightness(0.9);
-        }
-
-        .tree.dead {
-            filter: grayscale(1) brightness(0.5);
-            opacity: 0.6;
-        }
-
-        .tree span {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 9px;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 700;
-            pointer-events: none;
-        }
-
-        .key {
-            color: #93c5fd;
-        }
-
-        .string {
-            color: #86efac;
-        }
-
-        .number {
-            color: #fca5a5;
-        }
-
-        .boolean {
-            color: #f9a8d4;
-        }
-    </style>
 </head>
 
-<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors duration-500 selection:bg-green-500 selection:text-white min-h-screen flex flex-col">
 
+    <!-- Nav -->
+      <!-- Navigation -->
     <!-- Navigation -->
-    <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
-                    <span class="text-2xl">🌱</span>
-                    <span class="font-bold text-xl tracking-tight">AgriTwin</span>
-                </div>
-                <div class="hidden md:flex items-center space-x-4">
-                    <a href="index.html"
-                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
-                    <a href="market.html"
-                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Market
-                        Insights</a>
-                    <a href="map.html"
-                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
-                        Map</a>
-                    class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium
-                    shadow-sm">Simulation</a>
-                    <a href="disease.html"
-                        class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
-                        Lab</a>
-                    <!-- Theme Toggle -->
-                    <button id="theme-toggle"
-                        class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none">
-                        <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor"
-                            viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main
-        class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full h-[calc(100vh-64px)] overflow-hidden flex flex-col">
-
-        <!-- Header Controls -->
-        <div
-            class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
-            <div class="flex items-center gap-3">
-                <div
-                    class="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center text-xl">
-                    🧬</div>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-800 dark:text-white">Crop Digital Twin</h1>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Day <span id="day-counter"
-                            class="font-mono font-bold text-indigo-600 dark:text-indigo-400">0</span> of Simulation</p>
-                </div>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <div class="flex bg-slate-100 dark:bg-slate-700 p-1 rounded-lg">
-                    <button id="playBtn"
-                        class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded-md transition text-emerald-600 dark:text-emerald-400"
-                        title="Play">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    <button id="pauseBtn"
-                        class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded-md transition text-amber-600 dark:text-amber-400"
-                        title="Pause">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                    <button id="resetBtn"
-                        class="p-2 hover:bg-white dark:hover:bg-slate-600 rounded-md transition text-red-600 dark:text-red-400"
-                        title="Reset">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="h-8 w-px bg-slate-200 dark:bg-slate-600"></div>
-
-                <select id="speedSelect"
-                    class="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-sm p-2 rounded-lg font-medium text-slate-600 dark:text-slate-300 focus:ring-2 focus:ring-emerald-500 outline-none">
-                    <option value="1000">1x Speed</option>
-                    <option value="500">2x Speed</option>
-                    <option value="100">10x Speed</option>
-                </select>
-            </div>
+  <nav class="glass sticky top-0 z-50 shadow-lg text-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer hover-lift" onclick="window.location.href='index.html'">
+          <span class="text-3xl drop-shadow-md outfit tracking-tight">🌱</span>
+          <div>
+            <div class="font-bold text-xl leading-none outfit tracking-tight">AgriTwin</div>
+            <div class="text-[10px] text-green-200 tracking-widest uppercase font-semibold mt-0.5">Digital Twin</div>
+          </div>
         </div>
 
-        <!-- 2 Column Layout -->
-        <div class="flex flex-col lg:flex-row gap-6 flex-grow overflow-hidden">
+        <!-- Links -->
+        <div class="flex items-center space-x-1 overflow-x-auto no-scrollbar pb-2 md:pb-0 w-full md:w-auto">
+          <a href="index.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Dashboard</a>
+          <a href="market.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Market</a>
+          <a href="live_prices.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Live Prices</a>
+          <a href="map.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Soil Map</a>
+          <a href="simulation.html" class="bg-white/20 px-4 py-2 rounded-xl hover-lift text-sm font-bold shadow-sm whitespace-nowrap text-white border border-white/10">Simulation</a>
+          <a href="yield.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Yield Plan</a>
+          <a href="profit_calculator.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Profit Calculator</a>
+          <div class="h-6 w-px bg-white/20 mx-3 hidden md:block"></div>
 
-            <!-- Left: Visual Grid -->
+          <!-- Telegram Bot Quick Button -->
+          <a href="https://t.me/agritwin_bot" target="_blank" class="hidden md:flex items-center gap-2 mr-3 bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-full text-xs font-medium transition hover-lift">
+             <span>💬</span> Bot
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition flex-shrink-0 border border-transparent hover:border-white/10"
+            title="Toggle Theme">
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
+            </svg>
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100 dark:text-white outfit tracking-tight">What-If Simulation</h1>
+                <p class="text-slate-500 dark:text-slate-400 dark:text-gray-400">Model hypothetical scenarios without affecting real crops.
+                </p>
+            </div>
+            <button onclick="resetSimulation()"
+                class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">Reset
+                Defaults</button>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- Left: Controls -->
             <div
-                class="lg:w-5/12 xl:w-4/12 flex flex-col h-full bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-                <div
-                    class="p-4 border-b border-slate-100 dark:border-slate-700 flex justify-between items-center bg-slate-50/50 dark:bg-black/10">
-                    <h2 class="font-bold text-slate-700 dark:text-slate-200">🌱 Field View</h2>
-                    <span
-                        class="text-xs font-medium bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">Live
-                        Monitor</span>
+                class="lg:w-1/3 bg-white dark:bg-gray-800 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 p-6 h-fit">
+                <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200 mb-6 flex items-center gap-2">
+                    <span>🎛️</span> Simulation Parameters
+                </h2>
+
+                <!-- Control 1: Irrigation -->
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Irrigation
+                            Adjustment</label>
+                        <span id="val-irrigation" class="text-sm font-bold text-blue-600">0%</span>
+                    </div>
+                    <input type="range" min="-50" max="100" value="0" step="5" id="range-irrigation"
+                        oninput="updateVal('irrigation', '%')">
+                    <p class="text-xs text-gray-400 mt-1">Increase/Decrease water supply</p>
                 </div>
-                <div class="flex-grow p-4 flex items-center justify-center bg-slate-50 dark:bg-slate-900 overflow-auto">
-                    <div class="grid-container w-full max-w-md" id="farmGrid"></div>
+
+                <!-- Control 2: Temperature -->
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Temperature Change</label>
+                        <span id="val-temp" class="text-sm font-bold text-orange-500 text-brand">0°C</span>
+                    </div>
+                    <input type="range" min="-5" max="5" value="0" step="0.5" id="range-temp"
+                        oninput="updateVal('temp', '°C')">
+                    <p class="text-xs text-gray-400 mt-1">Simulate heatwave or cooling</p>
                 </div>
+
+                <!-- Control 3: Fertilizer -->
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Fertilizer Quantity</label>
+                        <span id="val-fert" class="text-sm font-bold text-purple-600">0%</span>
+                    </div>
+                    <input type="range" min="-50" max="100" value="0" step="5" id="range-fert"
+                        oninput="updateVal('fert', '%')">
+                    <p class="text-xs text-gray-400 mt-1">Impacts cost and yield potential</p>
+                </div>
+
+                <button onclick="runSimulation()"
+                    class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-lift shadow-sm hover:shadow-md border border-transparent text-white font-bold py-3 rounded-lg shadow-lg transition transform active:scale-95 flex justify-center items-center gap-2">
+                    <span>🚀</span> Run Simulation
+                </button>
             </div>
 
-            <!-- Right: Data Panes -->
-            <div class="lg:w-7/12 xl:w-8/12 flex flex-col gap-6 h-full overflow-y-auto pr-1">
+            <!-- Right: Results -->
+            <div class="lg:w-2/3 flex flex-col gap-6">
 
-                <!-- Top Row: Stats & Health -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 min-h-[300px]">
-                    <!-- JSON State -->
+                <!-- Status Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Predicted Yield -->
                     <div
-                        class="bg-slate-900 text-slate-300 rounded-xl shadow-sm overflow-hidden flex flex-col border border-slate-700 h-80">
-                        <div class="p-3 bg-slate-800 border-b border-slate-700 flex justify-between items-center">
-                            <h3 class="font-mono text-sm font-semibold text-slate-400">STATE_LOG.json</h3>
-                            <div class="flex gap-1.5">
-                                <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                                <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
-                            </div>
+                        class="bg-white dark:bg-gray-800 p-5 rounded-2xl hover-lift border border-gray-100 dark:border-gray-700 simulation-card">
+                        <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Projected Yield</div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="res-yield" class="text-2xl font-bold text-slate-800 dark:text-slate-100 dark:text-white">--</span>
+                            <span class="text-xs text-gray-400">kg/acre</span>
                         </div>
-                        <div class="p-4 font-mono text-xs overflow-auto custom-scroll flex-grow" id="jsonViewer"></div>
+                        <div id="delta-yield" class="text-xs font-medium mt-2 text-gray-400">-- vs baseline</div>
                     </div>
 
-                    <!-- Health Donut -->
+                    <!-- Est Cost -->
                     <div
-                        class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col relative h-80">
-                        <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-2">Crop Health Distribution</h3>
-                        <div class="flex-grow relative w-full h-full">
-                            <canvas id="healthChart"></canvas>
+                        class="bg-white dark:bg-gray-800 p-5 rounded-2xl hover-lift border border-gray-100 dark:border-gray-700 simulation-card">
+                        <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Estimated Cost</div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="res-cost" class="text-2xl font-bold text-slate-800 dark:text-slate-100 dark:text-white">--</span>
+                            <span class="text-xs text-gray-400">$</span>
                         </div>
-                        <div
-                            class="mt-4 flex justify-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
-                            <span class="flex items-center gap-1"><span
-                                    class="w-2 h-2 rounded-full bg-green-500"></span> Healthy</span>
-                            <span class="flex items-center gap-1"><span
-                                    class="w-2 h-2 rounded-full bg-yellow-400"></span> Stressed</span>
-                            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-red-500"></span>
-                                Critical</span>
+                        <div id="delta-cost" class="text-xs font-medium mt-2 text-gray-400">-- vs baseline</div>
+                    </div>
+
+                    <!-- Crop Stress -->
+                    <div
+                        class="bg-white dark:bg-gray-800 p-5 rounded-2xl hover-lift border border-gray-100 dark:border-gray-700 simulation-card">
+                        <div class="text-sm text-slate-500 dark:text-slate-400 mb-1">Stress Level</div>
+                        <div class="flex items-baseline gap-2">
+                            <span id="res-stress" class="text-2xl font-bold text-slate-800 dark:text-slate-100 dark:text-white">--</span>
+                            <span class="text-xs text-gray-400">%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5 mt-3 dark:bg-gray-700">
+                            <div id="stress-bar" class="bg-green-500 h-1.5 rounded-full" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bottom: Yield Graph -->
+                <!-- Comparison Chart -->
                 <div
-                    class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 flex-grow min-h-[250px] flex flex-col">
-                    <h3 class="font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2">
-                        <span>🚜</span> Projected Yield Timeline
-                    </h3>
-                    <div class="flex-grow w-full relative">
-                        <canvas id="yieldChart"></canvas>
+                    class="bg-white dark:bg-gray-800 p-6 rounded-2xl hover-lift border border-gray-100 dark:border-gray-700 flex-grow">
+                    <h3 class="font-bold text-gray-700 dark:text-gray-200 mb-4">Baseline vs. Simulation</h3>
+                    <div class="h-64 relative">
+                        <canvas id="compChart"></canvas>
                     </div>
+                </div>
+
+                <!-- Analysis Text -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
+                    <h4 class="font-bold text-blue-800 dark:text-blue-300 text-sm mb-1">💡 Analysis</h4>
+                    <p id="analysis-text" class="text-sm text-blue-700 dark:text-blue-200">
+                        Adjust parameters and run the simulation to see the impact on your crop.
+                    </p>
                 </div>
 
             </div>
@@ -281,166 +450,351 @@
     </main>
 
     <script>
-        // --- Theme Toggle ---
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const darkIcon = document.getElementById('theme-toggle-dark-icon');
-        const lightIcon = document.getElementById('theme-toggle-light-icon');
-        function updateIcons() {
-            if (document.documentElement.classList.contains('dark')) {
-                darkIcon.classList.remove('hidden'); lightIcon.classList.add('hidden');
-            } else {
-                lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden');
-            }
+        // State
+        const API = "http://127.0.0.1:8000";
+
+        function safeGet(id) { return document.getElementById(id); }
+
+        function updateVal(key, unit) {
+            const val = safeGet(`range-${key}`).value;
+            const prefix = val > 0 ? "+" : "";
+            safeGet(`val-${key}`).textContent = `${prefix}${val}${unit}`;
         }
-        updateIcons();
-        themeToggleBtn.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-            updateIcons();
-            healthChart.update();
-            yieldChart.update();
-        });
 
-
-        // --- Simulation State ---
-        const TOTAL_TREES = 100;
-        let day = 0, isRunning = false, speed = 1000, timer = null;
-        let state = {
-            id: "DT-FARM-001", status: "Active", day: 0,
-            weather: { temp: 24.5, condition: "Sunny" },
-            stats: { healthy: TOTAL_TREES, stressed: 0, critical: 0, dead: 0, projected_yield_kg: 0 }
-        };
-        let trees = new Array(TOTAL_TREES).fill(0);
-
-        const gridEl = document.getElementById('farmGrid');
-        const jsonEl = document.getElementById('jsonViewer');
-        const dayEl = document.getElementById('day-counter');
-
-        // --- Charts ---
-        Chart.defaults.color = () => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
-
-        const ctxHealth = document.getElementById('healthChart').getContext('2d');
-        const healthChart = new Chart(ctxHealth, {
-            type: 'doughnut',
+        // Initialize Chart
+        const ctx = document.getElementById('compChart').getContext('2d');
+        let compChart = new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: ['Healthy', 'Stressed', 'Critical', 'Dead'],
-                datasets: [{
-                    data: [100, 0, 0, 0],
-                    backgroundColor: ['#22c55e', '#facc15', '#ef4444', '#64748b'], borderWidth: 0
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, cutout: '70%', plugins: { legend: false } }
-        });
-
-        const ctxYield = document.getElementById('yieldChart').getContext('2d');
-        const yieldChart = new Chart(ctxYield, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Yield (kg)', data: [], borderColor: '#6366f1',
-                    backgroundColor: (ctx) => {
-                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 300);
-                        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.2)');
-                        gradient.addColorStop(1, 'rgba(99, 102, 241, 0)');
-                        return gradient;
-                    }, fill: true, tension: 0.4
-                }]
+                labels: ['Yield (kg)', 'Cost ($)'],
+                datasets: [
+                    { label: 'Baseline', data: [0, 0], backgroundColor: '#9ca3af', borderRadius: 4 },
+                    { label: 'Simulated', data: [0, 0], backgroundColor: '#16a34a', borderRadius: 4 }
+                ]
             },
             options: {
-                responsive: true, maintainAspectRatio: false,
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom' } },
                 scales: {
-                    x: { display: false },
-                    y: {
-                        display: true,
-                        grid: { color: () => document.documentElement.classList.contains('dark') ? '#334155' : '#f1f5f9' }
-                    }
-                },
-                plugins: { legend: false }
+                    y: { beginAtZero: true }
+                }
             }
         });
 
-        // --- Logic ---
-        function initGrid() {
-            gridEl.innerHTML = '';
-            trees.forEach((_, i) => {
-                const div = document.createElement('div');
-                div.className = 'tree'; div.id = `tree-${i}`;
-                div.innerHTML = `<span>${i + 1}</span>`;
-                div.onclick = () => affectTree(i);
-                gridEl.appendChild(div);
-            });
-            updateGridVisuals();
-        }
-        function affectTree(index) {
-            trees[index] = (trees[index] + 1) % 4;
-            updateGridVisuals(); updateStats();
-        }
-        function updateGridVisuals() {
-            trees.forEach((status, i) => {
-                const el = document.getElementById(`tree-${i}`);
-                el.className = 'tree';
-                if (status === 1) el.classList.add('stressed');
-                if (status === 2) el.classList.add('critical');
-                if (status === 3) el.classList.add('dead');
-            });
-        }
-        function updateStats() {
-            const counts = [0, 0, 0, 0];
-            trees.forEach(t => counts[t]++);
-            state.stats.healthy = counts[0]; state.stats.stressed = counts[1];
-            state.stats.critical = counts[2]; state.stats.dead = counts[3];
-            state.stats.projected_yield_kg = (counts[0] * 10) + (counts[1] * 5);
-            dayEl.innerText = state.day;
+        async function runSimulation() {
+            const btn = document.querySelector('button[onclick="runSimulation()"]');
+            btn.innerHTML = "⏳ Calculating...";
+            btn.disabled = true;
 
-            // JSON
-            jsonEl.innerHTML = syntaxHighlight(state);
+            const payload = {
+                irrigation_percent: parseFloat(safeGet('range-irrigation').value),
+                temp_change: parseFloat(safeGet('range-temp').value),
+                fertilizer_percent: parseFloat(safeGet('range-fert').value)
+            };
 
-            // Charts
-            healthChart.data.datasets[0].data = counts; healthChart.update();
-            if (yieldChart.data.labels.length > 30) {
-                yieldChart.data.labels.shift(); yieldChart.data.datasets[0].data.shift();
+            try {
+                const res = await fetch(`${API}/simulate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                updateUI(data);
+                generateAnalysis(data, payload);
+
+            } catch (e) {
+                console.error(e);
+                alert("Simulation failed: " + e.message);
+            } finally {
+                btn.innerHTML = "<span>🚀</span> Run Simulation";
+                btn.disabled = false;
             }
-            yieldChart.data.labels.push(state.day);
-            yieldChart.data.datasets[0].data.push(state.stats.projected_yield_kg);
-            yieldChart.update('none');
         }
-        function simulationStep() {
-            state.day++;
-            if (Math.random() < 0.08) {
-                const target = Math.floor(Math.random() * TOTAL_TREES);
-                if (trees[target] < 3) trees[target]++;
-            } else if (Math.random() > 0.95) {
-                const target = Math.floor(Math.random() * TOTAL_TREES);
-                if (trees[target] > 0) trees[target]--;
+
+        function updateUI(data) {
+            const base = data.baseline.metrics;
+            const sim = data.simulated.metrics;
+
+            // Metrics
+            safeGet('res-yield').textContent = sim.yield_kg;
+            safeGet('delta-yield').textContent = getDeltaText(sim.yield_kg, base.yield_kg);
+            safeGet('delta-yield').className = `text-xs font-medium mt-2 ${getColor(sim.yield_kg, base.yield_kg, true)}`;
+
+            safeGet('res-cost').textContent = sim.cost;
+            safeGet('delta-cost').textContent = getDeltaText(sim.cost, base.cost);
+            safeGet('delta-cost').className = `text-xs font-medium mt-2 ${getColor(sim.cost, base.cost, false)}`;
+
+            safeGet('res-stress').textContent = sim.stress_index;
+            safeGet('stress-bar').style.width = `${sim.stress_index}%`;
+            safeGet('stress-bar').className = `h-1.5 rounded-full ${sim.stress_index > 50 ? 'bg-red-500' : sim.stress_index > 20 ? 'bg-yellow-500' : 'bg-green-500'}`;
+
+            // Chart
+            compChart.data.datasets[0].data = [base.yield_kg, base.cost];
+            compChart.data.datasets[1].data = [sim.yield_kg, sim.cost];
+            compChart.update();
+        }
+
+        function getDeltaText(curr, base) {
+            const diff = curr - base;
+            const sign = diff >= 0 ? "+" : "";
+            const pct = ((diff / base) * 100).toFixed(1);
+            if (isNaN(pct) || !isFinite(pct)) return "--";
+            return `${sign}${diff.toFixed(1)} (${sign}${pct}%)`;
+        }
+
+        function getColor(curr, base, higherIsBetter) {
+            if (curr === base) return "text-gray-400";
+            if (higherIsBetter) return curr > base ? "text-green-600" : "text-red-600";
+            return curr < base ? "text-green-600" : "text-red-600"; // For Cost, lower is better
+        }
+
+        function generateAnalysis(data, inputs) {
+            const sim = data.simulated.metrics;
+            const base = data.baseline.metrics;
+            let text = "";
+
+            if (sim.yield_kg > base.yield_kg) {
+                text += `✅ <b>Positive Outcome:</b> Yield is projected to increase by ${((sim.yield_kg - base.yield_kg) / base.yield_kg * 100).toFixed(1)}%. `;
+            } else if (sim.yield_kg < base.yield_kg) {
+                text += `⚠️ <b>Risk:</b> Yield projected to decrease. `;
+            } else {
+                text += "No significant change in yield. ";
             }
-            state.weather.temp = (24 + Math.sin(state.day / 10) * 5 + Math.random()).toFixed(1);
-            state.weather.condition = Math.random() > 0.7 ? "Cloudy" : "Sunny";
-            updateGridVisuals(); updateStats();
-        }
-        function startSim() { if (isRunning) return; isRunning = true; timer = setInterval(simulationStep, speed); }
-        function pauseSim() { isRunning = false; clearInterval(timer); }
-        function resetSim() { pauseSim(); state.day = 0; trees.fill(0); yieldChart.data.labels = []; yieldChart.data.datasets[0].data = []; initGrid(); updateStats(); }
 
-        function syntaxHighlight(json) {
-            let jsonStr = JSON.stringify(json, undefined, 4);
-            return jsonStr.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-                var cls = 'number';
-                if (/^"/.test(match)) { cls = (/:$/.test(match)) ? 'key' : 'string'; }
-                else if (/true|false/.test(match)) cls = 'boolean';
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
+            if (sim.stress_index > 30) {
+                text += "However, crop stress is high (" + sim.stress_index + "%). Monitor water levels. ";
+            }
+
+            if (inputs.fertilizer_percent > 20 && sim.yield_kg - base.yield_kg < 50) {
+                text += "Note: High fertilizer increase yielding diminishing returns.";
+            }
+
+            safeGet('analysis-text').innerHTML = text;
         }
 
-        document.getElementById('playBtn').onclick = startSim;
-        document.getElementById('pauseBtn').onclick = pauseSim;
-        document.getElementById('resetBtn').onclick = resetSim;
-        document.getElementById('speedSelect').onchange = (e) => {
-            speed = parseInt(e.target.value); if (isRunning) { pauseSim(); startSim(); }
+        function resetSimulation() {
+            safeGet('range-irrigation').value = 0; updateVal('irrigation', '%');
+            safeGet('range-temp').value = 0; updateVal('temp', '°C');
+            safeGet('range-fert').value = 0; updateVal('fert', '%');
+            runSimulation();
+        }
+
+        // Theme Toggle
+        document.getElementById('theme-toggle').onclick = () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
         };
 
-        initGrid(); updateStats();
-    </script>
+        // Run once on load
+        window.onload = runSimulation;
+
+    
+
+const API_BASE = "http://127.0.0.1:8000";
+    // --- Chatbot Logic ---
+    let chatOpen = false;
+
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      const window = document.getElementById('chatbot-window');
+      if (chatOpen) {
+        window.classList.add('open');
+        setTimeout(() => document.getElementById('chatbot-input').focus(), 300);
+      } else {
+        window.classList.remove('open');
+      }
+    }
+
+    function addMessage(text, sender) {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${sender === 'user' ? 'chat-user' : 'chat-bot'}`;
+
+      // Simple markdown-like bold parsing for better readability
+      let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Handle newlines
+      formattedText = formattedText.replace(/\n/g, '<br>');
+
+      div.innerHTML = formattedText;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = 'typing-indicator';
+      div.id = 'typing-indicator';
+      div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+    }
+
+    let currentLang = 'en';
+
+    function changeChatLang() {
+      currentLang = document.getElementById('chatbot-lang').value;
+      const welcome = document.getElementById('chat-welcome-msg');
+      const input = document.getElementById('chatbot-input');
+      const defaultQueriesContainer = document.getElementById('chat-default-queries');
+
+      if (currentLang === 'ta') {
+        if (welcome) welcome.innerText = "வணக்கம்! நான் உங்கள் AgriTwin AI உதவியாளர். நீங்கள் பயிர் பரிந்துரைகள், வானிலை, அல்லது விவசாய தகவல்களை பற்றி என்னிடம் கேட்கலாம். நான் உங்களுக்கு எப்படி உதவ முடியும்?";
+        input.placeholder = "ஒரு கேள்வியைக் கேளுங்கள்...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('இப்போது பயிரிட சிறந்த பயிர் எது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 இப்போது பயிரிட சிறந்த பயிர் எது?</button>
+            <button onclick="sendDefaultQuery('மண் வளத்தை எவ்வாறு மேம்படுத்துவது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 மண் வளத்தை எவ்வாறு மேம்படுத்துவது?</button>
+            <button onclick="sendDefaultQuery('வானிலை சார்ந்த நீர்ப்பாசனத் திட்டத்தைக் கொடு.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 நீர்ப்பாசனத் திட்டத்தைக் கொடு.</button>
+          `;
+        }
+      } else {
+        if (welcome) welcome.innerText = "Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations, weather strategies, or general agricultural insights. How can I help you today?";
+        input.placeholder = "Ask a question...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('What is the best crop to plant now?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 What is the best crop to plant now?</button>
+            <button onclick="sendDefaultQuery('How can I improve soil health?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 How can I improve soil health?</button>
+            <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 Give me an irrigation plan.</button>
+          `;
+        }
+      }
+    }
+
+    async function sendDefaultQuery(text) {
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatbot-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+</script>
+
+<!-- RAG Chatbot UI -->
+  <div id="chatbot-fab" onclick="toggleChat()">
+    💬
+  </div>
+
+  <div id="chatbot-window">
+    <div id="chatbot-header">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🤖</span>
+        <span>AgriTwin Assistant</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="chatbot-lang" class="bg-green-700 text-white text-xs border-none rounded p-1 outline-none"
+          onchange="changeChatLang()">
+          <option value="en">English</option>
+          <option value="ta">தமிழ்</option>
+        </select>
+        <button onclick="toggleChat()" class="text-white hover:text-gray-200 focus:outline-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="chatbot-messages">
+      <div class="chat-msg chat-bot" id="chat-welcome-msg">
+        Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations,
+        weather strategies, or general agricultural insights. How can I help you today?
+      </div>
+      <div id="chat-default-queries" class="flex flex-col gap-2 mt-1">
+        <button onclick="sendDefaultQuery('What is the best crop to plant now?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱
+          What is the best crop to plant now?</button>
+        <button onclick="sendDefaultQuery('How can I improve soil health?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍
+          How can I improve soil health?</button>
+        <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧
+          Give me an irrigation plan.</button>
+      </div>
+    </div>
+
+    <form id="chatbot-input-container" onsubmit="handleChatSubmit(event)">
+      <input type="text" id="chatbot-input" placeholder="Ask a question..." autocomplete="off" required>
+      <button type="submit" id="chatbot-send">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" transform="rotate(90)">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+          </path>
+        </svg>
+      </button>
+    </form>
+  </div>
 </body>
 
 </html>

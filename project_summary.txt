@@ -1,0 +1,89 @@
+
+================================================================================
+AGRITWIN PROJECT SUMMARY REPORT
+================================================================================
+
+1. AI MODELS & ACCURACY
+--------------------------------------------------------------------------------
+The project utilizes four operational machine learning models:
+
+A. Crop Recommendation Model
+   - Type: Random Forest Classifier
+   - File: backend/model.pkl
+   - Input: N, P, K, Temperature, Humidity, pH, Rainfall
+   - Accuracy: ~99% (Typical for this dataset structure)
+   - Status: Active
+
+B. Crop Yield Prediction Model
+   - Type: Random Forest Regressor
+   - File: backend/yield_model.pkl
+   - Input: State, District, Crop, Season, Area, Production, Fertilizer, Pesticide, Rainfall
+   - Accuracy: 98.01% (R2 Score)
+   - Status: Active
+
+
+D. Market Price Prediction Model
+   - Type: Random Forest Regressor
+   - File: backend/models/market_model.pkl
+   - Input: State, District, Market, Commodity, Variety, Date
+   - Accuracy: High Variance (Dependent on market volatility)
+   - Status: Active
+
+2. MODEL SELECTION RATIONALE (WHY THESE MODELS?)
+--------------------------------------------------------------------------------
+A. Why Random Forest? (Used for Crop, Yield & Market)
+   - Non-Linear Relationships: Agricultural data (soil, weather, price) is highly complex and non-linear. Random Forest captures these patterns better than linear regression.
+   - Robustness to Overfitting: By averaging multiple decision trees, it reduces the risk of memorizing noise, which is common in real-world sensor data.
+   - Mixed Data Handling: It performs exceptionally well on tabular data containing both numerical (e.g., Temperature, Price) and categorical (e.g., State, Season) features.
+   - High Accuracy: It is the industry standard for tabular prediction tasks where deep learning (Neural Networks) often provides diminishing returns for higher computational cost.
+
+
+3. DATASET ORIGINS
+--------------------------------------------------------------------------------
+A. Crop Recommendation
+   - Source: Harvestify (GitHub/Kaggle)
+   - File: dataset/Crop_recommendation.csv
+   - Content: Soil and weather parameters labeled with optimal crops.
+
+B. Crop Yield
+   - Source: "Agricultural Crop Yield in Indian States" (Enriched version)
+   - File: dataset/crop_yield.csv
+   - Content: Historical yield data combined with fertilizer and pesticide usage.
+
+
+D. Market Data
+   - Source: Agmarknet (Gov. of India) & Synthetic Generation
+   - File: dataset/market.csv & Database
+   - Content: Daily modal prices for commodities across Indian mandis.
+
+4. DATABASE USAGE
+--------------------------------------------------------------------------------
+Database System: SQLite
+File: backend/agritwin.db
+
+Primary Tables & Uses:
+- market_data: Stores historical and live market prices (State, Commodity, Price, Date).
+- telemetry_data: Logs real-time sensor readings (Soil Moisture, NPK, Temp, Humidity).
+- user_logs: (Planned) Tracks user actions and advisories generated.
+
+The database serves as the persistent storage layer for the "Digital Twin" state, allowing the system to maintain history and provide trends over time.
+
+5. API KEYS & EXTERNAL SERVICES
+--------------------------------------------------------------------------------
+The project integrates with the following external services:
+
+A. OpenWeatherMap
+   - Key: 0adc9129d6eb63b80d6b028c9bf0e2ba
+   - Use: Real-time weather conditions and 5-day forecasts.
+
+B. Agmarknet (Open Gov Data Platform India)
+   - Key: 579b464db66ec23bdd00000191f5f8af492a4dcd65c3879f5158a990
+   - Use: Fetching real-time agricultural commodity prices.
+
+C. Agromonitoring
+   - Key: a57ae2b18ddbdfee9f55be1f1625cbd4
+   - Use: Satellite-based soil and vegetation indices (NDVI).
+
+================================================================================
+END OF REPORT
+================================================================================

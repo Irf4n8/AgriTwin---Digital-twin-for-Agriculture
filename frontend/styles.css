@@ -1,0 +1,142 @@
+/* Custom Global Styles for AgriTwin */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+/* Base typography */
+body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background-color: #f8fafc; /* Sleek light mode background */
+}
+
+h1, h2, h3, h4, h5, h6, .outfit {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism Classes */
+.glass {
+    background-color: rgba(22, 163, 74, 0.90); /* Green-600 */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
+}
+
+/* Premium Dark Mode Overrides (Deep Slate/Navy instead of flat gray) */
+html.dark body {
+    background-color: #0f172a; /* Slate 900 */
+    color: #f8fafc;
+}
+
+html.dark .glass {
+    background-color: rgba(15, 23, 42, 0.75); /* Slate 900 glass instead of green for sleek look */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}
+
+html.dark .bg-white {
+    background-color: #1e293b !important; /* Slate 800 */
+    color: #f8fafc !important;
+    border-color: #334155 !important; /* Slate 700 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Fix chart backgrounds */
+html.dark canvas {
+    filter: brightness(0.9) contrast(1.1);
+}
+
+html.dark .glass-panel {
+    background: rgba(30, 41, 59, 0.7) !important; /* Slate 800 */
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .bg-gray-50, html.dark .bg-gray-100 {
+    background-color: #0f172a !important; /* Slate 900 */
+}
+
+html.dark .bg-gray-200 {
+    background-color: #1e293b !important; /* Slate 800 */
+}
+
+html.dark .bg-gray-800, html.dark .bg-gray-900 {
+    background-color: #1e293b !important; /* Slate 800 */
+}
+
+html.dark .text-gray-900, html.dark .text-gray-800 {
+    color: #f8fafc !important; /* Slate 50 */
+}
+
+html.dark .text-gray-700, html.dark .text-gray-600 {
+    color: #cbd5e1 !important; /* Slate 300 */
+}
+
+html.dark .text-gray-500, html.dark .text-gray-400 {
+    color: #94a3b8 !important; /* Slate 400 */
+}
+
+/* Custom Scrollbar for a sleek look */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Smooth micro-animations */
+.hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+html.dark .hover-lift:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading Spinner Overrides */
+#page-loader {
+    position: fixed;
+    inset: 0;
+    background-color: #f8fafc;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease, visibility 0.5s;
+}
+
+html.dark #page-loader {
+    background-color: #0f172a;
+}

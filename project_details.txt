@@ -1,0 +1,152 @@
+Agri-Twin Digital Twin For Agriculture - Project Details
+
+1. Soil dataset attributes
+- N (Nitrogen)
+- P (Phosphorus)
+- K (Potassium)
+- ph (pH Level)
+- soil_moisture (Soil Moisture)
+
+2. Climate dataset parameters
+- temperature (Temperature in Celsius)
+- humidity (Humidity percentage)
+- rainfall (Rainfall in mm)
+
+3. Machine learning model comparison and accuracy
+- Crop Recommendation: Uses RandomForestClassifier (n_estimators=100) trained on soil and climate features. 
+- Yield Prediction: Uses RandomForestRegressor (n_estimators=100) trained on crop, season, state, area, rainfall, fertilizer, and pesticide data. Evaluted using Mean Squared Error (MSE) and R2 Score.
+- Market Trend: Uses another model framework for price predictions.
+Note: Exact accuracy metrics are dynamically calculated during training runs using `mean_squared_error` and `r2_score` or `accuracy_score`.
+
+4. Agri twin dashboard interface
+The dashboard includes the following components:
+- Farm Overview (Real-time telemetry insights)
+- Market Insights (Prices & Trends)
+- Soil Map (Satellite Analysis)
+- Simulation (Digital Twin for what-if scenarios)
+- 5-Day Weather Forecast
+- Live Sensor Grid: Environment (Temp, Humidity, Rainfall) and Soil Health (N, P, K, pH, Moisture)
+- Environmental & Nutrient Trend Charts
+- Smart Advisory Decision Engine
+- AI Crop Recommendation
+- AI Yield Forecast
+
+5. Crop recommendation output
+- recommended_crop: String (e.g., "rice", "wheat") predicted based on current N, P, K, temperature, humidity, pH, and rainfall.
+
+6. Yield prediction output
+- predicted_yield: Expected crop yield in tons per hectare.
+- total_production: Total expected production in tons (Yield * Area).
+- yield_unit: "tons per hectare"
+- production_unit: "tons"
+
+7. Market trend output
+Outputs JSON with:
+- total: Total number of records
+- columns: [id, state, district, market, commodity, variety, grade, arrival_date, min_price, max_price, modal_price]
+- rows: Array of records containing the above columns.
+
+8. Sample soil & climate data set records (from telemetry.csv)
+timestamp,device_id,N,P,K,temperature,humidity,ph,rainfall,soil_moisture
+2026-01-03T10:57:05,device-01,123,126,164,37.9,45.3,8.2,215.4,24.1
+2026-01-03T10:57:08,device-01,64,102,72,37.7,84.8,5.8,154.0,28.0
+2026-01-03T10:57:11,device-01,80,107,89,19.9,44.0,8.4,87.5,14.9
+
+9. Sample climate data set records (from telemetry.csv)
+(Covered in the sample above as soil and climate data are stored together in telemetry arrays)
+
+10. Sample crop data set records (from Crop_recommendation.csv and crop_yield.csv)
+Crop recommendation sample:
+N,P,K,temperature,humidity,ph,rainfall,label
+90,42,43,20.87,82.00,6.50,202.93,rice
+85,58,41,21.77,80.31,7.03,226.65,rice
+
+Crop yield sample:
+Crop,Season,State,Area,Annual_Rainfall,Fertilizer,Pesticide,Yield
+Arecanut,Whole Year,Assam,73814,2051.4,7024878.38,22882.34,0.796
+Arhar/Tur,Kharif,Assam,6637,2051.4,631643.29,2057.47,0.710
+
+11. Sample code snippet of Data preprocessing
+```python
+# Cleaning
+df = df.dropna()
+
+target = "Yield"
+features = ["Crop", "Season", "State", "Area", "Annual_Rainfall", "Fertilizer", "Pesticide"]
+
+X = df[features]
+y = df[target]
+
+# One-Hot Feature Encoding
+print("Encoding features...")
+X_encoded = pd.get_dummies(X, columns=["Crop", "Season", "State"], drop_first=True)
+```
+
+12. Sample code snippet of Model training
+```python
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Save model
+joblib.dump(model, model_path)
+```
+
+13. Sample code snippet of Crop prediction function
+```python
+@app.get("/predict")
+def predict_crop():
+    # ... Database fetch ...
+    N = safe_value(latest["N"])
+    P = safe_value(latest["P"])
+    K = safe_value(latest["K"])
+    temperature = safe_value(latest["temperature"])
+    humidity = safe_value(latest["humidity"])
+    ph = safe_value(latest["ph"])
+    rainfall = safe_value(latest["rainfall"])
+
+    features = np.array([[N, P, K, temperature, humidity, ph, rainfall]])
+    prediction = model.predict(features)[0]
+    return {
+        "telemetry_data": telemetry_dict,
+        "recommended_crop": str(prediction)
+    }
+```
+
+14. Sample code snippet of Model evaluation code
+```python
+# Evaluate
+y_pred = rf.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"Model Trained. MSE: {mse:.4f}, R2 Score: {r2:.4f}")
+```
+
+15. System configuration and api parameters
+System Configuration:
+- Backend: FastAPI combined with SQLite for tracking state and metadata. Uses Uvicorn for ASGI serving.
+- Frontend: HTML/TailwindCSS directly served by FastAPI or loaded directly via index.html.
+
+API Parameters/Integrations:
+- OpenWeather API: Used for weather forecasting (OPENWEATHER_API_KEY, CITY, UNITS).
+- Agmarknet API: Indian government API for fetching live market rates (MAGMARKNET_API_KEY, AGMARKNET_URL).
+- Agromonitoring API: Used for real-time soil data based on lat/lon (AGRO_API_KEY).
+
+16. Software environment used in the agri twin system
+- Python Libraries: FastAPI, Uvicorn, Pandas, Scikit-learn, Numpy, Joblib, SQLite3, Requests, Pydantic, Deep-translator
+- Frontend Stack: HTML5, Tailwind CSS, Chart.js, HTML2PDF.js
+- OS: Windows OS (PowerShell shell used for run_app.bat)
+
+17/18. Input parameters for crop prediction
+The parameters expected by the Random Forest Classifier for Crop Recommendation are:
+- N (Nitrogen - ppm)
+- P (Phosphorus - ppm)
+- K (Potassium - ppm)
+- temperature (°C)
+- humidity (%)
+- ph (pH Level)
+- rainfall (mm)

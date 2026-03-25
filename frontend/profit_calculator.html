@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farm Profit Calculator | AgriTwin</title>
+  <link rel="stylesheet" href="tailwind.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+  
+#chatbot-fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      cursor: pointer;
+      z-index: 9999;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #chatbot-fab:hover {
+      transform: scale(1.1);
+    }
+
+    #chatbot-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 9998;
+      overflow: hidden;
+      transform-origin: bottom right;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    
+
+    #chatbot-window.open {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #chatbot-header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 16px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chat-msg p {
+      margin-bottom: 8px;
+    }
+
+    .chat-msg p:last-child {
+      margin-bottom: 0;
+    }
+
+    .chat-user {
+      align-self: flex-end;
+      background: #10b981;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-bot {
+      align-self: flex-start;
+      background: #f3f4f6;
+      color: #1f2937;
+      border-bottom-left-radius: 4px;
+    }
+
+    
+
+    #chatbot-input-container {
+      padding: 12px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 8px;
+    }
+
+    
+
+    #chatbot-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      background: #f9fafb;
+    }
+
+    
+
+    #chatbot-send {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #chatbot-send:hover {
+      background: #059669;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      width: fit-content;
+    }
+
+    
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #9ca3af;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+</style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  </script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors duration-500 selection:bg-green-500 selection:text-white min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+
+  <!-- Navigation -->
+    <!-- Navigation -->
+    <!-- Navigation -->
+  <nav class="glass sticky top-0 z-50 shadow-lg text-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer hover-lift" onclick="window.location.href='index.html'">
+          <span class="text-3xl drop-shadow-md outfit tracking-tight">🌱</span>
+          <div>
+            <div class="font-bold text-xl leading-none outfit tracking-tight">AgriTwin</div>
+            <div class="text-[10px] text-green-200 tracking-widest uppercase font-semibold mt-0.5">Digital Twin</div>
+          </div>
+        </div>
+
+        <!-- Links -->
+        <div class="flex items-center space-x-1 overflow-x-auto no-scrollbar pb-2 md:pb-0 w-full md:w-auto">
+          <a href="index.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Dashboard</a>
+          <a href="market.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Market</a>
+          <a href="live_prices.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Live Prices</a>
+          <a href="map.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Soil Map</a>
+          <a href="simulation.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Simulation</a>
+          <a href="yield.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Yield Plan</a>
+          <a href="profit_calculator.html" class="bg-white/20 px-4 py-2 rounded-xl hover-lift text-sm font-bold shadow-sm whitespace-nowrap text-white border border-white/10">Profit Calculator</a>
+          <div class="h-6 w-px bg-white/20 mx-3 hidden md:block"></div>
+
+          <!-- Telegram Bot Quick Button -->
+          <a href="https://t.me/agritwin_bot" target="_blank" class="hidden md:flex items-center gap-2 mr-3 bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-full text-xs font-medium transition hover-lift">
+             <span>💬</span> Bot
+          </a>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition flex-shrink-0 border border-transparent hover:border-white/10"
+            title="Toggle Theme">
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
+            </svg>
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
+    
+    <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6 border-b border-gray-200 pb-6">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900 outfit tracking-tight">Farm Profit Calculator</h1>
+        <p class="text-lg text-slate-500 dark:text-slate-400 mt-2">Estimate expected profit or loss based on inputs and market prices.</p>
+      </div>
+      <button onclick="saveScenario()" class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 hover-lift shadow-sm hover:shadow-md border border-transparent text-white px-5 py-2 rounded-lg shadow-sm font-medium transition">
+        💾 Save Scenario
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      
+      <!-- Input Form -->
+      <div class="lg:col-span-1 space-y-6">
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border border-gray-200 relative overflow-hidden">
+            <div class="absolute right-[-10px] top-[-10px] text-6xl opacity-10">💰</div>
+            <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4 border-b border-gray-100 pb-2">Investment Details</h2>
+            
+            <form id="calc-form" class="space-y-4">
+              <!-- Basic Details -->
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Crop Type</label>
+                  <input type="text" id="crop" class="w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100" placeholder="e.g. Tomato" required value="Tomato">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 mb-1">Land Area (Acres)</label>
+                  <input type="number" id="area" class="w-full border border-gray-200 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-100" min="0" step="0.1" required value="10">
+                </div>
+              </div>
+
+              <!-- Cost Breakdown -->
+              <div>
+                  <label class="block text-xs font-bold text-gray-700 mb-2 uppercase">Input Costs (₹)</label>
+                  <div class="grid grid-cols-2 gap-3">
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Seed Cost</label>
+                          <input type="number" id="seed_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="5000">
+                      </div>
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Fertilizer Cost</label>
+                          <input type="number" id="fertilizer_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="12000">
+                      </div>
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Pesticide Cost</label>
+                          <input type="number" id="pesticide_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="4500">
+                      </div>
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Irrigation Cost</label>
+                          <input type="number" id="irrigation_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="3000">
+                      </div>
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Labor Cost</label>
+                          <input type="number" id="labor_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="15000">
+                      </div>
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Machinery Cost</label>
+                          <input type="number" id="machinery_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="8000">
+                      </div>
+                      <div class="col-span-2">
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Miscellaneous Cost</label>
+                          <input type="number" id="misc_cost" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="2500">
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Yield & Market Price -->
+              <div class="pt-2 border-t border-gray-100">
+                  <label class="block text-xs font-bold text-indigo-600 mb-2 uppercase">Expected Returns</label>
+                  <div class="grid grid-cols-2 gap-4">
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Expected Yield (kg/acre)</label>
+                          <input type="number" id="expected_yield" class="calc-input w-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded px-3 py-2 text-sm" value="4500">
+                      </div>
+                      <div>
+                          <label class="block text-[10px] text-slate-500 dark:text-slate-400 mb-1">Market Price (₹/kg)</label>
+                          <input type="number" id="market_price" class="calc-input w-full border border-indigo-200 bg-indigo-50 rounded px-3 py-2 text-sm font-bold text-indigo-700" value="22">
+                      </div>
+                  </div>
+              </div>
+            </form>
+        </div>
+      </div>
+
+      <!-- Results & Visuals -->
+      <div class="lg:col-span-2 flex flex-col gap-6">
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-2xl hover-lift shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">Total Investment</div>
+                <div class="text-xl font-bold text-red-600">₹<span id="res_total_cost">0</span></div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl hover-lift shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">Est. Yield</div>
+                <div class="text-xl font-bold text-slate-800 dark:text-slate-100"><span id="res_total_prod">0</span> kg</div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl hover-lift shadow-sm border border-gray-200 text-center">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">Expected Revenue</div>
+                <div class="text-xl font-bold text-green-600">₹<span id="res_revenue">0</span></div>
+            </div>
+            <div class="bg-white p-4 rounded-2xl hover-lift shadow-sm border-b-4 border-indigo-500 text-center transform scale-105 z-10">
+                <div class="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase mb-1">Net Profit / Loss</div>
+                <div class="text-2xl font-black text-indigo-700">₹<span id="res_net_profit">0</span></div>
+                <div id="res_profit_acre" class="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-1">₹0 per acre</div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div id="recommendations-box" class="bg-blue-50 border border-blue-200 p-4 rounded-xl shadow-sm hidden">
+             <h3 class="text-sm font-bold text-blue-800 mb-2 flex items-center gap-2">💡 Smart Advisory</h3>
+             <ul id="recommendations-list" class="text-sm text-blue-700 space-y-1 list-disc pl-5">
+             </ul>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow">
+            <!-- Pie Chart: Cost Breakdown -->
+            <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-200">
+                <h3 class="text-sm font-bold text-gray-700 mb-4 text-center">Cost Breakdown</h3>
+                <div class="relative h-64 w-full flex justify-center">
+                    <canvas id="costChart"></canvas>
+                </div>
+            </div>
+            <!-- Bar Chart: Revenue vs Cost -->
+            <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-200">
+                <h3 class="text-sm font-bold text-gray-700 mb-4 text-center">Cost vs. Revenue</h3>
+                <div class="relative h-64 w-full flex justify-center">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- History View -->
+    <div class="mt-8">
+        <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100 mb-4">Historical Scenarios</h2>
+        <div class="bg-white shadow-sm border border-gray-200 rounded-2xl hover-lift overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-slate-50 dark:bg-slate-900/50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Crop</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Area</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Investment</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Revenue</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Profit/Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-table-body" class="bg-white divide-y divide-gray-200 text-sm">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </main>
+
+  <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      updateChartsTheme();
+    });
+
+    let costChartInstance = null;
+    let comparisonChartInstance = null;
+
+    // formatting
+    const formatINR = (num) => {
+        return num.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+    };
+
+    function updateChartsTheme() {
+        const isDark = document.documentElement.classList.contains('dark');
+        const textColor = isDark ? '#e5e7eb' : '#374151';
+        
+        if (costChartInstance) {
+            costChartInstance.options.plugins.legend.labels.color = textColor;
+            costChartInstance.update();
+        }
+        if (comparisonChartInstance) {
+            comparisonChartInstance.options.plugins.legend.labels.color = textColor;
+            comparisonChartInstance.options.scales.x.ticks.color = textColor;
+            comparisonChartInstance.options.scales.y.ticks.color = textColor;
+            comparisonChartInstance.update();
+        }
+    }
+
+    async function calculateProfit() {
+        const reqBody = {
+            crop: document.getElementById('crop').value || 'Unknown',
+            area: parseFloat(document.getElementById('area').value) || 0,
+            seed_cost: parseFloat(document.getElementById('seed_cost').value) || 0,
+            fertilizer_cost: parseFloat(document.getElementById('fertilizer_cost').value) || 0,
+            pesticide_cost: parseFloat(document.getElementById('pesticide_cost').value) || 0,
+            irrigation_cost: parseFloat(document.getElementById('irrigation_cost').value) || 0,
+            labor_cost: parseFloat(document.getElementById('labor_cost').value) || 0,
+            machinery_cost: parseFloat(document.getElementById('machinery_cost').value) || 0,
+            misc_cost: parseFloat(document.getElementById('misc_cost').value) || 0,
+            expected_yield: parseFloat(document.getElementById('expected_yield').value) || 0,
+            market_price: parseFloat(document.getElementById('market_price').value) || 0
+        };
+
+        try {
+            const res = await fetch('/api/profit/calculate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+            
+            if (data.status === 'success') {
+                const results = data.data;
+                
+                // Update UI text
+                document.getElementById('res_total_cost').innerText = formatINR(results.total_cost);
+                document.getElementById('res_total_prod').innerText = formatINR(results.total_production);
+                document.getElementById('res_revenue').innerText = formatINR(results.estimated_revenue);
+                
+                const profitEl = document.getElementById('res_net_profit');
+                profitEl.innerText = formatINR(results.net_profit);
+                profitEl.className = results.net_profit >= 0 ? "text-2xl font-black text-green-600" : "text-2xl font-black text-red-600";
+                
+                document.getElementById('res_profit_acre').innerText = `₹${formatINR(results.net_profit / (reqBody.area || 1))} per acre`;
+
+                // Update Recommendations
+                const recBox = document.getElementById('recommendations-box');
+                const recList = document.getElementById('recommendations-list');
+                recList.innerHTML = '';
+                if (results.recommendations && results.recommendations.length > 0) {
+                    recBox.classList.remove('hidden');
+                    results.recommendations.forEach(r => {
+                        const li = document.createElement('li');
+                        li.innerText = r;
+                        recList.appendChild(li);
+                    });
+                } else {
+                    recBox.classList.add('hidden');
+                }
+
+                // Render Charts
+                renderCharts(reqBody, results);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    function renderCharts(inputs, results) {
+        const isDark = document.documentElement.classList.contains('dark');
+        const textColor = isDark ? '#e5e7eb' : '#374151';
+
+        // Pie Chart
+        const costCtx = document.getElementById('costChart').getContext('2d');
+        if (costChartInstance) costChartInstance.destroy();
+        costChartInstance = new Chart(costCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Seeds', 'Fertilizer', 'Pesticides', 'Irrigation', 'Labor', 'Machinery', 'Misc'],
+                datasets: [{
+                    data: [
+                        inputs.seed_cost, inputs.fertilizer_cost, inputs.pesticide_cost, 
+                        inputs.irrigation_cost, inputs.labor_cost, inputs.machinery_cost, inputs.misc_cost
+                    ],
+                    backgroundColor: [
+                        '#10b981', '#3b82f6', '#f59e0b', '#38bdf8', '#8b5cf6', '#ec4899', '#94a3b8'
+                    ],
+                    borderWidth: 2,
+                    borderColor: isDark ? '#1f2937' : '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: textColor, font: {size: 10} } }
+                }
+            }
+        });
+
+        // Bar Chart
+        const compCtx = document.getElementById('comparisonChart').getContext('2d');
+        if (comparisonChartInstance) comparisonChartInstance.destroy();
+        comparisonChartInstance = new Chart(compCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Investment vs Return'],
+                datasets: [
+                    {
+                        label: 'Total Cost (₹)',
+                        data: [results.total_cost],
+                        backgroundColor: '#ef4444',
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Est. Revenue (₹)',
+                        data: [results.estimated_revenue],
+                        backgroundColor: '#10b981',
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, ticks: {color: textColor} },
+                    x: { ticks: {color: textColor} }
+                },
+                plugins: {
+                    legend: { labels: { color: textColor } }
+                }
+            }
+        });
+    }
+
+    async function saveScenario() {
+        const reqBody = {
+            crop: document.getElementById('crop').value || 'Unknown',
+            area: parseFloat(document.getElementById('area').value) || 0,
+            seed_cost: parseFloat(document.getElementById('seed_cost').value) || 0,
+            fertilizer_cost: parseFloat(document.getElementById('fertilizer_cost').value) || 0,
+            pesticide_cost: parseFloat(document.getElementById('pesticide_cost').value) || 0,
+            irrigation_cost: parseFloat(document.getElementById('irrigation_cost').value) || 0,
+            labor_cost: parseFloat(document.getElementById('labor_cost').value) || 0,
+            machinery_cost: parseFloat(document.getElementById('machinery_cost').value) || 0,
+            misc_cost: parseFloat(document.getElementById('misc_cost').value) || 0,
+            expected_yield: parseFloat(document.getElementById('expected_yield').value) || 0,
+            market_price: parseFloat(document.getElementById('market_price').value) || 0
+        };
+
+        try {
+            const res = await fetch('/api/profit/history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(reqBody)
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                alert('Scenario saved to history!');
+                loadHistory();
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadHistory() {
+        try {
+            const res = await fetch('/api/profit/history');
+            const data = await res.json();
+            if(data.status === 'success') {
+                const tbody = document.getElementById('history-table-body');
+                tbody.innerHTML = '';
+                data.data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    
+                    const dateObj = new Date(row.created_at);
+                    const isDark = document.documentElement.classList.contains('dark');
+                    
+                    tr.className = isDark ? "hover:bg-gray-700" : "hover:bg-slate-50 dark:bg-slate-900/50";
+
+                    // Format profit cell color
+                    const profitColor = row.net_profit >= 0 ? "text-green-600" : "text-red-600";
+                    const profitPrefix = row.net_profit >= 0 ? "+" : "";
+
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">${dateObj.toLocaleDateString()} ${dateObj.getHours()}:${String(dateObj.getMinutes()).padStart(2, '0')}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-indigo-600">${row.crop}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${row.area} ac</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-red-600">₹${formatINR(row.total_cost)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-green-600">₹${formatINR(row.estimated_revenue)}</td>
+                        <td class="px-6 py-4 whitespace-nowrap font-bold ${profitColor}">${profitPrefix}₹${formatINR(row.net_profit)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    // Attach listeners
+    const inputs = document.querySelectorAll('.calc-input, #area, #crop, #expected_yield, #market_price');
+    inputs.forEach(input => {
+        input.addEventListener('input', calculateProfit);
+    });
+
+    // Initial load
+    calculateProfit();
+    loadHistory();
+
+  
+
+const API_BASE = "http://127.0.0.1:8000";
+    // --- Chatbot Logic ---
+    let chatOpen = false;
+
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      const window = document.getElementById('chatbot-window');
+      if (chatOpen) {
+        window.classList.add('open');
+        setTimeout(() => document.getElementById('chatbot-input').focus(), 300);
+      } else {
+        window.classList.remove('open');
+      }
+    }
+
+    function addMessage(text, sender) {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${sender === 'user' ? 'chat-user' : 'chat-bot'}`;
+
+      // Simple markdown-like bold parsing for better readability
+      let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Handle newlines
+      formattedText = formattedText.replace(/\n/g, '<br>');
+
+      div.innerHTML = formattedText;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = 'typing-indicator';
+      div.id = 'typing-indicator';
+      div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+    }
+
+    let currentLang = 'en';
+
+    function changeChatLang() {
+      currentLang = document.getElementById('chatbot-lang').value;
+      const welcome = document.getElementById('chat-welcome-msg');
+      const input = document.getElementById('chatbot-input');
+      const defaultQueriesContainer = document.getElementById('chat-default-queries');
+
+      if (currentLang === 'ta') {
+        if (welcome) welcome.innerText = "வணக்கம்! நான் உங்கள் AgriTwin AI உதவியாளர். நீங்கள் பயிர் பரிந்துரைகள், வானிலை, அல்லது விவசாய தகவல்களை பற்றி என்னிடம் கேட்கலாம். நான் உங்களுக்கு எப்படி உதவ முடியும்?";
+        input.placeholder = "ஒரு கேள்வியைக் கேளுங்கள்...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('இப்போது பயிரிட சிறந்த பயிர் எது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 இப்போது பயிரிட சிறந்த பயிர் எது?</button>
+            <button onclick="sendDefaultQuery('மண் வளத்தை எவ்வாறு மேம்படுத்துவது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 மண் வளத்தை எவ்வாறு மேம்படுத்துவது?</button>
+            <button onclick="sendDefaultQuery('வானிலை சார்ந்த நீர்ப்பாசனத் திட்டத்தைக் கொடு.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 நீர்ப்பாசனத் திட்டத்தைக் கொடு.</button>
+          `;
+        }
+      } else {
+        if (welcome) welcome.innerText = "Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations, weather strategies, or general agricultural insights. How can I help you today?";
+        input.placeholder = "Ask a question...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('What is the best crop to plant now?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 What is the best crop to plant now?</button>
+            <button onclick="sendDefaultQuery('How can I improve soil health?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 How can I improve soil health?</button>
+            <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 Give me an irrigation plan.</button>
+          `;
+        }
+      }
+    }
+
+    async function sendDefaultQuery(text) {
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatbot-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+</script>
+
+<!-- RAG Chatbot UI -->
+  <div id="chatbot-fab" onclick="toggleChat()">
+    💬
+  </div>
+
+  <div id="chatbot-window">
+    <div id="chatbot-header">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🤖</span>
+        <span>AgriTwin Assistant</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="chatbot-lang" class="bg-green-700 text-white text-xs border-none rounded p-1 outline-none"
+          onchange="changeChatLang()">
+          <option value="en">English</option>
+          <option value="ta">தமிழ்</option>
+        </select>
+        <button onclick="toggleChat()" class="text-white hover:text-gray-200 focus:outline-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="chatbot-messages">
+      <div class="chat-msg chat-bot" id="chat-welcome-msg">
+        Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations,
+        weather strategies, or general agricultural insights. How can I help you today?
+      </div>
+      <div id="chat-default-queries" class="flex flex-col gap-2 mt-1">
+        <button onclick="sendDefaultQuery('What is the best crop to plant now?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱
+          What is the best crop to plant now?</button>
+        <button onclick="sendDefaultQuery('How can I improve soil health?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍
+          How can I improve soil health?</button>
+        <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧
+          Give me an irrigation plan.</button>
+      </div>
+    </div>
+
+    <form id="chatbot-input-container" onsubmit="handleChatSubmit(event)">
+      <input type="text" id="chatbot-input" placeholder="Ask a question..." autocomplete="off" required>
+      <button type="submit" id="chatbot-send">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" transform="rotate(90)">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+          </path>
+        </svg>
+      </button>
+    </form>
+  </div>
+</body>
+</html>

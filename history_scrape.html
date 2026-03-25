@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script>
+    function callAjaxPostPre(url, body, callback, failureCallback)
+    {
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(){
+            if (xmlhttp.readyState == 4)
+            {
+                if(xmlhttp.status == 200)
+                {
+                    var responseText = xmlhttp.responseText;
+                    if(responseText && responseText != "")
+                    {
+                        var jsonResponse = JSON.parse(xmlhttp.responseText);
+                        callback(jsonResponse);
+                    }
+                    else
+                    {
+                        callback(null);
+                    }
+                }
+                else
+                {
+                    if(typeof failureCallback == "function")
+                    {
+                        failureCallback();
+                    }
+                }
+            }
+        }
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader('Content-type', 'application/json');
+        xmlhttp.send(JSON.stringify(body));
+    }
+    
+    var originalError = console.error;
+    var originalLog = console.log;
+    var originalWarn = console.warn;
+    
+    console.error = function(){
+        originalError.apply(console, arguments);
+        var message = Array.prototype.slice.call(arguments).map(function(arg) {
+            if (arg === undefined) return 'undefined';
+            if (arg === null) return 'null';
+            if (arg instanceof Error) return arg.stack || arg.message;
+            if (typeof arg === 'object') {
+                try {
+                    var str = JSON.stringify(arg);
+                    return str === '{}' ? Object.prototype.toString.call(arg) : str;
+                } catch(e) {
+                    return Object.prototype.toString.call(arg);
+                }
+            }
+            return String(arg);
+        }).join(' ');
+        if (message.trim() && !message.includes('pagead2.googlesyndication.com/pagead/js/rum.js')) {
+            logToServer('error', 'Console error: ' + message);
+        }
+    };
+    
+    console.log = function(){
+        originalLog.apply(console, arguments);
+    };
+    
+    console.warn = function(){
+        originalWarn.apply(console, arguments);
+        var message = Array.prototype.slice.call(arguments).map(function(arg) {
+            return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+        }).join(' ');
+        logToServer('warn', 'Console warn: ' + message);
+    };
+    
+    function postConsoleMessage(severity, message)
+    {
+        if (message.includes('Deprecation warning: allowHTML will default to false in a future release')
+            || message.includes('Highcharts warning: Consider including the "accessibility.js" module to make your chart more usable'))
+        {
+            return;
+        }
+    	setTimeout(function(){
+            callAjaxPostPre("/api/logger/write/message", {"severity":severity, "message": message}, function(){}, function() {});
+        }, 10);
+    }
+
+    function logToServer(severity, message){
+        var versionDetails = "";
+        var spanTag = document.getElementById("versionOfAppSpan");
+        if(spanTag){
+            versionDetails = "(" + spanTag.innerHTML + ")";
+        }
+        var fullMessage = versionDetails + " at " + window.location.href + " " + message;
+        postConsoleMessage(severity, fullMessage);
+    }
+    
+    window.onerror = function myErrorHandler(message, file, line, column, errorObj) {
+        if(line > 0)
+        {
+            var errorDetails = message;
+            if(errorObj && errorObj.stack) {
+                errorDetails = errorObj.stack;
+            } else if(file) {
+                errorDetails = message + " at " + file + ":" + line + ":" + column;
+            }
+            if(errorDetails.includes('pagead2.googlesyndication.com/pagead/js/rum.js')) {
+                return false;
+            }
+            var versionDetails = "";
+            var spanTag = document.getElementById("versionOfAppSpan");
+            if(spanTag)
+            {
+                versionDetails = "(" + spanTag.innerHTML + ")";
+            }
+            var messageString = "UI Console error" + versionDetails + " at " + window.location.href + " " + errorDetails;
+            postConsoleMessage("error", messageString);
+        }
+        return false;
+    }
+    function scriptFailure(resourceObj){
+        var sourceLink = resourceObj.src;
+        if(!sourceLink){
+            sourceLink = resourceObj.href;
+        }
+        var versionDetails = "";
+        if(document.getElementById("versionOfAppSpan"))
+        {
+            versionDetails = "(" + document.getElementById("versionOfAppSpan").innerHTML + ")";
+        }
+        postConsoleMessage("debug", "UI resource failed"+versionDetails+": " + sourceLink);
+    }
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1.0, width=device-width">
+<meta name="description" content="[[${metaDescription}]]">
+<title>TamilNadu (தமிழ்நாடு) Vegetable Market Price History, Data charts and tables analysis</title>
+<meta name="theme-color" content="#3f51b5">
+
+
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" 
+	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+	crossorigin="anonymous" onerror="scriptFailure(this)">
+
+
+<link href="/resource/css/style.css" rel="stylesheet" onerror="scriptFailure(this)"/>
+
+<link href="/resource/css/style_svg.css" media="print" onload="this.media='all'" rel="stylesheet" onerror="scriptFailure(this)"/>
+
+<noscript>
+	<link href="/resource/css/style_svg.css" rel="stylesheet"/>
+</noscript>
+
+
+<script async src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous" onerror="scriptFailure(this)"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous" c></script>
+
+<script async src="/resource/scripts/common.js" onerror="scriptFailure(this)" ></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8924733816021863"
+    crossorigin="anonymous" onload="window.adByGoogleIsEnabled = true;"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2RYZG7Y4NC" crossorigin="anonymous"></script>
+<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-2RYZG7Y4NC'); </script>
+
+</head>
+<body>
+	<style>
+.nav-item-li {
+	white-space: nowrap;
+	text-decoration: underline;
+}
+
+.nav-item-li a {
+	display: inline-block;
+	padding: 10px 10px;
+}
+</style>
+<div class="col-sm-12 nopadding navigation-tabs-container-wrapper">
+	<div class="col-sm-12" data-nosnippet>
+		<nav
+			class="navbar navbar-expand-md navbar-dark bg-primary navigation-tabs-container"
+			style="padding: 5px 0px; overflow: visible;">
+			<div class="container-fluid col-md-12 col-xl-10 offset-xl-1">
+				<a href="/"
+					style="font-weight: bold; white-space: nowrap; text-decoration: underline;"
+					class="navbar-brand vegetableMarketLogo">Vegetable Market Price</a>
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation"
+					style="position: absolute; right: 0.3em; top: 5px; background-color: #3f51b59e;">
+					<span class="navbar-toggler-icon"
+						style="min-width: 10px; min-height: 10px; display: inline-block;"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav">
+						<!-- <li class="nav-item nav-item-li">
+                            <a class="nav-link" href="/market">Today Price</a>
+                        </li>
+                        <li class="nav-item nav-item-li">
+                            <a class="nav-link" href="/history">History Price</a>
+                        </li> -->
+						<li class="nav-item nav-item-li"><a class="nav-link"
+							href="/store/list">Store List</a></li>
+						<li class="nav-item nav-item-li"><a class="nav-link"
+							href="/otherList">Other List</a></li>
+						<li class="nav-item nav-item-li"><a class="nav-link"
+							href="/user/login">Login</a></li>
+						
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+
+	<div class="row main-content-wrap" style="margin: 0px;">
+	    <div class="col-lg-2 nopadding" style="text-align: left;overflow: hidden;">
+	    </div>
+	    <div class="col-sm-12 col-md-9 col-lg-8 main-content nopadding">
+		    
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+	media="print" onload="this.media='all'"
+	crossorigin="anonymous" onerror="scriptFailure(this)"/>
+
+<noscript>
+	
+	<link rel="stylesheet"
+		href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+		crossorigin="anonymous"/>
+</noscript>
+
+
+<script async src="https://cdn.jsdelivr.net/npm/flatpickr"
+	crossorigin="anonymous" onerror="scriptFailure(this)"></script>
+
+
+<script
+	src="https://cdn.jsdelivr.net/npm/highcharts@10.1.0/highcharts.min.js"
+	crossorigin="anonymous" onerror="scriptFailure(this)"></script>
+
+
+<link
+	href="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/styles/choices.min.css"
+	media="print" onload="this.media='all'"
+	rel="stylesheet" crossorigin="anonymous" onerror="scriptFailure(this)" />
+
+<noscript>
+	
+	<link
+		href="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/styles/choices.min.css"
+		rel="stylesheet" crossorigin="anonymous" />
+</noscript>
+
+
+<script
+	src="https://cdn.jsdelivr.net/npm/choices.js@10.1.0/public/assets/scripts/choices.min.js"
+	crossorigin="anonymous" onerror="scriptFailure(this)"></script>
+
+<div class="row nomargin" id="mainContainer"
+	data-market-name="tamilnadu" data-page-type="market">
+	<div class="col-sm-12" style="min-height: 550px; padding: 0px;">
+		<div class="col-sm-12 content-header-div" style="text-align: center;">
+			<a
+				href="https://play.google.com/store/apps/details?id=com.market.price&pcampaignid=vmp_site"
+				target="_blank"> Android app available now</a> &nbsp; <a
+				href="https://play.google.com/store/apps/details?id=com.market.price&pcampaignid=vmp_site"
+				target="_blank"> <img
+				src="/resource/images/site/get_it_on_google_play.png"
+				style="width: 100px;height:30px;" />
+			</a>
+		</div>
+		<div class="col-sm-12 content-header-div">
+			<h1 style="display: inline; font-size: 1.1em;"
+				id="pageContentHeaderTitle">TamilNadu (தமிழ்நாடு) Vegetable Market Price History</h1>
+			<span id="addStarTag"
+				style="min-width: 24px; min-height: 24px; display: inline-block;"></span>
+		</div>
+		<div class="col-sm-12 nopadding dateRangeSelector"
+			style="text-align: center; overflow: hidden;">
+			<div style="padding: 5px; display: inline-block;" data-nosnippet>
+				Select Date:</div>
+			<div style="padding: 5px; display: inline-block; min-width: 300px; white-space: nowrap;">
+				<button id="prevRangeBtn" style="padding: 6px 10px; cursor: pointer; border: 1px solid #ccc; display: inline-block; vertical-align: middle;background-color: #ffffff;">&lt;</button>
+				<div id="reportrange" class="calendar-selection-container"
+					style="cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; display: inline-block; vertical-align: middle;margin: 0px -5px;">
+					<div class="svg-file-icon svg-file-calendar"
+						style="width: 20px; height: 20px; display: inline-block;"></div>
+					<span style="vertical-align: middle;"></span>
+					<div class="svg-file-icon svg-file-chevron-down"
+						style="width: 20px; height: 20px; margin-top: 4px; display: inline-block;"></div>
+				</div>
+				<button id="nextRangeBtn" style="padding: 6px 10px; cursor: pointer; border: 1px solid #ccc; display: none; vertical-align: middle;background-color: #ffffff;">&gt;</button>
+			</div>
+		</div>
+		<ul class="nav nav-tabs" data-nosnippet>
+			<li class="nav-item"><a class="nav-link" aria-current="page"
+				style="cursor: pointer;" id="navItemTable">Table</a></li>
+			<li class="nav-item"><a class="nav-link active"
+				style="cursor: pointer;" id="navItemChart">Chart</a></li>
+		</ul>
+		<div class="col-sm-12 history-data-chart-table-container">
+			<div id="historyDataTableDiv" class="col-sm-12 nopadding"
+				style="display: none; overflow: auto; max-height: 600px; min-height: 300px;">
+				<table id="historyDataTable" class="table auto-theme-table"></table>
+			</div>
+			<div id="historyDataChartDiv" class="col-sm-12 nopadding"
+				style="min-height: 600px;">
+				<figure class="highcharts-figure">
+					<div id="history-chart-container"></div>
+				</figure>
+			</div>
+		</div>
+		<div class="col-sm-12 px-2" id="choices-multiple-button-container"
+			style="min-height: 250px;">
+			<label id="choices-multiple-button-label"
+				for="choices-multiple-button">Select vegetable:</label> <select
+				id="choices-multiple-button" multiple
+				onchange="selectVegetableChange()" style="display: none;"></select>
+		</div>
+		<div class="col-sm-12 choices-multiple-button-container-space"
+			style="padding: 0px 10px; min-height: 130px;">
+			<div class="col-sm-12" style="padding: 0px 15px">
+				<span>Find related links</span>
+			</div>
+			<div class="col-sm-12">
+				<a href="/market/tenkasi/history" class="find-more-market-link"
+					style="white-space: nowrap;"> Tenkasi history price </a><a href="/market/chennai/history" class="find-more-market-link"
+					style="white-space: nowrap;"> Chennai history price </a><a href="/market/coimbatore/history" class="find-more-market-link"
+					style="white-space: nowrap;"> Coimbatore history price </a><a href="/market/madurai/history" class="find-more-market-link"
+					style="white-space: nowrap;"> Madurai history price </a>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-12"
+		style="padding: 20px 5px 5px 5px; text-align: center; overflow: hidden;">
+		<span style="color: #b41c1c; font-weight: bold;">Disclaimer:</span>
+		According to the retail market and shopping malls the price may vary
+		in different area.
+	</div>
+	<div class="col-sm-12 content-header-div" style="text-align: center;">
+		<a href="/account/pages">My Pages</a>
+	</div>
+</div>
+<script defer src="/resource/scripts/history.js" onerror="scriptFailure(this)"></script>
+
+
+	   </div>
+	   <div class="col-sm-12 col-md-3 col-lg-2 nopadding" style="text-align: right;overflow: hidden;">
+	    </div>
+	</div>
+	<div class="col-sm-12" data-nosnippet>
+	<div class="row common-footer-page-container"
+		style="margin: 0px; overflow: hidden;">
+		<div class="col-sm-12" style="padding: 1px 10px 4px 10px;">
+			<span id="copywriteSpanTagFooter"
+				style="margin: 0px 5px; white-space: nowrap;"> Copyright
+				@2025 </span> <a
+				style="text-decoration: underline; cursor: pointer; border-radius: 5px; white-space: nowrap; color: white;"
+				href="https://twitter.com/messages/compose?recipient_id=1440676520226275344&ref_src=twsrc%5Etfw"
+				target="_blank">Report an issue</a> <span style="margin: 0px 10px;"
+				id="versionOfAppSpan">6.0.9</span> <a
+				style="text-decoration: underline; cursor: pointer; border-radius: 5px; white-space: nowrap; color: white;"
+				href="/about">About</a>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

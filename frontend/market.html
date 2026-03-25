@@ -4,98 +4,326 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌾 Market Insights Dashboard</title>
+  <title>🌾 Market Insights - AgriTwin</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- 1. LOCAL TAILWIND (RELIABLE) -->
+  <link rel="stylesheet" href="tailwind.min.css">
+  <link rel="stylesheet" href="styles.css">
 
-  <script>
-    // ✅ Tailwind Dark Mode Config
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            slate: {
-              850: '#151f32',
-            }
-          }
-        }
+  <!-- 2. DARK MODE & DESIGN PATCH -->
+  <style>
+    
+
+    
+    
+
+    
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    .hidden {
+      display: none !important;
+    }
+
+    
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      
+      scrollbar-width: none;
+      
+    }
+  
+#chatbot-fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      cursor: pointer;
+      z-index: 9999;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #chatbot-fab:hover {
+      transform: scale(1.1);
+    }
+
+    #chatbot-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 9998;
+      overflow: hidden;
+      transform-origin: bottom right;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    
+
+    #chatbot-window.open {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #chatbot-header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 16px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chat-msg p {
+      margin-bottom: 8px;
+    }
+
+    .chat-msg p:last-child {
+      margin-bottom: 0;
+    }
+
+    .chat-user {
+      align-self: flex-end;
+      background: #10b981;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-bot {
+      align-self: flex-start;
+      background: #f3f4f6;
+      color: #1f2937;
+      border-bottom-left-radius: 4px;
+    }
+
+    
+
+    #chatbot-input-container {
+      padding: 12px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 8px;
+    }
+
+    
+
+    #chatbot-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      background: #f9fafb;
+    }
+
+    
+
+    #chatbot-send {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #chatbot-send:hover {
+      background: #059669;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      width: fit-content;
+    }
+
+    
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #9ca3af;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
       }
     }
-    // ✅ Init Theme
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+</style>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <script>
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
   </script>
-
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-
-    /* Transitions */
-    body,
-    div,
-    nav,
-    button,
-    span,
-    p,
-    h1,
-    h2,
-    h3,
-    table,
-    th,
-    td,
-    input,
-    select {
-      transition-property: background-color, border-color, color;
-      transition-duration: 300ms;
-    }
-  </style>
 </head>
 
-<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors duration-500 selection:bg-green-500 selection:text-white min-h-screen flex flex-col">
 
   <!-- Navigation -->
-  <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Navigation -->
+    <!-- Navigation -->
+  <nav class="glass sticky top-0 z-50 shadow-lg text-white">
+    <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
-        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
-          <span class="text-2xl">🌱</span>
-          <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer hover-lift" onclick="window.location.href='index.html'">
+          <span class="text-3xl drop-shadow-md outfit tracking-tight">🌱</span>
+          <div>
+            <div class="font-bold text-xl leading-none outfit tracking-tight">AgriTwin</div>
+            <div class="text-[10px] text-green-200 tracking-widest uppercase font-semibold mt-0.5">Digital Twin</div>
+          </div>
         </div>
-        <div class="hidden md:flex items-center space-x-4">
-          <a href="index.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Dashboard</a>
-          <a href="market.html"
-            class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium shadow-sm">Market
-            Insights</a>
-          <a href="map.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
-            Map</a>
-          <a href="simulation.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Simulation</a>
-          <a href="disease.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
-            Lab</a>
+
+        <!-- Links -->
+        <div class="flex items-center space-x-1 overflow-x-auto no-scrollbar pb-2 md:pb-0 w-full md:w-auto">
+          <a href="index.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Dashboard</a>
+          <a href="market.html" class="bg-white/20 px-4 py-2 rounded-xl hover-lift text-sm font-bold shadow-sm whitespace-nowrap text-white border border-white/10">Market</a>
+          <a href="live_prices.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Live Prices</a>
+          <a href="map.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Soil Map</a>
+          <a href="simulation.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Simulation</a>
+          <a href="yield.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Yield Plan</a>
+          <a href="profit_calculator.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Profit Calculator</a>
+          <div class="h-6 w-px bg-white/20 mx-3 hidden md:block"></div>
+
+          <!-- Telegram Bot Quick Button -->
+          <a href="https://t.me/agritwin_bot" target="_blank" class="hidden md:flex items-center gap-2 mr-3 bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-full text-xs font-medium transition hover-lift">
+             <span>💬</span> Bot
+          </a>
 
           <!-- Theme Toggle -->
-          <button id="theme-toggle"
-            class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
-            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
-                clip-rule="evenodd"></path>
+          <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition flex-shrink-0 border border-transparent hover:border-white/10"
+            title="Toggle Theme">
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
             </svg>
-            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
           </button>
         </div>
@@ -103,26 +331,36 @@
     </div>
   </nav>
 
-  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full animate-fade-in">
 
     <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
       <div>
-        <h1 class="text-3xl font-bold text-slate-800 dark:text-white">Market Insights</h1>
-        <p class="text-slate-500 dark:text-slate-400 mt-1">Real-time agricultural commodity prices &amp; trends.</p>
+        <h1 class="text-3xl font-bold text-slate-800 dark:text-slate-100 dark:text-white outfit tracking-tight">Market Insights</h1>
+        <p class="text-slate-500 dark:text-slate-400 dark:text-gray-400 mt-1">Real-time agricultural commodity prices &amp; trends.</p>
+      </div>
+      <div class="flex gap-3">
+        <button id="syncBtn"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition flex items-center gap-2">
+          🔄 Sync Live Data
+        </button>
+        <button id="exportBtn"
+          class="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition flex items-center gap-2">
+          📥 Export CSV
+        </button>
       </div>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6 mb-8"
+    <div class="bg-white dark:bg-gray-800 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8"
       role="region" aria-labelledby="filters-heading">
       <h2 id="filters-heading" class="sr-only">Filters</h2>
       <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
         <div>
           <label for="stateSelect"
-            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">State</label>
+            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">State</label>
           <div class="relative">
             <select id="stateSelect"
-              class="w-full appearance-none bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+              class="w-full appearance-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2.5 rounded-lg text-gray-800 dark:text-gray-100 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
               <option value="ALL">All States</option>
             </select>
           </div>
@@ -130,10 +368,10 @@
 
         <div>
           <label for="districtSelect"
-            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">District</label>
+            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">District</label>
           <div class="relative">
             <select id="districtSelect"
-              class="w-full appearance-none bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+              class="w-full appearance-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2.5 rounded-lg text-gray-800 dark:text-gray-100 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
               <option value="ALL">All Districts</option>
             </select>
           </div>
@@ -141,33 +379,37 @@
 
         <div>
           <label for="commoditySelect"
-            class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Commodity</label>
+            class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Commodity</label>
           <div class="relative">
             <select id="commoditySelect"
-              class="w-full appearance-none bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+              class="w-full appearance-none bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2.5 rounded-lg text-gray-800 dark:text-gray-100 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
               <option value="ALL">All Commodities</option>
             </select>
           </div>
         </div>
 
-        <div>
-          <label for="dateFrom" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">From</label>
-          <input id="dateFrom" type="date"
-            class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+        <div class="md:col-span-2">
+          <label for="dateRange" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Date
+            Range</label>
+          <div class="relative">
+            <input id="dateRange" type="text" placeholder="Select Date Range..."
+              class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 px-4 py-2 rounded-lg text-gray-800 dark:text-gray-100 font-semibold focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500" />
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+              📅
+            </div>
+          </div>
+          <!-- Hidden inputs for legacy compatibility if needed or JS internal use -->
+          <input type="hidden" id="dateFrom">
+          <input type="hidden" id="dateTo">
         </div>
 
-        <div>
-          <label for="dateTo" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">To</label>
-          <input id="dateTo" type="date"
-            class="w-full bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 px-4 py-2 rounded-lg text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
-        </div>
       </div>
 
       <div
-        class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-slate-100 dark:border-slate-700 pt-6">
-        <span id="status" class="text-sm text-slate-500 dark:text-slate-400 font-medium">Ready</span>
+        class="mt-6 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-gray-100 dark:border-gray-700 pt-6">
+        <span id="status" class="text-sm text-slate-500 dark:text-slate-400 dark:text-gray-400 font-medium">Ready</span>
         <button id="apply" type="button"
-          class="bg-emerald-600 dark:bg-emerald-700 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-emerald-700 dark:hover:bg-emerald-600 shadow-md transition-all active:scale-95 flex items-center gap-2">
+          class="bg-green-600 dark:bg-green-700 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-green-700 dark:hover:bg-green-600 shadow-md transition-all active:scale-95 flex items-center gap-2">
           Apply Filters
         </button>
       </div>
@@ -176,16 +418,16 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       <!-- Modal Price Chart -->
-      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📊 Modal Price Comparison</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200 mb-4">📊 Modal Price Comparison</h2>
         <div class="h-80 w-full relative">
           <canvas id="modalPriceChart"></canvas>
         </div>
       </div>
 
       <!-- Range Chart -->
-      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 p-6">
-        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">📈 Price Range Analysis</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200 mb-4">📈 Price Range Analysis</h2>
         <div class="h-80 w-full relative">
           <canvas id="rangeChart"></canvas>
         </div>
@@ -194,40 +436,40 @@
 
     <!-- Table -->
     <div
-      class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+      class="bg-white dark:bg-gray-800 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
       <div
-        class="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row items-center justify-between gap-4">
-        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200">📑 Market Data Details</h2>
+        class="p-6 border-b border-gray-100 dark:border-gray-700 flex flex-col md:flex-row items-center justify-between gap-4">
+        <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200">📑 Market Data Details</h2>
         <div
-          class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 p-1 rounded-lg border border-slate-200 dark:border-slate-600">
+          class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900/50 dark:bg-gray-900 p-1 rounded-lg border border-gray-200 dark:border-gray-600">
           <button id="prev" type="button"
-            class="px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-emerald-600 hover:bg-white dark:hover:bg-slate-700 rounded-md text-sm font-medium transition">←
+            class="px-3 py-1.5 text-slate-600 dark:text-slate-300 dark:text-gray-300 hover:text-green-600 hover:bg-white dark:hover:bg-gray-700 rounded-md text-sm font-medium transition">←
             Prev</button>
-          <span id="pageinfo" class="text-sm font-medium text-slate-500 dark:text-slate-400 px-2">Page 1</span>
+          <span id="pageinfo" class="text-sm font-medium text-slate-500 dark:text-slate-400 dark:text-gray-400 px-2">Page 1</span>
           <button id="next" type="button"
-            class="px-3 py-1.5 text-slate-600 dark:text-slate-300 hover:text-emerald-600 hover:bg-white dark:hover:bg-slate-700 rounded-md text-sm font-medium transition">Next
+            class="px-3 py-1.5 text-slate-600 dark:text-slate-300 dark:text-gray-300 hover:text-green-600 hover:bg-white dark:hover:bg-gray-700 rounded-md text-sm font-medium transition">Next
             →</button>
         </div>
       </div>
 
       <div class="overflow-x-auto">
-        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+        <table class="w-full text-sm text-left text-slate-500 dark:text-slate-400 dark:text-gray-400">
           <thead
-            class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-600">
+            class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-slate-50 dark:bg-slate-900/50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
             <tr>
               <th scope="col" class="px-6 py-4 font-bold">State</th>
               <th scope="col" class="px-6 py-4 font-bold">District</th>
               <th scope="col" class="px-6 py-4 font-bold">Market</th>
               <th scope="col" class="px-6 py-4 font-bold">Commodity</th>
               <th scope="col" class="px-6 py-4 font-bold">Variety</th>
-              <th scope="col" class="px-6 py-4 font-bold text-right text-emerald-600 dark:text-emerald-400">Min Price
+              <th scope="col" class="px-6 py-4 font-bold text-right text-green-600 dark:text-green-400">Min Price
               </th>
               <th scope="col" class="px-6 py-4 font-bold text-right text-red-600 dark:text-red-400">Max Price</th>
               <th scope="col" class="px-6 py-4 font-bold text-right text-blue-600 dark:text-blue-400">Modal</th>
               <th scope="col" class="px-6 py-4 font-bold text-right">Date</th>
             </tr>
           </thead>
-          <tbody id="marketBody" class="divide-y divide-slate-100 dark:divide-slate-700">
+          <tbody id="marketBody" class="divide-y divide-gray-100 dark:divide-gray-700">
             <!-- Rows will be injected here -->
           </tbody>
         </table>
@@ -236,34 +478,27 @@
   </main>
 
   <script>
-    const API = "http://127.0.0.1:8000";
+    const API = "http://127.0.0.1:8000"; // Absolute path
     let currentPage = 1, pageSize = 50;
     let modalChart = null, rangeChart = null;
 
     // --- Theme Logic ---
-    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');
 
     function updateIcons() {
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        darkIcon.classList.remove('hidden');
-        lightIcon.classList.add('hidden');
+      if (document.documentElement.classList.contains('dark')) {
+        darkIcon.classList.remove('hidden'); lightIcon.classList.add('hidden');
       } else {
-        lightIcon.classList.remove('hidden');
-        darkIcon.classList.add('hidden');
+        lightIcon.classList.remove('hidden'); darkIcon.classList.add('hidden');
       }
     }
     updateIcons();
 
-    themeToggleBtn.addEventListener('click', function () {
-      if (localStorage.theme === 'dark') {
-        document.documentElement.classList.remove('dark');
-        localStorage.theme = 'light';
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.theme = 'dark';
-      }
+    themeBtn.addEventListener('click', function () {
+      document.documentElement.classList.toggle('dark');
+      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
       updateIcons();
       // Re-render charts to update colors
       if (modalChart) modalChart.update();
@@ -290,24 +525,25 @@
       return document.getElementById(id);
     }
 
+    let globalMeta = null;
+
     async function loadMeta() {
       const statusEl = safeGetById("status");
       if (statusEl) statusEl.textContent = "Loading filters...";
-      let meta = null;
 
       try {
-        meta = await fetchWithTimeout(`${API}/market_meta`);
+        globalMeta = await fetchWithTimeout(`${API}/market_meta`);
       } catch (err) {
         console.error("Failed to load /market_meta:", err);
         if (statusEl) statusEl.textContent = "Failed to load filters (check backend).";
         return;
       }
 
-      const states = meta?.states || [];
-      const districts = meta?.districts || [];
-      const commodities = meta?.commodities || [];
-      const dateMin = meta?.date_min || "";
-      const dateMax = meta?.date_max || "";
+      const states = globalMeta?.states || [];
+      const districts = globalMeta?.districts || [];
+      const commodities = globalMeta?.commodities || [];
+      const dateMin = globalMeta?.date_min || "";
+      const dateMax = globalMeta?.date_max || "";
 
       function appendOption(selectEl, value, label) {
         if (!selectEl) return;
@@ -321,19 +557,52 @@
       const selDistrict = safeGetById("districtSelect");
       const selCommodity = safeGetById("commoditySelect");
 
-      // Clear existing (except ALL)
+      // Populate States (Clear existing except ALL)
       while (selState.options.length > 1) selState.remove(1);
-      while (selDistrict.options.length > 1) selDistrict.remove(1);
-      while (selCommodity.options.length > 1) selCommodity.remove(1);
-
       states.forEach(s => appendOption(selState, s, s));
-      districts.forEach(d => appendOption(selDistrict, d, d));
+
+      // Populate Districts (Initial: All)
+      populateDistricts(districts);
+
+      // Populate Commodities
+      while (selCommodity.options.length > 1) selCommodity.remove(1);
       commodities.forEach(c => appendOption(selCommodity, c, c));
 
-      const inputFrom = safeGetById("dateFrom");
-      const inputTo = safeGetById("dateTo");
-      if (inputFrom && dateMin) inputFrom.value = dateMin;
-      if (inputTo && dateMax) inputTo.value = dateMax;
+      // Cascading Logic
+      selState.addEventListener("change", () => {
+        const selectedState = selState.value;
+
+        // 1. Reset District Selection
+        selDistrict.value = "ALL";
+
+        // 2. Filter Districts
+        let filteredDistricts = districts;
+        if (selectedState !== "ALL" && globalMeta.state_district_map) {
+          filteredDistricts = globalMeta.state_district_map[selectedState] || [];
+        }
+
+        populateDistricts(filteredDistricts);
+      });
+
+      function populateDistricts(list) {
+        while (selDistrict.options.length > 1) selDistrict.remove(1);
+        list.forEach(d => appendOption(selDistrict, d, d));
+      }
+
+      // Flatpickr Init
+      const fp = flatpickr("#dateRange", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        defaultDate: [dateMin, dateMax],
+        onClose: function (selectedDates, dateStr, instance) {
+          if (selectedDates.length === 2) {
+            const from = instance.formatDate(selectedDates[0], "Y-m-d");
+            const to = instance.formatDate(selectedDates[1], "Y-m-d");
+            safeGetById("dateFrom").value = from;
+            safeGetById("dateTo").value = to;
+          }
+        }
+      });
 
       if (statusEl) statusEl.textContent = "Filters ready.";
     }
@@ -384,18 +653,18 @@
 
       for (const r of rows) {
         const tr = document.createElement("tr");
-        tr.className = "hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors";
+        tr.className = "hover:bg-slate-50 dark:bg-slate-900/50 dark:hover:bg-gray-800 transition-colors";
 
         const cols = [
-          { t: r?.State, a: 'text-left font-medium text-slate-900 dark:text-slate-100' },
-          { t: r?.District, a: 'text-left' },
-          { t: r?.Market, a: 'text-left' },
-          { t: r?.Commodity, a: 'text-left' },
-          { t: r?.Variety, a: 'text-left text-slate-400 text-xs' },
-          { t: r?.Min_Price, a: 'text-right font-mono text-emerald-600 dark:text-emerald-400' },
-          { t: r?.Max_Price, a: 'text-right font-mono text-red-600 dark:text-red-400' },
-          { t: r?.Modal_Price, a: 'text-right font-mono text-blue-600 dark:text-blue-400 font-bold' },
-          { t: r?.Arrival_Date, a: 'text-right text-slate-400 text-xs' }
+          { t: r?.state, a: 'text-left font-medium text-gray-900 dark:text-gray-100' },
+          { t: r?.district, a: 'text-left' },
+          { t: r?.market, a: 'text-left' },
+          { t: r?.commodity, a: 'text-left' },
+          { t: r?.variety, a: 'text-left text-gray-400 text-xs' },
+          { t: r?.min_price, a: 'text-right font-mono text-green-600 dark:text-green-400' },
+          { t: r?.max_price, a: 'text-right font-mono text-red-600 dark:text-red-400' },
+          { t: r?.modal_price, a: 'text-right font-mono text-blue-600 dark:text-blue-400 font-bold' },
+          { t: r?.arrival_date, a: 'text-right text-gray-400 text-xs' }
         ];
 
         cols.forEach(col => {
@@ -411,13 +680,14 @@
     }
 
     function renderCharts(rows) {
-      const cleaned = rows.filter(r => r && r.Modal_Price);
+      const cleaned = rows.filter(r => r && r.modal_price);
       const sample = cleaned.slice(0, 30);
 
-      const labels = sample.map(r => `${r.Market.substring(0, 10)}..`);
-      const modal = sample.map(r => Number(r.Modal_Price));
-      const minv = sample.map(r => Number(r.Min_Price));
-      const maxv = sample.map(r => Number(r.Max_Price));
+      // Map labels to Date for time-series visualization
+      const labels = sample.map(r => r.arrival_date);
+      const modal = sample.map(r => Number(r.modal_price));
+      const minv = sample.map(r => Number(r.min_price));
+      const maxv = sample.map(r => Number(r.max_price));
 
       try { if (modalChart) modalChart.destroy(); } catch (e) { }
       try { if (rangeChart) rangeChart.destroy(); } catch (e) { }
@@ -425,22 +695,42 @@
       const modalCtx = document.getElementById("modalPriceChart");
       const rangeCtx = document.getElementById("rangeChart");
 
-      // Chart Theme Helpers
-      Chart.defaults.color = () => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
-      Chart.defaults.borderColor = () => document.documentElement.classList.contains('dark') ? '#334155' : '#e2e8f0';
+      // Helper to get current theme colors
+      function getThemeColors() {
+        const isDark = document.documentElement.classList.contains('dark');
+        return {
+          textColor: isDark ? '#cbd5e1' : '#475569',
+          gridColor: isDark ? '#334155' : '#e2e8f0',
+          borderColor: isDark ? '#334155' : '#e2e8f0'
+        };
+      }
 
-      const commonOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } },
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { autoSkip: true, maxRotation: 0 }
+      function getChartOptions() {
+        const colors = getThemeColors();
+        return {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: { color: colors.textColor }
+            }
           },
-          y: { beginAtZero: true }
-        }
-      };
+          scales: {
+            x: {
+              grid: { display: false, borderColor: colors.borderColor },
+              ticks: { autoSkip: true, maxRotation: 0, color: colors.textColor }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: colors.gridColor, borderColor: colors.borderColor },
+              ticks: { color: colors.textColor }
+            }
+          }
+        };
+      }
+
+      const commonOptions = getChartOptions();
 
       if (modalCtx) {
         modalChart = new Chart(modalCtx, {
@@ -468,13 +758,15 @@
                 data: minv,
                 borderColor: '#059669',
                 backgroundColor: 'rgba(5, 150, 105, 0.1)',
-                fill: true, tension: 0.3
+                fill: true, tension: 0.3,
+                pointBackgroundColor: '#059669'
               },
               {
                 label: "Max Price (₹)",
                 data: maxv,
                 borderColor: '#ef4444',
-                borderDash: [5, 5], tension: 0.3
+                borderDash: [5, 5], tension: 0.3,
+                pointBackgroundColor: '#ef4444'
               }
             ]
           },
@@ -492,11 +784,270 @@
     const btnNext = safeGetById("next");
     if (btnNext) btnNext.addEventListener("click", () => { currentPage++; loadPage(); });
 
+    // Update charts on theme toggle
+    themeBtn.addEventListener('click', function () {
+      setTimeout(() => {
+        if (modalChart) {
+          modalChart.options = getChartOptions();
+          modalChart.update();
+        }
+        if (rangeChart) {
+          rangeChart.options = getChartOptions();
+          rangeChart.update();
+        }
+      }, 50); // Small delay to let class toggle settle
+    });
+
+
+    // Export Logic
+    const btnExport = safeGetById("exportBtn");
+    if (btnExport) {
+      btnExport.addEventListener("click", () => {
+        const params = new URLSearchParams({
+          state: safeGetById("stateSelect").value,
+          district: safeGetById("districtSelect").value,
+          commodity: safeGetById("commoditySelect").value,
+        });
+        const fromVal = safeGetById("dateFrom").value;
+        const toVal = safeGetById("dateTo").value;
+        if (fromVal) params.set("date_from", fromVal);
+        if (toVal) params.set("date_to", toVal);
+
+        window.location.href = `${API}/market_export?` + params.toString();
+      });
+    }
+
+    // Sync Logic
+    const btnSync = safeGetById("syncBtn");
+    if (btnSync) {
+      btnSync.addEventListener("click", async () => {
+        btnSync.disabled = true;
+        btnSync.innerHTML = "⏳ Syncing...";
+        try {
+          const res = await fetch(`${API}/market-sync`);
+          const data = await res.json();
+          alert(data.message);
+          // Reload data
+          await loadMeta();
+          await loadPage();
+        } catch (e) {
+          alert("Sync failed: " + e.message);
+        } finally {
+          btnSync.disabled = false;
+          btnSync.innerHTML = "🔄 Sync Live Data";
+        }
+      });
+    }
+
     (async function init() {
       await loadMeta();
       await loadPage();
     })();
-  </script>
+  
+
+const API_BASE = "http://127.0.0.1:8000";
+    // --- Chatbot Logic ---
+    let chatOpen = false;
+
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      const window = document.getElementById('chatbot-window');
+      if (chatOpen) {
+        window.classList.add('open');
+        setTimeout(() => document.getElementById('chatbot-input').focus(), 300);
+      } else {
+        window.classList.remove('open');
+      }
+    }
+
+    function addMessage(text, sender) {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${sender === 'user' ? 'chat-user' : 'chat-bot'}`;
+
+      // Simple markdown-like bold parsing for better readability
+      let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Handle newlines
+      formattedText = formattedText.replace(/\n/g, '<br>');
+
+      div.innerHTML = formattedText;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = 'typing-indicator';
+      div.id = 'typing-indicator';
+      div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+    }
+
+    let currentLang = 'en';
+
+    function changeChatLang() {
+      currentLang = document.getElementById('chatbot-lang').value;
+      const welcome = document.getElementById('chat-welcome-msg');
+      const input = document.getElementById('chatbot-input');
+      const defaultQueriesContainer = document.getElementById('chat-default-queries');
+
+      if (currentLang === 'ta') {
+        if (welcome) welcome.innerText = "வணக்கம்! நான் உங்கள் AgriTwin AI உதவியாளர். நீங்கள் பயிர் பரிந்துரைகள், வானிலை, அல்லது விவசாய தகவல்களை பற்றி என்னிடம் கேட்கலாம். நான் உங்களுக்கு எப்படி உதவ முடியும்?";
+        input.placeholder = "ஒரு கேள்வியைக் கேளுங்கள்...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('இப்போது பயிரிட சிறந்த பயிர் எது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 இப்போது பயிரிட சிறந்த பயிர் எது?</button>
+            <button onclick="sendDefaultQuery('மண் வளத்தை எவ்வாறு மேம்படுத்துவது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 மண் வளத்தை எவ்வாறு மேம்படுத்துவது?</button>
+            <button onclick="sendDefaultQuery('வானிலை சார்ந்த நீர்ப்பாசனத் திட்டத்தைக் கொடு.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 நீர்ப்பாசனத் திட்டத்தைக் கொடு.</button>
+          `;
+        }
+      } else {
+        if (welcome) welcome.innerText = "Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations, weather strategies, or general agricultural insights. How can I help you today?";
+        input.placeholder = "Ask a question...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('What is the best crop to plant now?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 What is the best crop to plant now?</button>
+            <button onclick="sendDefaultQuery('How can I improve soil health?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 How can I improve soil health?</button>
+            <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 Give me an irrigation plan.</button>
+          `;
+        }
+      }
+    }
+
+    async function sendDefaultQuery(text) {
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatbot-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+</script>
+
+<!-- RAG Chatbot UI -->
+  <div id="chatbot-fab" onclick="toggleChat()">
+    💬
+  </div>
+
+  <div id="chatbot-window">
+    <div id="chatbot-header">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🤖</span>
+        <span>AgriTwin Assistant</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="chatbot-lang" class="bg-green-700 text-white text-xs border-none rounded p-1 outline-none"
+          onchange="changeChatLang()">
+          <option value="en">English</option>
+          <option value="ta">தமிழ்</option>
+        </select>
+        <button onclick="toggleChat()" class="text-white hover:text-gray-200 focus:outline-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="chatbot-messages">
+      <div class="chat-msg chat-bot" id="chat-welcome-msg">
+        Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations,
+        weather strategies, or general agricultural insights. How can I help you today?
+      </div>
+      <div id="chat-default-queries" class="flex flex-col gap-2 mt-1">
+        <button onclick="sendDefaultQuery('What is the best crop to plant now?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱
+          What is the best crop to plant now?</button>
+        <button onclick="sendDefaultQuery('How can I improve soil health?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍
+          How can I improve soil health?</button>
+        <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧
+          Give me an irrigation plan.</button>
+      </div>
+    </div>
+
+    <form id="chatbot-input-container" onsubmit="handleChatSubmit(event)">
+      <input type="text" id="chatbot-input" placeholder="Ask a question..." autocomplete="off" required>
+      <button type="submit" id="chatbot-send">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" transform="rotate(90)">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+          </path>
+        </svg>
+      </button>
+    </form>
+  </div>
 </body>
 
 </html>

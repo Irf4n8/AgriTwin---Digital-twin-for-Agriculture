@@ -1,109 +1,451 @@
 <!DOCTYPE html>
-<html lang="en" class="light"> <!-- Default to light, script will update -->
+<html lang="en" class="light">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🌾 Agri Twin Dashboard</title>
+  <title>🌾 AgriTwin Dashboard</title>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- PDF Generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- 1. LOCAL TAILWIND (RELIABLE) -->
+  <link rel="stylesheet" href="tailwind.min.css">
+  <link rel="stylesheet" href="styles.css">
 
-  <script>
-    // ✅ Tailwind Dark Mode Config
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            slate: {
-              850: '#151f32', // Custom dark shade
-            }
-          }
-        }
+  <!-- 2. DARK MODE & DESIGN PATCH (Essential since we aren't using CDN) -->
+  <style>
+    
+
+
+    
+    #page-loader {
+      position: fixed;
+      inset: 0;
+      background-color: #f8fafc;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dark #page-loader {
+      background-color: #0f172a;
+      color: white;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #10b981;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
       }
     }
 
-    // ✅ Init Theme Immediately to prevent flash
+    .hidden {
+      display: none !important;
+    }
+
+    
+    #weather-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease-out;
+      pointer-events: none;
+      
+    }
+
+    .dark #weather-overlay {
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    
+    .weather-anim-container {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    
+    .sun-core {
+      width: 80px;
+      height: 80px;
+      background: #fbbf24;
+      border-radius: 50%;
+      position: absolute;
+      top: 60px;
+      left: 60px;
+      box-shadow: 0 0 40px #f59e0b;
+    }
+
+    .sun-rays {
+      width: 100%;
+      height: 100%;
+      animation: spin 10s linear infinite;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .ray {
+      width: 10px;
+      height: 30px;
+      background: #fbbf24;
+      position: absolute;
+      left: 95px;
+      top: 0;
+      border-radius: 5px;
+      transform-origin: 5px 100px;
+    }
+
+    /* Generate 8 rays via CSS rotation is cleaner in SCSS but here we hardcode in HTML or use simple SVG. 
+       Let's use a simpler SVG approach for icons in HTML to avoid massive CSS. */
+
+    
+    .rain-drop {
+      position: absolute;
+      width: 3px;
+      height: 15px;
+      background: #3b82f6;
+      top: -20px;
+      border-radius: 2px;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(220px);
+      }
+    }
+
+    
+    .cloud-body {
+      width: 120px;
+      height: 50px;
+      background: #94a3b8;
+      border-radius: 50px;
+      position: absolute;
+      top: 75px;
+      left: 40px;
+      animation: bloom 2s ease-in-out infinite alternate;
+    }
+
+    .cloud-body::after {
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: #94a3b8;
+      border-radius: 50%;
+      top: -30px;
+      left: 20px;
+    }
+
+    .cloud-body::before {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: #94a3b8;
+      border-radius: 50%;
+      top: -20px;
+      right: 20px;
+    }
+
+    @keyframes bloom {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.05);
+      }
+    }
+
+    
+    #chatbot-fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      cursor: pointer;
+      z-index: 9999;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #chatbot-fab:hover {
+      transform: scale(1.1);
+    }
+
+    #chatbot-window {
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      width: 350px;
+      height: 500px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 9998;
+      overflow: hidden;
+      transform-origin: bottom right;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      transform: scale(0);
+      opacity: 0;
+    }
+
+    
+
+    #chatbot-window.open {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    #chatbot-header {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 16px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-msg {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .chat-msg p {
+      margin-bottom: 8px;
+    }
+
+    .chat-msg p:last-child {
+      margin-bottom: 0;
+    }
+
+    .chat-user {
+      align-self: flex-end;
+      background: #10b981;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-bot {
+      align-self: flex-start;
+      background: #f3f4f6;
+      color: #1f2937;
+      border-bottom-left-radius: 4px;
+    }
+
+    
+
+    #chatbot-input-container {
+      padding: 12px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      gap: 8px;
+    }
+
+    
+
+    #chatbot-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+      background: #f9fafb;
+    }
+
+    
+
+    #chatbot-send {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #chatbot-send:hover {
+      background: #059669;
+    }
+
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+      background: #f3f4f6;
+      border-radius: 12px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+      width: fit-content;
+    }
+
+    
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: #9ca3af;
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+
+    .typing-dot:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+  <!-- Chart.js & Fonts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    // Theme Init
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
   </script>
-
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-
-    /* Smooth transitions for theme switch */
-    body,
-    div,
-    nav,
-    button,
-    span,
-    p,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      transition-property: background-color, border-color, color;
-      transition-duration: 300ms;
-    }
-  </style>
 </head>
 
-<body class="bg-slate-50 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors duration-500 selection:bg-green-500 selection:text-white min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
+
+  <!-- Page Loader -->
+  <div id="page-loader">
+    <div class="spinner"></div>
+    <p style="margin-top:15px; font-weight:600; letter-spacing:1px; font-size:0.9em;">INITIALIZING TWIN...</p>
+  </div>
+
+  <!-- Weather Overlay (Dynamic) -->
+  <div id="weather-overlay" style="opacity: 0; pointer-events: none;"> <!-- Hidden by default, JS will toggle -->
+    <div id="weather-anim-box" class="weather-anim-container">
+      <!-- Injected by JS -->
+    </div>
+    <h2 id="weather-title" class="text-2xl font-bold text-slate-800 dark:text-slate-100 dark:text-gray-100 mt-4">Checking Weather...</h2>
+  </div>
 
   <!-- Navigation -->
-  <nav class="bg-emerald-600 dark:bg-emerald-900 text-white shadow-lg sticky top-0 z-50 transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Navigation -->
+  <nav class="glass sticky top-0 z-50 shadow-lg text-white">
+    <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between h-16">
-
         <!-- Logo -->
-        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
-          <span class="text-2xl">🌱</span>
-          <span class="font-bold text-xl tracking-tight">AgriTwin</span>
+        <div class="flex items-center gap-3 cursor-pointer hover-lift" onclick="window.location.href='index.html'">
+          <span class="text-3xl drop-shadow-md outfit tracking-tight">🌱</span>
+          <div>
+            <div class="font-bold text-xl leading-none outfit tracking-tight">AgriTwin</div>
+            <div class="text-[10px] text-green-200 tracking-widest uppercase font-semibold mt-0.5">Digital Twin</div>
+          </div>
         </div>
 
         <!-- Links -->
-        <div class="hidden md:flex items-center space-x-4">
-          <a href="index.html"
-            class="bg-emerald-700 dark:bg-emerald-800 text-white px-3 py-2 rounded-md text-sm font-medium shadow-sm">Dashboard</a>
-          <a href="market.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Market
-            Insights</a>
-          <a href="map.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Soil
-            Map</a>
-          <a href="simulation.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Simulation</a>
-          <a href="disease.html"
-            class="hover:bg-emerald-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">Disease
-            Lab</a>
+        <div class="flex items-center space-x-1 overflow-x-auto no-scrollbar pb-2 md:pb-0 w-full md:w-auto">
+          <a href="index.html" class="bg-white/20 px-4 py-2 rounded-xl hover-lift text-sm font-bold shadow-sm whitespace-nowrap text-white border border-white/10">Dashboard</a>
+          <a href="market.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Market</a>
+          <a href="live_prices.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Live Prices</a>
+          <a href="map.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Soil Map</a>
+          <a href="simulation.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Simulation</a>
+          <a href="yield.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Yield Plan</a>
+          <a href="profit_calculator.html" class="hover:bg-white/10 px-3 py-2 rounded-xl hover-lift text-sm font-medium transition whitespace-nowrap text-green-50">Profit Calculator</a>
+          <div class="h-6 w-px bg-white/20 mx-3 hidden md:block"></div>
+
+          <!-- Telegram Bot Quick Button -->
+          <a href="https://t.me/agritwin_bot" target="_blank" class="hidden md:flex items-center gap-2 mr-3 bg-white/10 hover:bg-white/20 border border-white/10 px-3 py-1.5 rounded-full text-xs font-medium transition hover-lift">
+             <span>💬</span> Bot
+          </a>
 
           <!-- Theme Toggle -->
-          <button id="theme-toggle"
-            class="bg-emerald-700 dark:bg-emerald-800 p-2 rounded-full hover:bg-emerald-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500"
+          <button id="theme-toggle" class="p-2 rounded-full hover:bg-white/10 transition flex-shrink-0 border border-transparent hover:border-white/10"
             title="Toggle Theme">
-            <!-- Sun Icon -->
-            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 100 2h1z"
-                clip-rule="evenodd"></path>
+            <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
             </svg>
-            <!-- Moon Icon -->
-            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor"
+              viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
           </button>
         </div>
@@ -113,213 +455,326 @@
 
   <!-- Error Banner -->
   <div id="connection-error" class="hidden bg-red-600 text-white text-center py-2 px-4 font-bold shadow-md">
-    ⚠️ Cannot connect to server. Please run <code>python backend/main.py</code>
+    ⚠️ Backend Offline. Please run `run_app.bat` to start the server.
   </div>
 
   <!-- Main Content -->
-  <main id="dashboard-content" class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+  <main id="dashboard-content" class="flex-grow max-w-7xl mx-auto px-4 py-8 w-full">
 
-    <!-- Top Header & Actions -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6 border-b border-gray-200 pb-6">
       <div>
-        <h1 class="text-3xl font-bold text-slate-800 dark:text-white">Live Farm Overview</h1>
-        <p class="text-slate-500 dark:text-slate-400 mt-1">Real-time telemetry from your IoT sensors.</p>
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white outfit tracking-tight">Farm Overview</h1>
+        <p class="text-lg text-slate-500 dark:text-slate-400 dark:text-gray-400 mt-2">Real-time telemetry & actionable insights.</p>
       </div>
       <div class="flex gap-3" data-html2pdf-ignore="true">
+        <a href="https://t.me/agritwin_bot" target="_blank"
+          class="bg-blue-600 border border-blue-700 text-white px-5 py-2 rounded-lg shadow-sm hover:bg-blue-700 font-medium transition flex items-center gap-2">💬
+          Connect Telegram Bot</a>
         <button onclick="downloadReport()"
-          class="flex items-center gap-2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-lg font-medium hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
-          <span>📄</span> Download Report
-        </button>
+          class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover-lift dark:border-gray-700 text-gray-700 dark:text-gray-200 px-5 py-2 rounded-lg shadow-sm hover:bg-slate-50 dark:bg-slate-900/50 dark:hover:bg-gray-700 font-medium transition">📄
+          Report</button>
         <button id="enable-alerts"
-          class="flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 px-4 py-2 rounded-lg font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors">
-          <span>🔊</span> Enable Alerts
-        </button>
-        <button onclick="window.location.href='yield.html'"
-          class="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 shadow-md transition-all hover:-translate-y-0.5">
-          🌾 Yield Prediction
-        </button>
+          class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover-lift dark:border-gray-700 text-gray-700 dark:text-gray-200 px-5 py-2 rounded-lg shadow-sm hover:bg-slate-50 dark:bg-slate-900/50 dark:hover:bg-gray-700 font-medium transition">🔔
+          Alerts</button>
+      </div>
+    </div>
+
+    <!-- 🚀 FEATURE SHORTCUTS (Added for better accessibility) -->
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+      <a href="market.html"
+        class="group bg-white dark:bg-gray-800 p-6 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:border-green-500 dark:hover:border-green-500 transition transform hover:scale-105 cursor-pointer text-center">
+        <div class="text-4xl mb-3 transform group-hover:scale-110 transition duration-300 outfit tracking-tight drop-shadow-md">📊</div>
+        <h3 class="font-bold text-gray-700 dark:text-gray-200">Market Insights</h3>
+        <p class="text-xs text-gray-400 mt-1">Prices & Trends</p>
+      </a>
+      <a href="map.html"
+        class="group bg-white dark:bg-gray-800 p-6 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:border-green-500 dark:hover:border-green-500 transition transform hover:scale-105 cursor-pointer text-center">
+        <div class="text-4xl mb-3 transform group-hover:scale-110 transition duration-300 outfit tracking-tight drop-shadow-md">🌍</div>
+        <h3 class="font-bold text-gray-700 dark:text-gray-200">Soil Map</h3>
+        <p class="text-xs text-gray-400 mt-1">Satellite Analysis</p>
+      </a>
+      <a href="simulation.html"
+        class="group bg-white dark:bg-gray-800 p-6 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-lg hover:border-green-500 dark:hover:border-green-500 transition transform hover:scale-105 cursor-pointer text-center">
+        <div class="text-4xl mb-3 transform group-hover:scale-110 transition duration-300 outfit tracking-tight drop-shadow-md">🧬</div>
+        <h3 class="font-bold text-gray-700 dark:text-gray-200">Simulation</h3>
+        <p class="text-xs text-gray-400 mt-1">Digital Twin</p>
+      </a>
+    </div>
+
+    <!-- 🌦 5-Day Weather Forecast -->
+    <div class="mb-10">
+      <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">🌦 5-Day Forecast</h2>
+      <div id="forecast-container" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <!-- Forecast Items will be injected here -->
+        <div class="bg-blue-50 dark:bg-gray-800 p-4 rounded-xl text-center animate-pulse">
+          <div class="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-2"></div>
+          <div class="h-4 w-16 bg-gray-200 dark:bg-gray-700 rounded mx-auto"></div>
+        </div>
       </div>
     </div>
 
     <!-- Sensor Grid -->
-    <section>
-      <h2 class="text-xl font-semibold text-emerald-800 dark:text-emerald-400 mb-4 flex items-center gap-2">
-        📡 Sensor Readings
-      </h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <!-- Reusable Sensor Card Structure -->
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Nitrogen (N)</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-slate-700 dark:text-slate-200" id="N">--</span>
-            <span class="text-sm text-slate-400">ppm</span>
-          </div>
-        </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
 
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Phosphorus (P)</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-slate-700 dark:text-slate-200" id="P">--</span>
-            <span class="text-sm text-slate-400">ppm</span>
+      <!-- Environment -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">🌤 Environment</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">Temperature</div>
+            <div class="text-3xl font-bold text-gray-900 outfit tracking-tight"><span id="temp">--</span><span
+                class="text-sm font-medium text-orange-500 ml-1">°C</span></div>
           </div>
-        </div>
-
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Potassium (K)</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-slate-700 dark:text-slate-200" id="K">--</span>
-            <span class="text-sm text-slate-400">ppm</span>
+          <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">Humidity</div>
+            <div class="text-3xl font-bold text-gray-900 outfit tracking-tight"><span id="humidity">--</span><span
+                class="text-sm font-medium text-blue-500 ml-1">%</span></div>
           </div>
-        </div>
-
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Soil pH</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-purple-600 dark:text-purple-400" id="ph">--</span>
-          </div>
-        </div>
-
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Rainfall</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-blue-500 dark:text-blue-400" id="rainfall">--</span>
-          </div>
-        </div>
-
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Temperature</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-orange-500 dark:text-orange-400" id="temp">--</span>
-          </div>
-        </div>
-
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Humidity</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-cyan-500 dark:text-cyan-400" id="humidity">--</span>
-          </div>
-        </div>
-
-        <div
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-          <div class="text-sm text-slate-400 font-medium uppercase tracking-wider mb-1">Soil Moisture</div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-bold text-amber-600 dark:text-amber-400" id="soil_moisture">--</span>
+          <div class="col-span-2 bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">Rainfall</div>
+            <div class="text-3xl font-bold text-gray-900 outfit tracking-tight"><span id="rainfall">--</span><span
+                class="text-sm font-medium text-blue-500 ml-1">mm/hr</span></div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Main Dashboard Body -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-
-      <!-- Left Column (Chart) -->
-      <div class="lg:col-span-2">
-        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700">
-          <div class="flex justify-between items-center mb-6">
-            <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200">📈 Sensor Trends</h2>
-            <span
-              class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 text-xs font-medium px-2.5 py-0.5 rounded">Live</span>
+      <!-- Soil -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-700 mb-4 flex items-center gap-2">🌱 Soil Health</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">Nitrogen (N)</div>
+            <div class="text-2xl font-bold text-gray-900"><span id="N">--</span> <small
+                class="text-xs text-green-600">ppm</small></div>
           </div>
-          <!-- Relative container for chart responsiveness -->
-          <div class="relative w-full h-80">
+          <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">Phosphorus (P)</div>
+            <div class="text-2xl font-bold text-gray-900"><span id="P">--</span> <small
+                class="text-xs text-green-600">ppm</small></div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">Potassium (K)</div>
+            <div class="text-2xl font-bold text-gray-900"><span id="K">--</span> <small
+                class="text-xs text-green-600">ppm</small></div>
+          </div>
+          <div class="bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="text-xs text-gray-400 font-bold uppercase mb-2">pH Level</div>
+            <div class="text-2xl font-bold text-purple-600"><span id="ph">--</span></div>
+          </div>
+          <div class="col-span-2 bg-white p-5 rounded-2xl hover-lift shadow-sm border border-gray-100">
+            <div class="flex justify-between mb-2">
+              <div class="text-xs text-gray-400 font-bold uppercase">Soil Moisture</div>
+              <div class="text-sm font-bold text-orange-600" id="soil_moisture">--</div>
+            </div>
+            <div class="w-full bg-gray-100 rounded-full h-2">
+              <div id="moisture-bar" class="bg-orange-500 h-2 rounded-full" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts & Insights -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Charts & Insights -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Chart 1: Environment -->
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200">🌡️ Environmental Trends</h2>
+            <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">LIVE</span>
+          </div>
+          <div class="relative w-full h-72">
             <canvas id="sensorChart"></canvas>
           </div>
         </div>
 
-        <!-- Weather Block -->
-        <div
-          class="mt-8 bg-gradient-to-r from-blue-500 to-cyan-400 dark:from-blue-700 dark:to-cyan-600 rounded-xl p-6 text-white shadow-lg shadow-blue-200 dark:shadow-none">
-          <div class="flex items-center gap-3 mb-2">
-            <span class="text-2xl">🌦️</span>
-            <h3 class="text-lg font-bold">Local Weather</h3>
+        <!-- Chart 2: Nutrients -->
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border border-gray-100 dark:border-gray-700">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-bold text-gray-700 dark:text-gray-200">🌱 Soil Nutrient Trends</h2>
+            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-1 rounded">NPK</span>
           </div>
-          <div id="weather-box" class="text-blue-50 font-medium text-lg">
-            Loading weather data...
+          <div class="relative w-full h-72">
+            <canvas id="nutrientChart"></canvas>
           </div>
         </div>
       </div>
 
-      <!-- Right Column (Insights) -->
       <div class="flex flex-col gap-6">
-
-        <!-- Crop Prediction -->
-        <div
-          class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border-l-4 border-emerald-500 dark:border-emerald-600">
-          <h3 class="text-slate-400 text-sm font-bold uppercase tracking-wide mb-2">AI Recommendation</h3>
-          <div id="crop-suggestion" class="text-2xl font-bold text-emerald-700 dark:text-emerald-400">
-            🌾 Analyzing...
+        <!-- Decision Engine / Smart Advisory -->
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border-l-4 border-green-600">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-gray-400 text-xs font-bold uppercase">Smart Advisory (Decision Engine)</h3>
+            <span class="animate-pulse h-2 w-2 bg-green-500 rounded-full"></span>
           </div>
-          <p class="text-slate-500 text-sm mt-2">Based on current NPK and soil conditions. (Updates every 10s)</p>
-        </div>
 
-        <!-- Irrigation Alert -->
-        <div
-          class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border-l-4 border-orange-500 dark:border-orange-600">
-          <h3 class="text-slate-400 text-sm font-bold uppercase tracking-wide mb-2">Irrigation Status</h3>
-          <div id="irrigation-alert" class="text-xl font-bold text-orange-700 dark:text-orange-400">
-            💧 Checking...
-          </div>
-          <p class="text-slate-500 text-sm mt-2">Real-time soil moisture analysis.</p>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="bg-slate-800 dark:bg-slate-900 text-slate-300 p-6 rounded-xl border border-slate-700"
-          data-html2pdf-ignore="true">
-          <h3 class="text-white font-bold mb-4">Quick Navigation</h3>
-          <div class="flex flex-col gap-3">
-            <button onclick="window.location.href='map.html'"
-              class="flex items-center justify-between p-3 bg-slate-700 dark:bg-slate-800 rounded-lg hover:bg-slate-600 dark:hover:bg-slate-700 transition">
-              <span>🌍 View Satellite Map</span>
-              <span>→</span>
-            </button>
-            <button onclick="window.location.href='simulation.html'"
-              class="flex items-center justify-between p-3 bg-slate-700 dark:bg-slate-800 rounded-lg hover:bg-slate-600 dark:hover:bg-slate-700 transition">
-              <span>🧬 Run Simulation</span>
-              <span>→</span>
-            </button>
-            <button onclick="window.location.href='disease.html'"
-              class="flex items-center justify-between p-3 bg-emerald-700 dark:bg-emerald-800 rounded-lg hover:bg-emerald-600 dark:hover:bg-emerald-700 transition shadow-md">
-              <span>🩺 Identify Plant Disease</span>
-              <span>→</span>
-            </button>
+          <div id="decision-container" class="space-y-3">
+            <div class="flex items-start gap-3">
+              <div class="bg-gray-100 p-2 rounded-lg text-xl">🧠</div>
+              <div>
+                <div class="text-sm font-bold text-gray-700">Analyzing Field State...</div>
+                <div class="text-xs text-slate-500 dark:text-slate-400">Checking NPK, Moisture & Weather rules.</div>
+              </div>
+            </div>
           </div>
         </div>
 
+        <!-- Simulation Teaser -->
+        <div class="bg-purple-900 text-white p-6 rounded-xl shadow-lg relative overflow-hidden group cursor-pointer"
+          onclick="window.location.href='simulation.html'">
+          <div
+            class="absolute right-[-20px] top-[-20px] text-9xl opacity-10 transform rotate-12 group-hover:rotate-0 transition duration-500">
+            🧬</div>
+          <div class="relative z-10">
+            <h3 class="font-bold text-lg mb-1">What-If Simulation</h3>
+            <p class="text-purple-200 text-xs mb-4">Run hypothetical scenarios accurately.</p>
+            <div
+              class="flex items-center gap-2 text-sm font-bold bg-white/10 w-fit px-3 py-1 rounded-xl hover-lift backdrop-blur-sm border border-white/10 hover:bg-white/20 transition">
+              <span>Try Now</span>
+              <span>→</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Crop Recommendation (AI) -->
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border-l-4 border-yellow-500">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-gray-400 text-xs font-bold uppercase">AI Crop Recommendation</h3>
+            <span class="text-xs font-bold px-2 py-0.5 bg-yellow-100 text-yellow-800 rounded">BEST FIT</span>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="text-4xl outfit tracking-tight">🌾</div>
+            <div>
+              <div id="crop-suggestion" class="text-2xl font-bold text-slate-800 dark:text-slate-100 dark:text-gray-200">Analyzing...</div>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Based on current soil & weather</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Vegetable Prices -->
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border-l-4 border-teal-500">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-gray-400 text-xs font-bold uppercase">Live Vegetable Prices</h3>
+             <a href="market.html" class="text-xs font-bold px-2 py-0.5 bg-teal-100 text-teal-800 rounded hover:bg-teal-200 transition">VIEW ALL</a>
+          </div>
+          <div id="vegetable-prices-list" class="space-y-3">
+            <div class="text-sm text-slate-500 dark:text-slate-400 animate-pulse">Fetching latest market prices...</div>
+          </div>
+        </div>
+
+        <!-- Weather -->
+        <div class="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-6 rounded-xl shadow-lg">
+          <div class="flex items-center gap-4">
+            <div class="text-4xl outfit tracking-tight">🌦️</div>
+            <div>
+              <div class="font-bold text-xl">Local Weather</div>
+              <div id="weather-box" class="text-blue-50 text-sm">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Yield Forecast -->
+        <div class="bg-white p-6 rounded-2xl hover-lift shadow-sm border-l-4 border-indigo-500">
+          <h3 class="text-gray-400 text-xs font-bold uppercase mb-2">Yield Forecast (AI)</h3>
+          <div class="flex justify-between items-end">
+            <div>
+              <div id="yield-predict" class="text-2xl font-bold text-indigo-700">Estimating...</div>
+              <div class="flex items-center gap-2 mt-1">
+                <p class="text-xs text-slate-500 dark:text-slate-400">Confidence: <span id="yield-confidence"
+                    class="font-bold text-gray-700">--</span>%</p>
+                <span id="yield-badge"
+                  class="hidden px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-gray-100 text-slate-600 dark:text-slate-300">Pending</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-400 mb-1">Range</div>
+              <div class="text-sm font-semibold text-slate-600 dark:text-slate-300"><span id="yield-min">--</span> — <span
+                  id="yield-max">--</span></div>
+              <div id="yield-unit" class="text-xs text-gray-400 mt-1">tons/ha</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
   </main>
 
   <footer
-    class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 mt-12 py-8 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 text-center text-slate-500 dark:text-slate-400 text-sm">
-      <p>Developed by <strong>Vikas</strong> | Powered by FastAPI + ML 🌿</p>
-      <p class="mt-2 text-slate-400 dark:text-slate-500">© 2026 Agri-Twin Project</p>
-    </div>
+    class="mt-12 py-8 text-center text-gray-400 text-sm border-t border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
+    AgriTwin v2.0 · Professional Edition
   </footer>
 
-  <audio id="irrigation-alert-sound" src="alert.mp3" preload="auto"></audio>
+  <!-- RAG Chatbot UI -->
+  <div id="chatbot-fab" onclick="toggleChat()">
+    💬
+  </div>
+
+  <div id="chatbot-window">
+    <div id="chatbot-header">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🤖</span>
+        <span>AgriTwin Assistant</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="chatbot-lang" class="bg-green-700 text-white text-xs border-none rounded p-1 outline-none"
+          onchange="changeChatLang()">
+          <option value="en">English</option>
+          <option value="ta">தமிழ்</option>
+        </select>
+        <button onclick="toggleChat()" class="text-white hover:text-gray-200 focus:outline-none">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="chatbot-messages">
+      <div class="chat-msg chat-bot" id="chat-welcome-msg">
+        Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations,
+        weather strategies, or general agricultural insights. How can I help you today?
+      </div>
+      <div id="chat-default-queries" class="flex flex-col gap-2 mt-1">
+        <button onclick="sendDefaultQuery('What is the best crop to plant now?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱
+          What is the best crop to plant now?</button>
+        <button onclick="sendDefaultQuery('How can I improve soil health?')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍
+          How can I improve soil health?</button>
+        <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')"
+          class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧
+          Give me an irrigation plan.</button>
+      </div>
+    </div>
+
+    <form id="chatbot-input-container" onsubmit="handleChatSubmit(event)">
+      <input type="text" id="chatbot-input" placeholder="Ask a question..." autocomplete="off" required>
+      <button type="submit" id="chatbot-send">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" transform="rotate(90)">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+          </path>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <audio id="irrigation-alert-sound" src="alert.mp3"></audio>
 
   <script>
     const API_BASE = "http://127.0.0.1:8000";
-    let chart;
+    let chart, nChart;
     let soundEnabled = false;
     const alertSound = document.getElementById("irrigation-alert-sound");
 
-    // --- Theme Logic ---
-    const themeToggleBtn = document.getElementById('theme-toggle');
+    // Theme Toggle Logic
+    const themeBtn = document.getElementById('theme-toggle');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
     const lightIcon = document.getElementById('theme-toggle-light-icon');
 
     function updateIcons() {
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      if (document.documentElement.classList.contains('dark')) {
         darkIcon.classList.remove('hidden');
         lightIcon.classList.add('hidden');
       } else {
@@ -329,210 +784,548 @@
     }
     updateIcons();
 
-    themeToggleBtn.addEventListener('click', function () {
-      if (localStorage.theme === 'dark') {
-        document.documentElement.classList.remove('dark');
-        localStorage.theme = 'light';
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.theme = 'dark';
-      }
+    themeBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
       updateIcons();
-      if (chart) chart.update(); // Update chart colors
+      if (chart) chart.update();
+      if (nChart) nChart.update();
     });
 
-
-    // --- Alerts ---
+    // Alerts
     document.getElementById("enable-alerts").addEventListener("click", () => {
       soundEnabled = true;
-      alertSound.play().catch(() => { });
-      const btn = document.getElementById("enable-alerts");
-      btn.innerHTML = "<span>🔊</span> Alerts On";
-      btn.classList.add("ring-2", "ring-emerald-500");
+      try { alertSound.play().catch(() => { }); } catch (e) { }
+      document.getElementById("enable-alerts").innerText = "🔊 On";
     });
 
-    // --- Chart ---
+    // Charts
     function initChart() {
+      // 1. Environmental Chart
       const ctx = document.getElementById("sensorChart").getContext("2d");
+      const gradientTemp = ctx.createLinearGradient(0, 0, 0, 400);
+      gradientTemp.addColorStop(0, 'rgba(249, 115, 22, 0.5)');
+      gradientTemp.addColorStop(1, 'rgba(249, 115, 22, 0.0)');
 
-      // Plugin to handle dark mode colors dynamically
-      Chart.defaults.color = () => document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#475569';
-      Chart.defaults.borderColor = () => document.documentElement.classList.contains('dark') ? '#334155' : '#e2e8f0';
+      const gradientHum = ctx.createLinearGradient(0, 0, 0, 400);
+      gradientHum.addColorStop(0, 'rgba(6, 182, 212, 0.5)');
+      gradientHum.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
 
       chart = new Chart(ctx, {
         type: "line",
         data: {
           labels: [],
           datasets: [
-            { label: "Temp (°C)", data: [], borderColor: "#f97316", tension: 0.4, borderWidth: 2, pointRadius: 0 },
-            { label: "Humidity (%)", data: [], borderColor: "#06b6d4", tension: 0.4, borderWidth: 2, pointRadius: 0 },
-            { label: "Rain (mm)", data: [], borderColor: "#3b82f6", tension: 0.4, borderWidth: 2, pointRadius: 0 },
-            { label: "pH", data: [], borderColor: "#9333ea", tension: 0.4, borderWidth: 2, pointRadius: 0 },
-            { label: "Moisture (%)", data: [], borderColor: "#d97706", tension: 0.4, borderWidth: 2, pointRadius: 0 }
+            { label: "Temp (°C)", data: [], borderColor: "#f97316", backgroundColor: gradientTemp, fill: true, tension: 0.4 },
+            { label: "Humidity (%)", data: [], borderColor: "#06b6d4", backgroundColor: gradientHum, fill: true, tension: 0.4 },
+            { label: "Moisture (%)", data: [], borderColor: "#d97706", fill: false, tension: 0.4 },
+            { label: "Rainfall (mm)", data: [], borderColor: "#3b82f6", fill: false, tension: 0.4 }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { position: "bottom", labels: { usePointStyle: true, boxWidth: 8 } }
-          },
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'top' } },
           scales: {
-            x: {
-              grid: { display: false },
-              title: { display: false }
-            },
-            y: {
-              beginAtZero: true,
-              grid: { borderDash: [4, 4] }
-            }
+            x: { grid: { display: false } },
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      // 2. Nutrient Chart
+      const nCtx = document.getElementById("nutrientChart").getContext("2d");
+      nChart = new Chart(nCtx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [
+            { label: "Nitrogen (ppm)", data: [], borderColor: "#22c55e", tension: 0.4 },
+            { label: "Phosphorus (ppm)", data: [], borderColor: "#84cc16", tension: 0.4 },
+            { label: "Potassium (ppm)", data: [], borderColor: "#14b8a6", tension: 0.4 },
+            { label: "pH", data: [], borderColor: "#8b5cf6", tension: 0.4, yAxisID: 'yPH' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: { legend: { position: 'top' } },
+          scales: {
+            x: { grid: { display: false } },
+            y: { beginAtZero: true, position: 'left', title: { display: true, text: 'NPK (ppm)' } },
+            yPH: { beginAtZero: true, position: 'right', max: 14, title: { display: true, text: 'pH' }, grid: { drawOnChartArea: false } }
           }
         }
       });
     }
 
-    // --- Error Handling Wrapper ---
-    function showError(msg) {
-      const banner = document.getElementById('connection-error');
-      banner.classList.remove('hidden');
-      banner.innerHTML = `⚠️ ${msg}`;
+    function showError() { document.getElementById('connection-error').classList.remove('hidden'); }
+    function hideError() { document.getElementById('connection-error').classList.add('hidden'); }
 
-      // Also set visible state in cards
-      ["N", "P", "K", "rainfall", "temp", "humidity", "ph", "soil_moisture"].forEach(id => {
-        document.getElementById(id).innerText = "!";
-      });
-      document.getElementById("crop-suggestion").innerText = "⚠️ Offline";
-      document.getElementById("weather-box").innerHTML = "⚠️ Offline";
-    }
-
-    function hideError() {
-      document.getElementById('connection-error').classList.add('hidden');
-    }
-
-    // --- Data Fetching ---
     async function fetchSensorData() {
       try {
-        const res = await fetch(`${API_BASE}/latest`);
-        if (!res.ok) throw new Error("Sensor Error");
+        const res = await fetch(`${API_BASE}/latest?t=${Date.now()}`);
+        if (!res.ok) throw new Error("Fail");
         const t = await res.json();
-
         hideError();
 
-        document.getElementById("N").innerText = (t.N ?? 0).toFixed(0);
-        document.getElementById("P").innerText = (t.P ?? 0).toFixed(0);
-        document.getElementById("K").innerText = (t.K ?? 0).toFixed(0);
-        document.getElementById("rainfall").innerText = (t.rainfall ?? 0).toFixed(1) + " mm";
-        document.getElementById("temp").innerText = (t.temperature ?? 0).toFixed(1) + "°C";
-        document.getElementById("humidity").innerText = (t.humidity ?? 0).toFixed(1) + "%";
-        document.getElementById("ph").innerText = (t.ph ?? 0).toFixed(1);
-        document.getElementById("soil_moisture").innerText = (t.soil_moisture ?? 0).toFixed(1) + "%";
+        ["N", "P", "K", "rainfall", "temp", "humidity", "ph", "soil_moisture"].forEach(k => {
+          const el = document.getElementById(k);
+          if (el) el.innerText = (t[k === 'temp' ? 'temperature' : k] ?? 0).toFixed(1);
+        });
 
-        updateChart(new Date().toLocaleTimeString('en-US', { hour12: false }), t);
-      } catch (err) {
-        console.error("Sensor fetch fail", err);
-        showError("Cannot connect to backend. Is it running?");
-      }
+        const bar = document.getElementById('moisture-bar');
+        if (bar) bar.style.width = `${Math.min(t.soil_moisture, 100)}%`;
+
+        const timeLabel = new Date().toLocaleTimeString();
+
+        // Update Env Chart
+        chart.data.labels.push(timeLabel);
+        chart.data.datasets[0].data.push(t.temperature);
+        chart.data.datasets[1].data.push(t.humidity);
+        chart.data.datasets[2].data.push(t.soil_moisture);
+        chart.data.datasets[3].data.push(t.rainfall);
+
+        if (chart.data.labels.length > 20) {
+          chart.data.labels.shift();
+          chart.data.datasets.forEach(d => d.data.shift());
+        }
+        chart.update('none');
+
+        // Update Nutrient Chart
+        nChart.data.labels.push(timeLabel);
+        nChart.data.datasets[0].data.push(t.N);
+        nChart.data.datasets[1].data.push(t.P);
+        nChart.data.datasets[2].data.push(t.K);
+        nChart.data.datasets[3].data.push(t.ph);
+
+        if (nChart.data.labels.length > 20) {
+          nChart.data.labels.shift();
+          nChart.data.datasets.forEach(d => d.data.shift());
+        }
+        nChart.update('none');
+
+      } catch (e) { showError(); }
     }
 
-    async function fetchPrediction() {
+    async function fetchOther() {
       try {
-        // Re-using fetch logic but only for the recommendation part
-        const res = await fetch(`${API_BASE}/predict`);
-        if (!res.ok) return;
-        const data = await res.json();
-        const crop = data.recommended_crop;
-        document.getElementById("crop-suggestion").innerText = "🌾 " + (crop || "Analyzing...");
-      } catch (err) {
-        console.error(err);
-      }
-    }
+        const r1 = await fetch(`${API_BASE}/predict`);
+        if (r1.ok) { document.getElementById("crop-suggestion").innerText = (await r1.json()).recommended_crop; }
 
-
-    function updateChart(time, t) {
-      chart.data.labels.push(time);
-      chart.data.datasets[0].data.push(t.temperature ?? 0);
-      chart.data.datasets[1].data.push(t.humidity ?? 0);
-      chart.data.datasets[2].data.push(t.rainfall ?? 0);
-      chart.data.datasets[3].data.push(t.ph ?? 0);
-      chart.data.datasets[4].data.push(t.soil_moisture ?? 0);
-      if (chart.data.labels.length > 20) {
-        chart.data.labels.shift();
-        chart.data.datasets.forEach(ds => ds.data.shift());
-      }
-      chart.update('none');
-    }
-
-    async function fetchWeather() {
-      try {
-        const res = await fetch(`${API_BASE}/weather`);
-        if (!res.ok) throw new Error("Weather Error");
-        const data = await res.json();
-        document.getElementById("weather-box").innerHTML =
-          `<div>
-                <div class="text-3xl font-bold">${data.temperature}°C</div>
-                <div class="text-blue-100">${data.condition} · ${data.city}</div>
-                <div class="text-sm mt-2 opacity-80">Humidity: ${data.humidity}% | Rain: ${data.rainfall}mm</div>
-            </div>`;
-      } catch (err) {
-        // Fallback or just ignore (main error banner handles critical stuff)
-        document.getElementById("weather-box").innerText = "⚠️ Weather Unavailable";
-      }
-    }
-
-    async function fetchIrrigationAlert() {
-      try {
-        const res = await fetch(`${API_BASE}/irrigation-alert`);
-        if (!res.ok) return;
-        const data = await res.json();
-        const alertBox = document.getElementById("irrigation-alert");
-        alertBox.innerText = `💧 ${data.alert_message}`;
-
-        // Remove old classes
-        const p = alertBox.parentElement;
-        p.className = ""; // Reset
-
-        if (data.alert_level === "critical") {
-          p.className = "bg-red-50 dark:bg-red-900/20 p-6 rounded-xl shadow-sm border-l-4 border-red-500 dark:border-red-600";
-          alertBox.className = "text-xl font-bold text-red-700 dark:text-red-400";
-          if (soundEnabled) alertSound.play().catch(() => { });
-        } else {
-          p.className = "bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border-l-4 border-orange-500 dark:border-orange-600";
-          alertBox.className = "text-xl font-bold text-orange-700 dark:text-orange-400";
+        const r2 = await fetch(`${API_BASE}/irrigation-alert`);
+        if (r2.ok) {
+          const d = await r2.json();
+          document.getElementById("irrigation-alert").innerText = d.alert_message;
+          if (d.alert_level === 'critical' && soundEnabled) alertSound.play().catch(() => { });
         }
 
-      } catch (err) { }
+        const r3 = await fetch(`${API_BASE}/weather`);
+        if (r3.ok) {
+          const w = await r3.json();
+          document.getElementById("weather-box").innerText = `${w.temperature}°C, ${w.condition}`;
+        }
+      } catch (e) { }
     }
 
-    // --- Report Generation ---
+    async function fetchForecast() {
+      try {
+        const res = await fetch(`${API_BASE}/weather-forecast`);
+        if (!res.ok) throw new Error("Forecast failed");
+        const data = await res.json();
+
+        const container = document.getElementById("forecast-container");
+        container.innerHTML = "";
+
+        data.forEach(day => {
+          const dateObj = new Date(day.date);
+          const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+
+          const div = document.createElement("div");
+          div.className = "bg-white dark:bg-gray-800 p-4 rounded-xl text-center shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition transform hover:scale-105";
+
+          // If it's a sun icon (clear sky day '01d' or '01n'), apply an orange filter
+          const isSun = day.icon === '01d' || day.icon === '01n';
+          const imgStyle = isSun ? 'filter: sepia(1) saturate(5) hue-rotate(-25deg);' : '';
+
+          div.innerHTML = `
+            <div class="text-xs text-gray-400 font-bold uppercase mb-1">${dayName}</div>
+            <img src="http://openweathermap.org/img/wn/${day.icon}.png" alt="${day.condition}" class="w-10 h-10 mx-auto" style="${imgStyle}">
+            <div class="font-bold text-gray-700 dark:text-gray-200">${Math.round(day.temp)}°C</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 dark:text-gray-400">${day.condition}</div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (e) {
+        console.error(e);
+        document.getElementById("forecast-container").innerHTML = `<div class="col-span-full text-center text-sm text-gray-400">Forecast unavailable</div>`;
+      }
+    }
+
+    async function fetchDecisions() {
+      try {
+        const payload = {
+          growth_stage: "Vegetative",
+          days_since_last_fert: 15, // Example context
+          crop_type: "Rice" // ideally dynamic
+        };
+
+        const res = await fetch(`${API_BASE}/recommendations`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          const recs = data.recommendations || [];
+          const container = document.getElementById("decision-container");
+          container.innerHTML = "";
+
+          if (recs.length === 0) {
+            container.innerHTML = `<div class="text-sm text-slate-500 dark:text-slate-400 italic">No critical actions required right now.</div>`;
+            return;
+          }
+
+          recs.forEach(rec => {
+            const colors = rec.risk === 'High' ? 'bg-red-50 border-red-200 text-red-800' :
+              rec.risk === 'Medium' ? 'bg-orange-50 border-orange-200 text-orange-800' :
+                'bg-green-50 border-green-200 text-green-800';
+            const icon = rec.type === 'Irrigation' ? '💧' : rec.type === 'Fertilizer' ? '🧪' : '📢';
+
+            const item = document.createElement("div");
+            item.className = `p-3 rounded-lg border ${colors} border-opacity-50`;
+            item.innerHTML = `
+                <div class="flex justify-between items-start mb-1">
+                   <span class="font-bold text-xs uppercase opacity-75">${rec.type}</span>
+                   <span class="text-[10px] font-bold px-1.5 py-0.5 bg-white bg-opacity-50 rounded">${rec.risk} Priority</span>
+                </div>
+                <div class="font-bold text-sm mb-1 flex gap-2"><span>${icon}</span> ${rec.action}</div>
+                <div class="text-xs opacity-90">${rec.reason} Benefit: ${rec.benefit}</div>
+              `;
+            container.appendChild(item);
+          });
+        }
+      } catch (e) { console.error("Decision fetch error", e); }
+    }
+
+    async function fetchYield() {
+      try {
+        // 1. Get Crop Recommendation
+        const cropRes = await fetch(`${API_BASE}/predict`);
+        let crop = "Rice"; // Default
+        if (cropRes.ok) {
+          const cData = await cropRes.json();
+          crop = cData.recommended_crop || "Rice";
+        }
+
+        // 2. Predict Yield for this crop
+        const res = await fetch(`${API_BASE}/yield-predict-ai?crop=${encodeURIComponent(crop)}`);
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.expected_yield) {
+            document.getElementById("yield-predict").innerText = data.expected_yield;
+            document.getElementById("yield-confidence").innerText = data.confidence_score;
+            document.getElementById("yield-unit").innerText = data.unit;
+            document.getElementById("yield-min").innerText = data.worst_case_yield;
+            document.getElementById("yield-max").innerText = data.best_case_yield;
+
+            // Badge color based on confidence
+            const badge = document.getElementById("yield-badge");
+            if (badge) {
+              badge.classList.remove("hidden", "bg-gray-100", "text-slate-600 dark:text-slate-300", "bg-green-100", "text-green-800", "bg-yellow-100", "text-yellow-800", "bg-red-100", "text-red-800");
+
+              if (data.confidence_score >= 80) {
+                badge.classList.add("bg-green-100", "text-green-800");
+                badge.innerText = "HIGH";
+              } else if (data.confidence_score >= 50) {
+                badge.classList.add("bg-yellow-100", "text-yellow-800");
+                badge.innerText = "MEDIUM";
+              } else {
+                badge.classList.add("bg-red-100", "text-red-800");
+                badge.innerText = "LOW";
+              }
+            }
+          }
+        }
+      } catch (e) { console.error("Yield fetch error", e); }
+    }
+
+    async function fetchVegetablePrices() {
+      try {
+        const res = await fetch(`${API_BASE}/api/vegetables/recent`);
+        if (res.ok) {
+          const payload = await res.json();
+          const container = document.getElementById("vegetable-prices-list");
+          container.innerHTML = "";
+          
+          if (!payload.data || payload.data.length === 0) {
+             container.innerHTML = `<div class="text-sm text-slate-500 dark:text-slate-400 italic">No price data available.</div>`;
+             return;
+          }
+          
+          payload.data.forEach(item => {
+             const div = document.createElement("div");
+             div.className = "flex justify-between items-center border-b border-gray-100 pb-2 last:border-0 last:pb-0";
+             div.innerHTML = `
+                <div class="text-sm font-semibold text-gray-700">${item.name}</div>
+                <div class="text-sm font-bold text-teal-600">₹${item.price} <span class="text-xs text-gray-400 font-normal">/${item.unit}</span></div>
+             `;
+             container.appendChild(div);
+          });
+        }
+      } catch (e) { console.error("Vegetable price fetch error", e); }
+    }
+
     function downloadReport() {
-      const element = document.getElementById('dashboard-content');
-      const opt = {
-        margin: 0.5,
-        filename: 'AgriTwin_Report.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-      };
-      html2pdf().set(opt).from(element).save();
+      html2pdf().from(document.getElementById('dashboard-content')).save();
     }
 
-    window.onload = () => {
+    window.onload = async () => {
+      // 1. Initialize logic
       initChart();
-      // Initial fetch attempts
+
+      // 2. Fetch Weather Immediately for Overlay
+      let weatherCond = "Clear";
+      try {
+        const res = await fetch(`${API_BASE}/weather`);
+        if (res.ok) {
+          const w = await res.json();
+          weatherCond = w.condition || "Clear";
+          // Update weather box sidebar while we are here
+          document.getElementById("weather-box").innerText = `${w.temperature}°C, ${w.condition}`;
+        }
+      } catch (e) { console.log("Weather init fail"); }
+
+      // 3. Setup Animation Strings
+      const animBox = document.getElementById('weather-anim-box');
+      const title = document.getElementById('weather-title');
+      const overlay = document.getElementById('weather-overlay');
+
+      let html = '';
+      let text = `Current Conditions: ${weatherCond}`;
+
+      // Normalize condition string matching
+      const cond = weatherCond.toLowerCase();
+
+      if (cond.includes('rain') || cond.includes('drizzle')) {
+        // Rain Drops
+        html = '<div style="position:relative; width:100%; height:100%;">';
+        for (let i = 0; i < 15; i++) {
+          const left = Math.random() * 200;
+          const delay = Math.random() * 1;
+          const dur = 0.5 + Math.random() * 0.5;
+          html += `<div class="rain-drop" style="left:${left}px; animation-delay:${delay}s; animation-duration:${dur}s;"></div>`;
+        }
+        html += '</div>'; // maybe add a cloud too
+        html += '<div class="cloud-body" style="top:20px; left:40px; background:#64748b;"></div>';
+      }
+      else if (cond.includes('cloud') || cond.includes('overcast') || cond.includes('mist') || cond.includes('haze')) {
+        // Cloud
+        html = '<div class="cloud-body" style="top:75px; left:40px;"></div>';
+        text = `It's ${weatherCond} today.`;
+      }
+      else {
+        // Sun (Clear/Default)
+        html = `
+          <div class="sun-core"></div>
+          <div class="sun-rays">
+            <div class="ray" style="transform: rotate(0deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(45deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(90deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(135deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(180deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(225deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(270deg) translate(0, -50px);"></div>
+            <div class="ray" style="transform: rotate(315deg) translate(0, -50px);"></div>
+          </div>
+        `;
+        text = "Sunny & Clear Skies!";
+      }
+
+      animBox.innerHTML = html;
+      title.innerText = text;
+
+      // 4. Trigger Sequence
+      // Remove spinner
+      const loader = document.getElementById('page-loader');
+      loader.style.opacity = '0';
+      setTimeout(() => loader.remove(), 500);
+
+      // Show Weather Overlay
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto'; // Block interaction temporarily
+
+      // Hide Overlay after 2.5s
+      setTimeout(() => {
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+        // Cleanup DOM after fade to save frames (optional)
+      }, 2500);
+
+      // 5. Continue fetching rest of data
       fetchSensorData();
-      fetchPrediction();
-      fetchWeather();
-      fetchIrrigationAlert();
+      fetchOther(); // Note: we already fetched weather once, but this refreshes everything
+      fetchForecast();
+      fetchYield();
+      fetchDecisions();
+      fetchVegetablePrices();
 
-      // Update Sensors every 3s (keep visuals fast)
       setInterval(fetchSensorData, 3000);
-
-      // Update Prediction every 10s (stable recommendation)
-      setInterval(fetchPrediction, 10000);
-
-      setInterval(fetchWeather, 60000);
-      setInterval(fetchIrrigationAlert, 10000);
+      setInterval(fetchOther, 10000);
+      setInterval(fetchYield, 15000);
+      setInterval(fetchDecisions, 20000);
     };
+
+    // --- Chatbot Logic ---
+    let chatOpen = false;
+
+    function toggleChat() {
+      chatOpen = !chatOpen;
+      const window = document.getElementById('chatbot-window');
+      if (chatOpen) {
+        window.classList.add('open');
+        setTimeout(() => document.getElementById('chatbot-input').focus(), 300);
+      } else {
+        window.classList.remove('open');
+      }
+    }
+
+    function addMessage(text, sender) {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = `chat-msg ${sender === 'user' ? 'chat-user' : 'chat-bot'}`;
+
+      // Simple markdown-like bold parsing for better readability
+      let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      // Handle newlines
+      formattedText = formattedText.replace(/\n/g, '<br>');
+
+      div.innerHTML = formattedText;
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function showTyping() {
+      const msgs = document.getElementById('chatbot-messages');
+      const div = document.createElement('div');
+      div.className = 'typing-indicator';
+      div.id = 'typing-indicator';
+      div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+      msgs.appendChild(div);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    function removeTyping() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+    }
+
+    let currentLang = 'en';
+
+    function changeChatLang() {
+      currentLang = document.getElementById('chatbot-lang').value;
+      const welcome = document.getElementById('chat-welcome-msg');
+      const input = document.getElementById('chatbot-input');
+      const defaultQueriesContainer = document.getElementById('chat-default-queries');
+
+      if (currentLang === 'ta') {
+        if (welcome) welcome.innerText = "வணக்கம்! நான் உங்கள் AgriTwin AI உதவியாளர். நீங்கள் பயிர் பரிந்துரைகள், வானிலை, அல்லது விவசாய தகவல்களை பற்றி என்னிடம் கேட்கலாம். நான் உங்களுக்கு எப்படி உதவ முடியும்?";
+        input.placeholder = "ஒரு கேள்வியைக் கேளுங்கள்...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('இப்போது பயிரிட சிறந்த பயிர் எது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 இப்போது பயிரிட சிறந்த பயிர் எது?</button>
+            <button onclick="sendDefaultQuery('மண் வளத்தை எவ்வாறு மேம்படுத்துவது?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 மண் வளத்தை எவ்வாறு மேம்படுத்துவது?</button>
+            <button onclick="sendDefaultQuery('வானிலை சார்ந்த நீர்ப்பாசனத் திட்டத்தைக் கொடு.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 நீர்ப்பாசனத் திட்டத்தைக் கொடு.</button>
+          `;
+        }
+      } else {
+        if (welcome) welcome.innerText = "Hi there! I'm your AI assistant for the AgriTwin project. You can ask me about the models, crop recommendations, weather strategies, or general agricultural insights. How can I help you today?";
+        input.placeholder = "Ask a question...";
+        if (defaultQueriesContainer) {
+          defaultQueriesContainer.innerHTML = `
+            <button onclick="sendDefaultQuery('What is the best crop to plant now?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌱 What is the best crop to plant now?</button>
+            <button onclick="sendDefaultQuery('How can I improve soil health?')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">🌍 How can I improve soil health?</button>
+            <button onclick="sendDefaultQuery('Give me a weather-based irrigation plan.')" class="text-left text-sm bg-green-50 hover:bg-green-100 text-green-800 border border-green-200 px-3 py-2 rounded-lg transition dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-green-300 dark:border-gray-600">💧 Give me an irrigation plan.</button>
+          `;
+        }
+      }
+    }
+
+    async function sendDefaultQuery(text) {
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatbot-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+
+      const defaultQueries = document.getElementById('chat-default-queries');
+      if (defaultQueries) defaultQueries.remove();
+
+      addMessage(text, 'user');
+      showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: text, language: currentLang })
+        });
+
+        removeTyping();
+
+        if (res.ok) {
+          const data = await res.json();
+          addMessage(data.reply, 'bot');
+        } else {
+          console.error("Chat API Error", await res.text());
+          addMessage("I'm sorry, I encountered an error while connecting to the knowledge base.", 'bot');
+        }
+      } catch (err) {
+        console.error("Network Error", err);
+        removeTyping();
+        addMessage("Network error. Please check your connection to the backend server.", 'bot');
+      }
+    }
   </script>
 </body>
 

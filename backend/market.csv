@@ -1,0 +1,931 @@
+State,District,Market,Commodity,Variety,Grade,Min_Price,Max_Price,Modal_Price,Arrival_Date
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4170,5097,4634,03-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4290,5243,4767,04-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4564,5579,5072,05-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4253,5198,4726,06-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4189,5120,4655,07-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4664,5701,5183,08-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4475,5470,4973,09-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4385,5360,4873,10-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4380,5353,4867,11-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4054,4955,4505,12-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4148,5069,4609,13-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4550,5561,5056,14-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4361,5330,4846,15-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4424,5407,4916,16-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4653,5687,5170,17-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4815,5886,5351,18-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4120,5035,4578,19-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4726,5777,5252,20-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4824,5896,5360,21-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4570,5585,5078,22-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4940,6037,5489,23-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4740,5793,5267,24-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4482,5479,4981,25-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4523,5528,5026,26-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4613,5638,5126,27-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4216,5153,4685,28-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4241,5184,4713,29-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4681,5722,5202,30-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4316,5275,4796,31-12-2025
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4942,6041,5492,01-01-2026
+Maharashtra,Pune,Pune,Rice,Basmati,FAQ,4308,5265,4787,02-01-2026
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2418,2955,2687,03-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2295,2806,2551,04-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2176,2659,2418,05-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2348,2869,2609,06-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2445,2988,2717,07-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2081,2544,2313,08-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2344,2865,2605,09-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2253,2754,2504,10-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2300,2811,2556,11-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2394,2926,2660,12-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2377,2906,2642,13-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2426,2965,2696,14-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2313,2828,2571,15-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2109,2578,2344,16-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2105,2572,2339,17-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2225,2720,2473,18-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2090,2555,2323,19-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2322,2839,2581,20-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2460,3007,2734,21-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2160,2641,2401,22-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2299,2810,2555,23-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2402,2935,2669,24-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2056,2513,2285,25-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2149,2626,2388,26-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2042,2495,2269,27-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2206,2697,2452,28-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2245,2744,2495,29-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2385,2916,2651,30-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2463,3010,2737,31-12-2025
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2159,2638,2399,01-01-2026
+Maharashtra,Pune,Pune,Wheat,Locwan,FAQ,2188,2675,2432,02-01-2026
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1336,1633,1485,03-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1386,1694,1540,04-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1461,1786,1624,05-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1396,1707,1552,06-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1427,1744,1586,07-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1384,1691,1538,08-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1458,1783,1621,09-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1476,1805,1641,10-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1478,1807,1643,11-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1457,1780,1619,12-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1234,1509,1372,13-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1372,1677,1525,14-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1431,1750,1591,15-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1317,1610,1464,16-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1430,1747,1589,17-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1480,1809,1645,18-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1250,1527,1389,19-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1440,1761,1601,20-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1301,1590,1446,21-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1245,1522,1384,22-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1418,1733,1576,23-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1319,1612,1466,24-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1251,1529,1390,25-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1224,1497,1361,26-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1292,1579,1436,27-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1282,1567,1425,28-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1253,1532,1393,29-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1437,1756,1597,30-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1412,1725,1569,31-12-2025
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1322,1615,1469,01-01-2026
+Maharashtra,Pune,Manchar,Tomato,Hybrid,FAQ,1274,1557,1416,02-01-2026
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1827,2233,2030,03-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1887,2306,2097,04-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1759,2150,1955,05-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2006,2451,2229,06-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1953,2387,2170,07-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1839,2248,2044,08-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1986,2427,2207,09-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1792,2191,1992,10-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1714,2095,1905,11-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1906,2329,2118,12-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2043,2497,2270,13-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1972,2411,2192,14-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1844,2253,2049,15-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2043,2498,2271,16-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2070,2530,2300,17-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1767,2160,1964,18-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1946,2379,2163,19-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2072,2533,2303,20-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1772,2165,1969,21-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1735,2120,1928,22-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1941,2372,2157,23-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2022,2471,2247,24-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1709,2088,1899,25-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1886,2305,2096,26-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1921,2348,2135,27-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1746,2134,1940,28-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,2004,2449,2227,29-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1855,2268,2062,30-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1860,2273,2067,31-12-2025
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1952,2385,2169,01-01-2026
+Maharashtra,Nashik,Lasalgaon,Onion,Red,FAQ,1753,2142,1948,02-01-2026
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6818,8333,7576,03-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5891,7200,6546,04-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5981,7310,6646,05-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6538,7991,7265,06-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6462,7898,7180,07-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6129,7491,6810,08-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6047,7390,6719,09-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5830,7125,6478,10-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5753,7032,6393,11-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5936,7255,6596,12-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5826,7121,6474,13-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6095,7450,6773,14-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5994,7326,6660,15-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6670,8153,7412,16-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6055,7400,6728,17-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6300,7701,7001,18-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5887,7196,6542,19-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6849,8371,7610,20-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6603,8070,7337,21-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5740,7015,6378,22-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5687,6950,6319,23-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6304,7705,7005,24-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5764,7045,6405,25-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,5869,7174,6522,26-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6695,8182,7439,27-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6642,8119,7381,28-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6593,8058,7326,29-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6770,8275,7523,30-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6404,7827,7116,31-12-2025
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6169,7540,6855,01-01-2026
+Maharashtra,Nashik,Nashik,Grapes,Thompson,FAQ,6900,8433,7667,02-01-2026
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2340,2860,2600,03-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2313,2828,2571,04-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2229,2724,2477,05-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,1990,2433,2212,06-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2034,2487,2261,07-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2281,2788,2535,08-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2223,2717,2470,09-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,1990,2433,2212,10-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2025,2475,2250,11-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2003,2448,2226,12-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2423,2962,2693,13-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2145,2622,2384,14-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2247,2746,2497,15-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2254,2755,2505,16-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2304,2816,2560,17-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2377,2906,2642,18-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2288,2797,2543,19-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2175,2658,2417,20-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2177,2660,2419,21-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2196,2684,2440,22-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2096,2561,2329,23-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2133,2608,2371,24-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2375,2902,2639,25-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2033,2484,2259,26-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2126,2599,2363,27-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2411,2946,2679,28-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2399,2932,2666,29-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2183,2668,2426,30-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2179,2664,2422,31-12-2025
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2169,2652,2411,01-01-2026
+Punjab,Ludhiana,Ludhiana,Wheat,Sharbati,FAQ,2146,2623,2385,02-01-2026
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4477,5472,4975,03-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4613,5638,5126,04-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4747,5802,5275,05-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,5083,6212,5648,06-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4307,5264,4786,07-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4887,5974,5431,08-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,5132,6273,5703,09-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4219,5156,4688,10-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4969,6074,5522,11-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4550,5561,5056,12-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4326,5287,4807,13-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4449,5438,4944,14-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4696,5739,5218,15-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,5130,6271,5701,16-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4548,5559,5054,17-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4232,5173,4703,18-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4464,5456,4960,19-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,5137,6278,5708,20-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4245,5188,4717,21-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4428,5413,4921,22-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4708,5755,5232,23-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,5065,6190,5628,24-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4959,6062,5511,25-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4843,5920,5382,26-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4744,5799,5272,27-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4557,5570,5064,28-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4664,5701,5183,29-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4467,5460,4964,30-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4915,6008,5462,31-12-2025
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,4404,5383,4894,01-01-2026
+Punjab,Ludhiana,Khanna,Rice,Basmati 1121,FAQ,5122,6261,5692,02-01-2026
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1031,1260,1146,03-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1116,1364,1240,04-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1130,1381,1256,05-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1161,1419,1290,06-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1080,1320,1200,07-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1066,1303,1185,08-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1224,1496,1360,09-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1100,1345,1223,10-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1093,1336,1215,11-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1129,1380,1255,12-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1152,1408,1280,13-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1158,1415,1287,14-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1194,1459,1327,15-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1170,1430,1300,16-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1144,1399,1272,17-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1073,1312,1193,18-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1108,1355,1232,19-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1224,1496,1360,20-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1201,1468,1335,21-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1034,1263,1149,22-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1017,1243,1130,23-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1197,1464,1331,24-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1196,1461,1329,25-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1194,1459,1327,26-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1070,1307,1189,27-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1016,1241,1129,28-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1161,1420,1291,29-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1123,1372,1248,30-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1107,1353,1230,31-12-2025
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1219,1490,1355,01-01-2026
+Karnataka,Bangalore,Kolar,Tomato,Local,FAQ,1182,1445,1314,02-01-2026
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1661,2030,1846,03-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1539,1882,1711,04-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1420,1735,1578,05-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1451,1774,1613,06-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1586,1939,1763,07-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1693,2070,1882,08-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1424,1741,1583,09-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1647,2013,1830,10-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1666,2037,1852,11-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1490,1821,1656,12-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1536,1877,1707,13-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1667,2038,1853,14-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1499,1832,1666,15-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1477,1806,1642,16-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1564,1911,1738,17-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1728,2112,1920,18-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1674,2046,1860,19-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1431,1749,1590,20-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1602,1958,1780,21-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1426,1743,1585,22-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1705,2084,1895,23-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1573,1922,1748,24-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1684,2059,1872,25-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1482,1811,1647,26-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1639,2004,1822,27-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1573,1922,1748,28-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1585,1938,1762,29-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1477,1806,1642,30-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1450,1773,1612,31-12-2025
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1696,2073,1885,01-01-2026
+Karnataka,Bangalore,Binny Mill,Potato,Jyoti,FAQ,1433,1752,1593,02-01-2026
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1476,1804,1640,03-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1332,1628,1480,04-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1481,1810,1646,05-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1495,1828,1662,06-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1500,1833,1667,07-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1377,1683,1530,08-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1377,1683,1530,09-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1572,1921,1747,10-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1492,1823,1658,11-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1435,1754,1595,12-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1486,1817,1652,13-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1382,1689,1536,14-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1339,1636,1488,15-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1543,1886,1715,16-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1427,1744,1586,17-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1538,1879,1709,18-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1356,1657,1507,19-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1493,1824,1659,20-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1440,1761,1601,21-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1314,1606,1460,22-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1355,1656,1506,23-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1514,1851,1683,24-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1359,1661,1510,25-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1451,1774,1613,26-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1565,1912,1739,27-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1539,1881,1710,28-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1347,1646,1497,29-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1548,1893,1721,30-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1372,1677,1525,31-12-2025
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1355,1656,1506,01-01-2026
+Uttar Pradesh,Lucknow,Lucknow,Potato,Desi,FAQ,1445,1766,1606,02-01-2026
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1522,1861,1692,03-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1369,1674,1522,04-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1349,1648,1499,05-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1263,1544,1404,06-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1371,1676,1524,07-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1399,1710,1555,08-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1369,1674,1522,09-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1529,1868,1699,10-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1339,1636,1488,11-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1518,1855,1687,12-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1517,1854,1686,13-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1444,1765,1605,14-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1500,1833,1667,15-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1500,1833,1667,16-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1287,1574,1431,17-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1516,1853,1685,18-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1395,1705,1550,19-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1495,1828,1662,20-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1440,1760,1600,21-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1436,1755,1596,22-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1409,1722,1566,23-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1419,1734,1577,24-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1358,1659,1509,25-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1395,1705,1550,26-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1360,1663,1512,27-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1414,1729,1572,28-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1459,1784,1622,29-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1258,1537,1398,30-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1350,1650,1500,31-12-2025
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1367,1670,1519,01-01-2026
+Uttar Pradesh,Agra,Agra,Potato,Desi,FAQ,1515,1852,1684,02-01-2026
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5644,6899,6272,03-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5097,6230,5664,04-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5862,7165,6514,05-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5636,6889,6263,06-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5698,6965,6332,07-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5016,6131,5574,08-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5627,6878,6253,09-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5118,6255,5687,10-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5223,6384,5804,11-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5486,6705,6096,12-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5823,7117,6470,13-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5747,7024,6386,14-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5197,6352,5775,15-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,4882,5967,5425,16-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,4941,6040,5491,17-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5825,7120,6473,18-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5703,6970,6337,19-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5118,6255,5687,20-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,4915,6008,5462,21-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5327,6510,5919,22-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5462,6675,6069,23-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5311,6492,5902,24-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5437,6646,6042,25-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5884,7191,6538,26-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5383,6580,5982,27-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5045,6166,5606,28-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5512,6737,6125,29-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,4984,6091,5538,30-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5694,6959,6327,31-12-2025
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,5359,6550,5955,01-01-2026
+Gujarat,Ahmedabad,Ahmedabad,Cotton,Shankar-6,FAQ,4973,6078,5526,02-01-2026
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1667,2038,1853,03-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1694,2071,1883,04-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1802,2203,2003,05-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1935,2365,2150,06-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1634,1997,1816,07-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1820,2225,2023,08-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1638,2002,1820,09-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1702,2081,1892,10-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1958,2393,2176,11-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1794,2193,1994,12-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1695,2072,1884,13-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1732,2117,1925,14-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1737,2124,1931,15-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1671,2042,1857,16-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1966,2403,2185,17-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1892,2313,2103,18-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1895,2316,2106,19-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1739,2126,1933,20-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1838,2247,2043,21-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1620,1981,1801,22-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1651,2018,1835,23-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1788,2185,1987,24-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1882,2301,2092,25-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1771,2164,1968,26-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1672,2043,1858,27-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1743,2130,1937,28-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1851,2262,2057,29-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1666,2037,1852,30-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1862,2275,2069,31-12-2025
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1823,2228,2026,01-01-2026
+Gujarat,Surat,Surat,Banana,Robusta,FAQ,1764,2156,1960,02-01-2026
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3752,4585,4169,03-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3297,4030,3664,04-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3774,4613,4194,05-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3356,4101,3729,06-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3860,4717,4289,07-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3507,4286,3897,08-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3270,3997,3634,09-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3461,4230,3846,10-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3700,4523,4112,11-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3505,4284,3895,12-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3447,4214,3831,13-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3615,4418,4017,14-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3447,4213,3830,15-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3328,4067,3698,16-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3569,4362,3966,17-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3474,4247,3861,18-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3514,4295,3905,19-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3626,4431,4029,20-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3443,4208,3826,21-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3431,4194,3813,22-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3576,4371,3974,23-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3778,4617,4198,24-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3617,4420,4019,25-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3764,4601,4183,26-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3572,4365,3969,27-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3517,4298,3908,28-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3748,4581,4165,29-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3852,4709,4281,30-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3264,3989,3627,31-12-2025
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3745,4578,4162,01-01-2026
+Madhya Pradesh,Indore,Indore,Soyabean,Yellow,FAQ,3529,4314,3922,02-01-2026
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2048,2503,2276,03-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1882,2301,2092,04-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1863,2277,2070,05-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1976,2415,2196,06-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1899,2321,2110,07-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2244,2743,2494,08-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2111,2580,2346,09-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1921,2348,2135,10-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1893,2314,2104,11-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2202,2691,2447,12-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2037,2490,2264,13-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2009,2456,2233,14-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1950,2383,2167,15-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2009,2456,2233,16-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2248,2747,2498,17-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2235,2732,2484,18-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2220,2713,2467,19-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2208,2699,2454,20-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1989,2432,2211,21-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2215,2708,2462,22-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1956,2391,2174,23-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2052,2509,2281,24-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2031,2482,2257,25-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1869,2284,2077,26-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2016,2465,2241,27-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2105,2572,2339,28-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2186,2671,2429,29-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1915,2340,2128,30-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2261,2764,2513,31-12-2025
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,2025,2476,2251,01-01-2026
+Madhya Pradesh,Bhopal,Bhopal,Wheat,Lokwan,FAQ,1979,2418,2199,02-01-2026
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4145,5066,4606,03-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3737,4568,4153,04-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3411,4169,3790,05-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3604,4405,4005,06-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4002,4891,4447,07-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3522,4305,3914,08-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3498,4275,3887,09-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3606,4407,4007,10-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3584,4381,3983,11-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3690,4510,4100,12-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4152,5075,4614,13-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4141,5062,4602,14-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3782,4623,4203,15-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3430,4193,3812,16-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3903,4770,4337,17-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3527,4310,3919,18-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3823,4672,4248,19-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3942,4819,4381,20-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3807,4654,4231,21-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3682,4501,4092,22-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3978,4862,4420,23-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4118,5033,4576,24-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3588,4385,3987,25-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3825,4676,4251,26-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3788,4629,4209,27-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3906,4775,4341,28-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4086,4995,4541,29-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3637,4446,4042,30-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3814,4661,4238,31-12-2025
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,4067,4970,4519,01-01-2026
+Tamil Nadu,Chennai,Chennai,Rice,Ponni,FAQ,3748,4581,4165,02-01-2026
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2762,3375,3069,03-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2421,2959,2690,04-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2664,3256,2960,05-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2458,3005,2732,06-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2520,3081,2801,07-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2436,2977,2707,08-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2614,3195,2905,09-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2302,2813,2558,10-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2523,3084,2804,11-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2403,2938,2671,12-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2575,3148,2862,13-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2348,2869,2609,14-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2620,3203,2912,15-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2293,2802,2548,16-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2362,2887,2625,17-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2655,3246,2951,18-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2410,2945,2678,19-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2662,3253,2958,20-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2456,3001,2729,21-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2600,3177,2889,22-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2694,3293,2994,23-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2596,3173,2885,24-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2709,3312,3011,25-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2679,3274,2977,26-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2682,3279,2981,27-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2410,2945,2678,28-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2759,3372,3066,29-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2583,3157,2870,30-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2295,2805,2550,31-12-2025
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2672,3265,2969,01-01-2026
+Tamil Nadu,Coimbatore,Coimbatore,Coconut,Large,FAQ,2493,3048,2771,02-01-2026
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2589,3164,2877,03-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2809,3434,3122,04-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2619,3201,2910,05-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2672,3265,2969,06-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2964,3623,3294,07-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2958,3615,3287,08-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2854,3489,3172,09-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2968,3627,3298,10-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2718,3322,3020,11-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2511,3070,2791,12-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2735,3342,3039,13-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2481,3032,2757,14-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2781,3400,3091,15-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2577,3150,2864,16-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2584,3159,2872,17-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2745,3355,3050,18-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2664,3256,2960,19-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2566,3137,2852,20-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2466,3014,2740,21-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2763,3378,3071,22-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2867,3504,3186,23-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2963,3622,3293,24-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2514,3073,2794,25-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2762,3375,3069,26-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2615,3196,2906,27-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2537,3100,2819,28-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2561,3130,2846,29-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2790,3411,3101,30-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2794,3415,3105,31-12-2025
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2789,3408,3099,01-01-2026
+West Bengal,Kolkata,Kolkata,Rice,Swarna,FAQ,2815,3440,3128,02-01-2026
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,3941,4816,4379,03-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4512,5515,5014,04-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,3977,4860,4419,05-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4031,4926,4479,06-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4732,5783,5258,07-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4322,5283,4803,08-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4000,4889,4445,09-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4601,5624,5113,10-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4671,5710,5191,11-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4202,5135,4669,12-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4585,5604,5095,13-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4181,5110,4646,14-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4260,5207,4734,15-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4297,5252,4775,16-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4024,4919,4472,17-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4378,5351,4865,18-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4324,5285,4805,19-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4339,5304,4822,20-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4014,4906,4460,21-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4050,4951,4501,22-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4615,5640,5128,23-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4346,5311,4829,24-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4355,5322,4839,25-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4214,5151,4683,26-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4327,5288,4808,27-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4605,5628,5117,28-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4355,5322,4839,29-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,3942,4818,4380,30-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4603,5626,5115,31-12-2025
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4246,5189,4718,01-01-2026
+West Bengal,Hooghly,Sheoraphuli,Jute,TD-5,FAQ,4238,5179,4709,02-01-2026
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5235,6398,5817,03-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5104,6239,5672,04-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4510,5513,5012,05-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4537,5546,5042,06-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4788,5853,5321,07-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4790,5855,5323,08-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5286,6461,5874,09-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4795,5860,5328,10-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5202,6359,5781,11-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4421,5404,4913,12-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5097,6230,5664,13-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4830,5903,5367,14-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4900,5989,5445,15-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4858,5937,5398,16-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5327,6510,5919,17-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4825,5898,5362,18-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5214,6373,5794,19-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4786,5849,5318,20-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4435,5420,4928,21-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4730,5781,5256,22-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4561,5574,5068,23-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4861,5942,5402,24-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4406,5385,4896,25-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5072,6199,5636,26-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4854,5933,5394,27-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5192,6345,5769,28-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5269,6440,5855,29-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4976,6081,5529,30-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,5266,6437,5852,31-12-2025
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4611,5636,5124,01-01-2026
+Rajasthan,Jaipur,Jaipur,Mustard,Black,FAQ,4537,5546,5042,02-01-2026
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3408,4165,3787,03-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3584,4381,3983,04-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3968,4849,4409,05-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3859,4716,4288,06-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3864,4723,4294,07-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3322,4061,3692,08-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3931,4804,4368,09-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3413,4172,3793,10-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3708,4533,4121,11-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3687,4506,4097,12-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3723,4550,4137,13-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3822,4671,4247,14-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3778,4617,4198,15-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3430,4193,3812,16-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3365,4112,3739,17-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3591,4389,3990,18-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3600,4401,4001,19-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3747,4580,4164,20-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3798,4643,4221,21-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3394,4149,3772,22-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3474,4246,3860,23-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,4046,4945,4496,24-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,4002,4891,4447,25-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3984,4869,4427,26-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3579,4374,3977,27-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3364,4111,3738,28-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3837,4690,4264,29-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3613,4416,4015,30-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3442,4207,3825,31-12-2025
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3815,4662,4239,01-01-2026
+Rajasthan,Kota,Kota,Soyabean,Yellow,FAQ,3984,4869,4427,02-01-2026
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12578,15373,13976,03-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12856,15713,14285,04-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13167,16094,14631,05-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13115,16030,14573,06-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13078,15985,14532,07-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12241,14962,13602,08-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13293,16248,14771,09-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11606,14185,12896,10-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11972,14633,13303,11-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,10977,13416,12197,12-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12677,15494,14086,13-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11867,14504,13186,14-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11661,14252,12957,15-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13002,15891,14447,16-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12013,14682,13348,17-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11213,13704,12459,18-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12978,15862,14420,19-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12098,14787,13443,20-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12902,15769,14336,21-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12730,15559,14145,22-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13360,16329,14845,23-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11171,13654,12413,24-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12605,15406,14006,25-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12335,15076,13706,26-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12983,15868,14426,27-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,12300,15033,13667,28-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13357,16326,14842,29-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,13209,16144,14677,30-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11147,13624,12386,31-12-2025
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,11378,13907,12643,01-01-2026
+Andhra Pradesh,Guntur,Guntur,Chilly,Red,FAQ,10960,13395,12178,02-01-2026
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3526,4309,3918,03-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3653,4464,4059,04-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3652,4463,4058,05-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3483,4258,3871,06-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3516,4297,3907,07-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3850,4705,4278,08-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3615,4418,4017,09-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3503,4282,3893,10-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3661,4474,4068,11-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3816,4664,4240,12-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3745,4578,4162,13-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3897,4763,4330,14-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3542,4329,3936,15-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3629,4436,4033,16-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4170,5097,4634,17-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4215,5152,4684,18-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3623,4428,4026,19-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3994,4881,4438,20-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3527,4310,3919,21-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4028,4923,4476,22-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3741,4572,4157,23-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3582,4378,3980,24-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3561,4352,3957,25-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3924,4797,4361,26-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3920,4791,4356,27-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3704,4527,4116,28-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4238,5179,4709,29-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4021,4914,4468,30-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,3605,4406,4006,31-12-2025
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4067,4970,4519,01-01-2026
+Andhra Pradesh,Vijayawada,Vijayawada,Rice,Sona Masuri,FAQ,4127,5044,4586,02-01-2026
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1888,2307,2098,03-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1782,2179,1981,04-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1703,2082,1893,05-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1899,2321,2110,06-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1675,2048,1862,07-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1777,2172,1975,08-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1668,2039,1854,09-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1781,2176,1979,10-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1793,2192,1993,11-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1647,2013,1830,12-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1771,2164,1968,13-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1642,2007,1825,14-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1917,2344,2131,15-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1806,2207,2007,16-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1882,2301,2092,17-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1879,2296,2088,18-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1946,2379,2163,19-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1732,2117,1925,20-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1655,2022,1839,21-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1629,1992,1811,22-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1904,2327,2116,23-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1799,2198,1999,24-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1662,2031,1847,25-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1675,2048,1862,26-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1737,2124,1931,27-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1901,2324,2113,28-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1715,2096,1906,29-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1696,2073,1885,30-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1864,2279,2072,31-12-2025
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1691,2066,1879,01-01-2026
+Telangana,Hyderabad,Bowenpally,Vegetables,Mix,FAQ,1700,2077,1889,02-01-2026
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5827,7122,6475,03-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5633,6884,6259,04-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5600,6845,6223,05-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,4987,6096,5542,06-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5842,7141,6492,07-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5037,6156,5597,08-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5339,6526,5933,09-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5517,6743,6130,10-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5872,7177,6525,11-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5405,6606,6006,12-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5516,6741,6129,13-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5925,7242,6584,14-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5647,6902,6275,15-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5646,6901,6274,16-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5726,6999,6363,17-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5688,6953,6321,18-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5421,6626,6024,19-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5548,6781,6165,20-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5659,6916,6288,21-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5243,6408,5826,22-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5226,6387,5807,23-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5791,7078,6435,24-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5315,6496,5906,25-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5354,6543,5949,26-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5981,7310,6646,27-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5123,6262,5693,28-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5765,7046,6406,29-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5084,6213,5649,30-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5098,6231,5665,31-12-2025
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5778,7063,6421,01-01-2026
+Telangana,Warangal,Warangal,Cotton,Bunny,FAQ,5100,6233,5667,02-01-2026
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2477,3028,2753,03-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2725,3330,3028,04-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2509,3066,2788,05-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2437,2978,2708,06-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2506,3063,2785,07-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2781,3400,3091,08-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2422,2961,2692,09-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2754,3366,3060,10-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2405,2940,2673,11-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2749,3360,3055,12-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2572,3143,2858,13-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2409,2944,2677,14-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2548,3115,2832,15-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2372,2899,2636,16-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2831,3460,3146,17-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2789,3408,3099,18-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2468,3017,2743,19-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2505,3062,2784,20-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2794,3415,3105,21-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2850,3483,3167,22-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2497,3052,2775,23-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2623,3206,2915,24-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2610,3190,2900,25-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2725,3330,3028,26-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2484,3037,2761,27-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2514,3073,2794,28-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2383,2912,2648,29-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2492,3045,2769,30-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2376,2904,2640,31-12-2025
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2861,3496,3179,01-01-2026
+Kerala,Kochi,Ernakulam,Coconut,Medium,FAQ,2439,2981,2710,02-01-2026
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,92448,112993,102721,03-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,85024,103919,94472,04-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,96733,118230,107482,05-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,82733,101118,91926,06-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,85412,104393,94903,07-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,88101,107679,97890,08-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,90804,110983,100894,09-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,86562,105799,96181,10-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,98950,120939,109945,11-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,95095,116228,105662,12-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,82161,100419,91290,13-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,98968,120961,109965,14-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,85261,104208,94735,15-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,88093,107670,97882,16-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,98739,120681,109710,17-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,92241,112740,102491,18-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,91345,111644,101495,19-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,87177,106550,96864,20-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,92103,112570,102337,21-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,97289,118908,108099,22-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,96905,118440,107673,23-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,96987,118540,107764,24-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,90501,110612,100557,25-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,89960,109951,99956,26-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,96053,117398,106726,27-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,94968,116073,105521,28-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,85662,104698,95180,29-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,93512,114293,103903,30-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,81668,99817,90743,31-12-2025
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,86570,105807,96189,01-01-2026
+Kerala,Idukki,Idukki,Cardamom,Small,FAQ,88878,108629,98754,02-01-2026
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2731,3338,3035,03-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2611,3192,2902,04-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2512,3071,2792,05-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2376,2904,2640,06-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2484,3036,2760,07-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2720,3325,3023,08-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2548,3115,2832,09-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2469,3018,2744,10-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2274,2779,2527,11-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2682,3278,2980,12-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2541,3106,2824,13-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2705,3306,3006,14-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2505,3062,2784,15-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2327,2844,2586,16-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2578,3151,2865,17-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2358,2882,2620,18-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2486,3039,2763,19-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2686,3283,2985,20-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2408,2943,2676,21-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2723,3328,3026,22-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2714,3317,3016,23-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2691,3290,2991,24-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2648,3237,2943,25-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2278,2785,2532,26-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2619,3202,2911,27-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2580,3153,2867,28-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2638,3225,2932,29-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2725,3330,3028,30-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2344,2865,2605,31-12-2025
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2412,2949,2681,01-01-2026
+Bihar,Patna,Patna,Rice,Munsuri,FAQ,2766,3381,3074,02-01-2026
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4214,5151,4683,03-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4942,6041,5492,04-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4446,5434,4940,05-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4480,5475,4978,06-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4938,6035,5487,07-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4918,6011,5465,08-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4249,5194,4722,09-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4364,5333,4849,10-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4329,5292,4811,11-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4589,5608,5099,12-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4291,5244,4768,13-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4717,5766,5242,14-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4070,4975,4523,15-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4739,5792,5266,16-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4248,5192,4720,17-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4909,6000,5455,18-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4267,5216,4742,19-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4664,5701,5183,20-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4727,5778,5253,21-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4654,5689,5172,22-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4127,5044,4586,23-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4432,5417,4925,24-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4624,5651,5138,25-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4228,5167,4698,26-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4758,5815,5287,27-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4448,5437,4943,28-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4887,5973,5430,29-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4789,5854,5322,30-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4887,5973,5430,31-12-2025
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4899,5988,5444,01-01-2026
+Bihar,Muzaffarpur,Muzaffarpur,Litchi,Shahi,FAQ,4675,5714,5195,02-01-2026
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4783,5846,5315,03-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4572,5588,5080,04-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4421,5404,4913,05-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4114,5029,4572,06-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4251,5196,4724,07-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4331,5294,4813,08-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4546,5557,5052,09-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4248,5192,4720,10-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4387,5362,4875,11-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4641,5672,5157,12-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4221,5159,4690,13-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4869,5951,5410,14-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4618,5645,5132,15-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4673,5712,5193,16-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4492,5491,4992,17-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4095,5006,4551,18-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4447,5436,4942,19-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4340,5305,4823,20-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4049,4948,4499,21-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4857,5936,5397,22-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4653,5687,5170,23-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4132,5051,4592,24-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4653,5688,5171,25-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4612,5637,5125,26-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4743,5798,5271,27-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4553,5564,5059,28-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4816,5887,5352,29-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4662,5698,5180,30-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4899,5988,5444,31-12-2025
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4840,5915,5378,01-01-2026
+Haryana,Karnal,Karnal,Rice,Basmati,FAQ,4671,5710,5191,02-01-2026

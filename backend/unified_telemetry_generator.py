@@ -3,6 +3,8 @@ import random
 import time
 from datetime import datetime
 import os
+from database import get_db_connection, init_db
+
 
 # ===============================
 # 🪴 Arduino Serial Setup
@@ -13,24 +15,17 @@ try:
 except ImportError:
     ARDUINO_AVAILABLE = False
 
+ARDUINO_AVAILABLE = False  # ⚠️ FORCED SIMULATION MODE by default
+
 ARDUINO_PORT = "COM07"  # ⚠️ Change this to your correct port (e.g., COM3, COM5)
 BAUD_RATE = 9600
 TIMEOUT = 2  # seconds
 
 # ===============================
-# 📝 Telemetry CSV Setup
+# 📝 Database Setup
 # ===============================
-telemetry_file = "telemetry.csv"
-file_exists = os.path.isfile(telemetry_file)
-
-if not file_exists:
-    with open(telemetry_file, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            "timestamp", "device_id", "N", "P", "K",
-            "temperature", "humidity", "ph", "rainfall", "soil_moisture"
-        ])
-    print("✅ Created telemetry.csv with headers")
+init_db()
+print("Initialized database connection")
 
 # ===============================
 # 🔌 Connect to Arduino (if available)
@@ -39,15 +34,15 @@ ser = None
 if ARDUINO_AVAILABLE:
     try:
         ser = serial.Serial(ARDUINO_PORT, BAUD_RATE, timeout=TIMEOUT)
-        print(f"✅ Arduino detected on port {ARDUINO_PORT}")
+        print(f"Arduino detected on port {ARDUINO_PORT}")
         time.sleep(2)  # wait for Arduino to reset
     except Exception as e:
-        print(f"❌ Error connecting to Arduino: {e}")
+        print(f"Error connecting to Arduino: {e}")
         ser = None
 else:
-    print("⚠️ PySerial not installed. Falling back to simulated data.")
+    print("PySerial not installed. Falling back to simulated data.")
 
-print("🌾 Telemetry generator started...")
+print("Telemetry generator started...")
 
 # ===============================
 # ♻️ Continuous Data Generation
@@ -68,10 +63,10 @@ while True:
                 humidity = float(hum_str)
                 soil_moisture = float(soil_str)
             except Exception as e:
-                print(f"⚠️ Invalid Arduino data received: '{line}' | Error: {e}")
+                print(f"Invalid Arduino data received: '{line}' | Error: {e}")
                 continue
         else:
-            print("⚠️ No data received from Arduino")
+            print("No data received from Arduino")
             continue
     else:
         # 🧪 Simulated data if Arduino is not available
@@ -89,20 +84,24 @@ while True:
     rainfall = round(random.uniform(0, 250), 1)
 
     # ---------------------------
-    # 🪄 Append to telemetry.csv
+    # 🪄 Append to Database
     # ---------------------------
-    with open(telemetry_file, "a", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow([
-            timestamp, device_id, N, P, K,
-            temperature, humidity, ph, rainfall, soil_moisture
-        ])
+    try:
+        conn = get_db_connection()
+        conn.execute('''
+            INSERT INTO telemetry_data (timestamp, device_id, N, P, K, temperature, humidity, ph, rainfall, soil_moisture)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (timestamp, device_id, N, P, K, temperature, humidity, ph, rainfall, soil_moisture))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error saving to database: {e}")
 
     # ---------------------------
     # 🖨️ Log to console
     # ---------------------------
     print(
-        f"✅ {timestamp} | Temp:{temperature}°C Hum:{humidity}% Soil:{soil_moisture}% "
+        f"{timestamp} | Temp:{temperature}C Hum:{humidity}% Soil:{soil_moisture}% "
         f"N:{N} P:{P} K:{K} pH:{ph} Rain:{rainfall}"
     )
 
