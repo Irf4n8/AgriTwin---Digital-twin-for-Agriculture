@@ -12,7 +12,7 @@ import json
 # ⚙️ CONFIGURATION
 # ==========================================
 # ⚠️ REPLACE WITH YOUR ACTUAL BOT TOKEN & CHAT ID
-BOT_TOKEN = "8185619661:AAFW7_v86iVn8CnKFp2rmFQ8vTdLykH4NcU" 
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "YOUR_BOT_TOKEN") 
 # You can find your Chat ID by messaging @userinfobot
 TARGET_CHAT_ID = "949374838" 
 

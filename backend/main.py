@@ -85,7 +85,7 @@ yield_model_columns = ["Crop_Rice", "State_Tamil Nadu", "Season_Kharif", "Area",
 # ===============================
 # OpenWeather API Config
 # ===============================
-OPENWEATHER_API_KEY = "0adc9129d6eb63b80d6b028c9bf0e2ba"
+OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY", "YOUR_OPENWEATHER_API_KEY")
 CITY = "Coimbatore"
 UNITS = "metric"
 
@@ -95,13 +95,13 @@ UNITS = "metric"
 # ===============================
 # Agmarknet API Config
 # ===============================
-MAGMARKNET_API_KEY = "579b464db66ec23bdd00000191f5f8af492a4dcd65c3879f5158a990"
+MAGMARKNET_API_KEY = os.environ.get("MAGMARKNET_API_KEY", "YOUR_MAGMARKNET_API_KEY")
 AGMARKNET_URL = "https://api.data.gov.in/resource/35985678-0d79-46b4-9ed6-6f13308a1d24"
 
 # ===============================
 # Agromonitoring API Config
 # ===============================
-AGRO_API_KEY = "a57ae2b18ddbdfee9f55be1f1625cbd4"
+AGRO_API_KEY = os.environ.get("AGRO_API_KEY", "YOUR_AGRO_API_KEY")
 
 # ===============================
 # Weather Forecast

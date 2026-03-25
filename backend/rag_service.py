@@ -14,7 +14,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(BASE_DIR)
 
 # Configure Gemini API Key
-os.environ["GOOGLE_API_KEY"] = "AIzaSyA2rWJ5U_l_dGGAntTL7OpV_6EynLFfVmA"
+os.environ["GOOGLE_API_KEY"] = os.environ.get("GOOGLE_API_KEY", "YOUR_GOOGLE_API_KEY")
 
 class RAGService:
     def __init__(self):
