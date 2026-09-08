@@ -1,13 +1,5 @@
 {
   "version": 2,
-  "rewrites": [
-    {
-      "source": "/(weather.*|irrigation-alert|recommendations|predict|latest.*|yield.*|soil.*|api/.*)",
-      "destination": "/api/index.py"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/frontend/$1"
-    }
-  ]
+  "buildCommand": null,
+  "outputDirectory": "frontend"
 }
