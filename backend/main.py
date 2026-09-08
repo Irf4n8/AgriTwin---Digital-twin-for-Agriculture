@@ -23,12 +23,18 @@ from decision_engine import DecisionEngine
 import asyncio
 from market_scraper import scrape_vegetable_prices
 
-try:
-    from rag_service import RAGService
-    rag_service_instance = RAGService()
-except Exception as e:
-    print(f"Could not load RAGService: {e}")
-    rag_service_instance = None
+rag_service_instance = None
+
+def get_rag_service():
+    global rag_service_instance
+    if rag_service_instance is None:
+        try:
+            from rag_service import RAGService
+            rag_service_instance = RAGService()
+        except Exception as e:
+            print(f"Could not load RAGService: {e}")
+            rag_service_instance = None
+    return rag_service_instance
 
 sim_engine = AgriSimulationEngine()
 yield_service_ai = YieldForecastingService()
@@ -1007,10 +1013,11 @@ class ChatRequest(BaseModel):
 
 @app.post("/api/chat")
 def chat_with_rag(request: ChatRequest):
-    if rag_service_instance is None:
+    service = get_rag_service()
+    if service is None:
         return {"reply": "Chatbot is temporarily disabled due to missing dependencies on this python version."}
     try:
-        reply = rag_service_instance.query(request.message)
+        reply = service.query(request.message)
         return {"reply": reply}
     except Exception as e:
         return {"reply": f"Sorry, the chatbot encountered an error: {str(e)}"}
