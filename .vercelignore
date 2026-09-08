@@ -1,0 +1,9 @@
+.git
+.venv
+venv
+__pycache__
+*.pyc
+telemetry.csv
+dataset/
+sketch_dec23a/
+error.log
