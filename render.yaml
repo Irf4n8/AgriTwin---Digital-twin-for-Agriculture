@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: agritwin-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: WEATHER_LATITUDE
+        value: "22.0"
+      - key: WEATHER_LONGITUDE
+        value: "79.0"
+
+  - type: web
+    name: agritwin-frontend
+    env: static
+    buildCommand: ""
+    staticPublishPath: ./frontend

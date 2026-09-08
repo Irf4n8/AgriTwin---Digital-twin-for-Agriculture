@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+venv/
+env/
+.venv/
+
+# Large models
+*.pkl
+*.h5
+*.pth
+backend/yield_model.pkl

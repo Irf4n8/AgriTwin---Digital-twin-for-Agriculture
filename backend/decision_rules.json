@@ -1,0 +1,40 @@
+{
+  "irrigation": [
+    {
+      "condition": "soil_moisture < 30",
+      "action": "Initiate Irrigation (Level 1)",
+      "reason": "Soil moisture is critical (Below 30%).",
+      "benefit": "Prevents immediate water stress.",
+      "risk": "High",
+      "priority": 1
+    },
+    {
+      "condition": "soil_moisture < 50 and temperature > 30",
+      "action": "Mist Spray / Light Irrigation",
+      "reason": "High temperature detected with moderate moisture.",
+      "benefit": "Mitigates heat stress.",
+      "risk": "Medium",
+      "priority": 2
+    }
+  ],
+  "fertilizer": [
+    {
+      "condition": "growth_stage == 'Vegetative' and days_since_last_fert > 14",
+      "action": "Apply Nitrogen Boost",
+      "reason": "Vegetative stage requires high nitrogen.",
+      "benefit": "Promotes leaf growth.",
+      "risk": "Low",
+      "priority": 3
+    }
+  ],
+  "alerts": [
+    {
+      "condition": "rainfall_forecast > 50",
+      "action": "Halt Irrigation",
+      "reason": "Heavy rain forecast (>50mm).",
+      "benefit": "Avoids waterlogging and saves water.",
+      "risk": "High",
+      "priority": 0
+    }
+  ]
+}

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script>
+    function callAjaxPostPre(url, body, callback, failureCallback)
+    {
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function(){
+            if (xmlhttp.readyState == 4)
+            {
+                if(xmlhttp.status == 200)
+                {
+                    var responseText = xmlhttp.responseText;
+                    if(responseText && responseText != "")
+                    {
+                        var jsonResponse = JSON.parse(xmlhttp.responseText);
+                        callback(jsonResponse);
+                    }
+                    else
+                    {
+                        callback(null);
+                    }
+                }
+                else
+                {
+                    if(typeof failureCallback == "function")
+                    {
+                        failureCallback();
+                    }
+                }
+            }
+        }
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader('Content-type', 'application/json');
+        xmlhttp.send(JSON.stringify(body));
+    }
+    
+    var originalError = console.error;
+    var originalLog = console.log;
+    var originalWarn = console.warn;
+    
+    console.error = function(){
+        originalError.apply(console, arguments);
+        var message = Array.prototype.slice.call(arguments).map(function(arg) {
+            if (arg === undefined) return 'undefined';
+            if (arg === null) return 'null';
+            if (arg instanceof Error) return arg.stack || arg.message;
+            if (typeof arg === 'object') {
+                try {
+                    var str = JSON.stringify(arg);
+                    return str === '{}' ? Object.prototype.toString.call(arg) : str;
+                } catch(e) {
+                    return Object.prototype.toString.call(arg);
+                }
+            }
+            return String(arg);
+        }).join(' ');
+        if (message.trim() && !message.includes('pagead2.googlesyndication.com/pagead/js/rum.js')) {
+            logToServer('error', 'Console error: ' + message);
+        }
+    };
+    
+    console.log = function(){
+        originalLog.apply(console, arguments);
+    };
+    
+    console.warn = function(){
+        originalWarn.apply(console, arguments);
+        var message = Array.prototype.slice.call(arguments).map(function(arg) {
+            return typeof arg === 'object' ? JSON.stringify(arg) : String(arg);
+        }).join(' ');
+        logToServer('warn', 'Console warn: ' + message);
+    };
+    
+    function postConsoleMessage(severity, message)
+    {
+        if (message.includes('Deprecation warning: allowHTML will default to false in a future release')
+            || message.includes('Highcharts warning: Consider including the "accessibility.js" module to make your chart more usable'))
+        {
+            return;
+        }
+    	setTimeout(function(){
+            callAjaxPostPre("/api/logger/write/message", {"severity":severity, "message": message}, function(){}, function() {});
+        }, 10);
+    }
+
+    function logToServer(severity, message){
+        var versionDetails = "";
+        var spanTag = document.getElementById("versionOfAppSpan");
+        if(spanTag){
+            versionDetails = "(" + spanTag.innerHTML + ")";
+        }
+        var fullMessage = versionDetails + " at " + window.location.href + " " + message;
+        postConsoleMessage(severity, fullMessage);
+    }
+    
+    window.onerror = function myErrorHandler(message, file, line, column, errorObj) {
+        if(line > 0)
+        {
+            var errorDetails = message;
+            if(errorObj && errorObj.stack) {
+                errorDetails = errorObj.stack;
+            } else if(file) {
+                errorDetails = message + " at " + file + ":" + line + ":" + column;
+            }
+            if(errorDetails.includes('pagead2.googlesyndication.com/pagead/js/rum.js')) {
+                return false;
+            }
+            var versionDetails = "";
+            var spanTag = document.getElementById("versionOfAppSpan");
+            if(spanTag)
+            {
+                versionDetails = "(" + spanTag.innerHTML + ")";
+            }
+            var messageString = "UI Console error" + versionDetails + " at " + window.location.href + " " + errorDetails;
+            postConsoleMessage("error", messageString);
+        }
+        return false;
+    }
+    function scriptFailure(resourceObj){
+        var sourceLink = resourceObj.src;
+        if(!sourceLink){
+            sourceLink = resourceObj.href;
+        }
+        var versionDetails = "";
+        if(document.getElementById("versionOfAppSpan"))
+        {
+            versionDetails = "(" + document.getElementById("versionOfAppSpan").innerHTML + ")";
+        }
+        postConsoleMessage("debug", "UI resource failed"+versionDetails+": " + sourceLink);
+    }
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1.0, width=device-width">
+<meta name="description" content="[[${metaDescription}]]">
+<title>Vegetable Market Price Today, History Price</title>
+<meta name="theme-color" content="#3f51b5">
+
+
+
+
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" 
+	integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" 
+	crossorigin="anonymous" onerror="scriptFailure(this)">
+
+
+<link href="/resource/css/style.css" rel="stylesheet" onerror="scriptFailure(this)"/>
+
+<link href="/resource/css/style_svg.css" media="print" onload="this.media='all'" rel="stylesheet" onerror="scriptFailure(this)"/>
+
+<noscript>
+	<link href="/resource/css/style_svg.css" rel="stylesheet"/>
+</noscript>
+
+
+<script async src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous" onerror="scriptFailure(this)"></script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" 
+    crossorigin="anonymous" c></script>
+
+<script async src="/resource/scripts/common.js" onerror="scriptFailure(this)" ></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8924733816021863"
+    crossorigin="anonymous" onload="window.adByGoogleIsEnabled = true;"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2RYZG7Y4NC" crossorigin="anonymous"></script>
+<script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-2RYZG7Y4NC'); </script>
+
+</head>
+<body>
+	<style>
+.nav-item-li {
+	white-space: nowrap;
+	text-decoration: underline;
+}
+
+.nav-item-li a {
+	display: inline-block;
+	padding: 10px 10px;
+}
+</style>
+<div class="col-sm-12 nopadding navigation-tabs-container-wrapper">
+	<div class="col-sm-12" data-nosnippet>
+		<nav
+			class="navbar navbar-expand-md navbar-dark bg-primary navigation-tabs-container"
+			style="padding: 5px 0px; overflow: visible;">
+			<div class="container-fluid col-md-12 col-xl-10 offset-xl-1">
+				<a href="/"
+					style="font-weight: bold; white-space: nowrap; text-decoration: underline;"
+					class="navbar-brand vegetableMarketLogo">Vegetable Market Price</a>
+				<button class="navbar-toggler" type="button"
+					data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+					aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation"
+					style="position: absolute; right: 0.3em; top: 5px; background-color: #3f51b59e;">
+					<span class="navbar-toggler-icon"
+						style="min-width: 10px; min-height: 10px; display: inline-block;"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav">
+						<!-- <li class="nav-item nav-item-li">
+                            <a class="nav-link" href="/market">Today Price</a>
+                        </li>
+                        <li class="nav-item nav-item-li">
+                            <a class="nav-link" href="/history">History Price</a>
+                        </li> -->
+						<li class="nav-item nav-item-li"><a class="nav-link"
+							href="/store/list">Store List</a></li>
+						<li class="nav-item nav-item-li"><a class="nav-link"
+							href="/otherList">Other List</a></li>
+						<li class="nav-item nav-item-li"><a class="nav-link"
+							href="/user/login">Login</a></li>
+						
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+
+	<div class="row main-content-wrap" style="margin: 0px;">
+	    <div class="col-lg-2 nopadding" style="text-align: left;overflow: hidden;">
+	    </div>
+	    <div class="col-sm-12 col-md-9 col-lg-8 main-content nopadding">
+		    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/LeaVerou/awesomplete@1.1.5/awesomplete.css"
+	media="print" onload="this.media='all'"
+	crossorigin="anonymous" onerror="scriptFailure(this)" />
+
+<noscript>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/LeaVerou/awesomplete@1.1.5/awesomplete.css"
+		crossorigin="anonymous" />
+</noscript>
+
+<script src="/resource/scripts/index.js" onerror="scriptFailure(this)" defer></script>
+
+<script src="https://cdn.jsdelivr.net/gh/LeaVerou/awesomplete@1.1.5/awesomplete.min.js" 
+	crossorigin="anonymous" onerror="scriptFailure(this)" defer></script>
+
+<style>
+    .awesomplete {
+        width: 100%;
+    }
+</style>
+<div class="row" style="margin:0px;">
+   	<div class="row px-lg-2 px-md-1 px-0" style="margin:0px;">
+   		<div class="col-sm-12" style="padding: 10px;">
+            <input id="header-search-input" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style="min-width: 50px;width: 100%;"/>
+   		</div>
+	</div>
+   	<div class="row px-lg-2 px-md-1 px-0" style="margin:4px 0px 0px 0px;">
+	  <div class="content-header-div" style="text-align: center;">
+        <a href="https://play.google.com/store/apps/details?id=com.market.price&pcampaignid=vmp_site" target="_blank">
+        	Android app available now</a>
+        &nbsp;
+        <a href="https://play.google.com/store/apps/details?id=com.market.price&pcampaignid=vmp_site" target="_blank">
+        	<img src="/resource/images/site/get_it_on_google_play.png" style="width:100px;height:30px;"/>
+        </a>
+      </div>
+	</div>
+   	<div class="row px-lg-2 px-md-1 px-0" id="favoritesBar" style="display:none;margin:4px 0px 0px 0px;">
+	  <div class="content-header-div">
+        Favorites
+      </div>
+      <div id="favoritesBarContent" style="padding: 0px;">
+      </div>
+	</div>
+   	<div class="row" style="margin:4px 0px 0px 0px;padding: 0px;">
+       <div class="col-md-6 px-lg-2 px-md-1 px-0">
+           <div class="col-sm-12 nopadding">
+               <div class="col-sm-12 content-header-div">
+           	    	<h3 style="display: inline;font-size: 1em;">Vegetable today price</h3>
+               </div>
+               <div class="col-sm-12" style="padding: 0px;margin-top: 5px;">
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/koyambedu/today">
+                          Koyambedu market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/tamilnadu/today">
+                          TamilNadu market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/coimbatore/today">
+                          Coimbatore market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/madurai/today">
+                          Madurai market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/tiruchirappalli/today">
+                          Tiruchirappalli market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/andhrapradesh/today">
+                          Andhra Pradesh market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/bangalore/today">
+                          Bangalore market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/telangana/today">
+                          Telangana market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/salem/today">
+                          Salem market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/kerala/today">
+                          Kerala market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/chennai/today">
+                          Chennai market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/tirunelveli/today">
+                          Tirunelveli market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/tirupur/today">
+                          Tirupur market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/erode/today">
+                          Erode market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/dindigul/today">
+                          Dindigul market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/visakhapatnam/today">
+                          Visakhapatnam market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/hosur/today">
+                          Hosur market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/dharmapuri/today">
+                          Dharmapuri market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/theni/today">
+                          Theni market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/ahmedabad/today">
+                          Ahmedabad market price
+                      </a>
+                   </div>
+               	   <div class="market-link-div">
+                      <a class="market-link" href="/market/nagercoil/today">
+                          Nagercoil market price
+                      </a>
+                   </div>
+               	   
+               	   
+               	   
+               	   
+               	   
+               	   
+               	   
+               	   
+               	   
+                  <div class="market-link-div" style="text-align: center;">
+                     <button class="find-more-button" onclick="openLink('/market')">
+                         Find more
+                     </button>
+                  </div>
+               </div>
+           </div>
+      	</div>
+       <div class="col-md-6 px-lg-2 px-md-1 px-0">
+           <div class="col-sm-12 nopadding">
+               <div class="col-sm-12 content-header-div">
+               	<h3 style="display: inline;font-size: 1em;">Vegetables history price</h3>
+               </div>
+               <div class="col-sm-12" style="padding: 0px;margin-top: 5px;">
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/koyambedu/history">
+                          Koyambedu market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/tamilnadu/history">
+                          TamilNadu market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/madurai/history">
+                          Madurai market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/bangalore/history">
+                          Bangalore market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/andhrapradesh/history">
+                          Andhra Pradesh market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/tiruchirappalli/history">
+                          Tiruchirappalli market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/telangana/history">
+                          Telangana market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/coimbatore/history">
+                          Coimbatore market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/salem/history">
+                          Salem market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/tirupur/history">
+                          Tirupur market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/chennai/history">
+                          Chennai market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/erode/history">
+                          Erode market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/maharashtra/history">
+                          Maharashtra market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/nagercoil/history">
+                          Nagercoil market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/dharmapuri/history">
+                          Dharmapuri market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/kerala/history">
+                          Kerala market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/theni/history">
+                          Theni market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/delhi/history">
+                          Delhi market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/hosur/history">
+                          Hosur market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/dindigul/history">
+                          Dindigul market history price
+                      </a>
+                    </div>
+               	<div class="market-link-div">
+                      <a class="market-link" href="/market/udagamandalam/history">
+                          Udagamandalam (Ooty) market history price
+                      </a>
+                    </div>
+               	
+               	
+               	
+               	
+               	
+               	
+               	
+               	
+               	
+                   <div class="market-link-div" style="text-align: center;">
+                     <button class="find-more-button" onclick="openLink('/history')">
+                         Find more
+                     </button>
+                   </div>
+               </div>
+          	</div>
+   		</div>
+	</div>
+   	<div class="row px-lg-2 px-md-1 px-0" style="margin:10px 0px 0px 0px;">
+   		<div class="col-sm-12 px-md-5 go-to-page-container" style="padding: 4px 0px;">
+            <div style="display: inline-block;padding: 3px 5px;">
+             <label style="width:50px;">Today:</label>
+             <select id="gotoPageTypeSelector" onchange="gotoPageTypeChanged()" class="form-control form-control-sm" style="width: 130px;display: inline-block;">
+             	<option value="market" selected>Vegetable</option>
+             	<option value="fruits">Fruits</option>
+             	<option value="nonveg">NonVeg</option>
+             </select>
+            </div>
+            <div style="display: inline-block;padding: 3px 5px;">
+             <label style="width:50px;">State:</label>
+             <select id="gotoStateSelector" onchange="gotoStateChanged()" class="form-control form-control-sm" style="width: 180px;display: inline-block;">
+                 <option value=''>Select..</option>
+                 <option value="andaman">
+                 	Andaman and Nicobar
+                 </option>
+                 <option value="andhrapradesh">
+                 	Andhra Pradesh
+                 </option>
+                 <option value="arunachalpradesh">
+                 	Arunachal Pradesh
+                 </option>
+                 <option value="assam">
+                 	Assam
+                 </option>
+                 <option value="bihar">
+                 	Bihar
+                 </option>
+                 <option value="chandigarh">
+                 	Chandigarh
+                 </option>
+                 <option value="chhattisgarh">
+                 	Chhattisgarh
+                 </option>
+                 <option value="dadranagar">
+                 	Dadra and Nagar
+                 </option>
+                 <option value="damandiu">
+                 	Daman and Diu
+                 </option>
+                 <option value="delhi">
+                 	Delhi
+                 </option>
+                 <option value="goa">
+                 	Goa
+                 </option>
+                 <option value="gujarat">
+                 	Gujarat
+                 </option>
+                 <option value="haryana">
+                 	Haryana
+                 </option>
+                 <option value="himachalpradesh">
+                 	Himachal Pradesh
+                 </option>
+                 <option value="jammukashmir">
+                 	Jammu and Kashmir
+                 </option>
+                 <option value="jharkhand">
+                 	Jharkhand
+                 </option>
+                 <option value="karnataka">
+                 	Karnataka
+                 </option>
+                 <option value="kerala">
+                 	Kerala
+                 </option>
+                 <option value="lakshadweep">
+                 	Lakshadweep
+                 </option>
+                 <option value="madhyapradesh">
+                 	Madhya Pradesh
+                 </option>
+                 <option value="maharashtra">
+                 	Maharashtra
+                 </option>
+                 <option value="manipur">
+                 	Manipur
+                 </option>
+                 <option value="meghalaya">
+                 	Meghalaya
+                 </option>
+                 <option value="mizoram">
+                 	Mizoram
+                 </option>
+                 <option value="nagaland">
+                 	Nagaland
+                 </option>
+                 <option value="odisha">
+                 	Odisha
+                 </option>
+                 <option value="puducherry">
+                 	Puducherry
+                 </option>
+                 <option value="punjab">
+                 	Punjab
+                 </option>
+                 <option value="rajasthan">
+                 	Rajasthan
+                 </option>
+                 <option value="sikkim">
+                 	Sikkim
+                 </option>
+                 <option value="tamilnadu">
+                 	TamilNadu
+                 </option>
+                 <option value="telangana">
+                 	Telangana
+                 </option>
+                 <option value="tripura">
+                 	Tripura
+                 </option>
+                 <option value="uttarakhand">
+                 	Uttarakhand
+                 </option>
+                 <option value="uttarpradesh">
+                 	Uttar Pradesh
+                 </option>
+                 <option value="westbengal">
+                 	West Bengal
+                 </option>
+             </select>
+            </div>
+            <div style="display: none;padding: 3px 5px;" id="gotoCitySelectorContainer">
+             <label style="width:50px;">City:</label>
+             <select id="gotoCitySelector" style="width: 180px;display: inline-block;" class="form-control form-control-sm">
+             	<option value=''>Select..</option>
+             </select>
+            </div>
+            <div style="display: inline-block;padding: 3px 5px;">
+            	<button type="button" class="btn btn-primary btn-sm" onclick="gotoButtonSubmit()">Go to page</button>
+            </div>
+        </div>
+	</div>
+	<div class="row px-0" style="margin:20px 0px 0px 0px;">
+    	
+<div class="row px-0">
+	<div class="col-sm-6 px-md-5 price-rise-container">
+		<div>
+			<div class="price-rise-container-header"
+				style="padding: 10px; text-align: center; font-size: larger; font-weight: bold;">
+				Today Price rise <span class="toolTipOverInfo"
+					data-bs-toggle="tooltip" data-bs-placement="top"
+					title="Today price rise calculated from last 30 days. Checkout about page for more information.">
+					<span class="svg-file-icon svg-file-info-circle-fill"
+					style="width: 18px; height: 18px;"></span>
+				</span>
+			</div>
+			<div class="price-rise-container-body" style="padding: 10px;">
+				<table style="text-align: center">
+					<tbody>
+						<tr>
+							<td style="padding: 3px 5px;">
+								Garlic</td>
+							<td style="padding: 3px 5px;">
+								12.18 <span
+								class="svg-file-icon svg-file-caret-up-fill-green"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+							<td style="padding: 3px 5px;">
+								Amla</td>
+							<td style="padding: 3px 5px;">
+								3.95 <span
+								class="svg-file-icon svg-file-caret-up-fill-green"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6 px-md-5 price-fall-container">
+		<div>
+			<div class="price-fall-container-header"
+				style="padding: 10px; text-align: center; font-size: larger; font-weight: bold;">
+				Today Price fall <span class="toolTipOverInfo"
+					data-bs-toggle="tooltip" data-bs-placement="top"
+					title="Today price fall calculated from last 30 days. Checkout about page for more information.">
+					<span class="svg-file-icon svg-file-info-circle-fill"
+					style="width: 18px; height: 18px;"></span>
+				</span>
+			</div>
+			<div class="price-fall-container-body" style="padding: 10px;">
+				<table style="text-align: center">
+					<tbody>
+						<tr>
+
+							<td style="padding: 3px 5px;">Onion Small
+							</td>
+							<td style="padding: 3px 5px;">
+								6.50 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Drumsticks
+							</td>
+							<td style="padding: 3px 5px;">
+								6.28 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Onion Big
+							</td>
+							<td style="padding: 3px 5px;">
+								4.65 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Snake Gourd
+							</td>
+							<td style="padding: 3px 5px;">
+								2.48 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">French Beans
+							</td>
+							<td style="padding: 3px 5px;">
+								2.43 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Cabbage
+							</td>
+							<td style="padding: 3px 5px;">
+								2.40 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Bottle Gourd
+							</td>
+							<td style="padding: 3px 5px;">
+								2.04 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Brinjal (Big)
+							</td>
+							<td style="padding: 3px 5px;">
+								1.78 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Tomato
+							</td>
+							<td style="padding: 3px 5px;">
+								1.28 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+						<tr>
+
+							<td style="padding: 3px 5px;">Elephant Yam
+							</td>
+							<td style="padding: 3px 5px;">
+								1.25 <span
+								class="svg-file-icon svg-file-caret-down-fill-red"
+								style="width: 20px; height: 20px; vertical-align: text-bottom;"></span>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+    </div>
+   	<div class="row px-lg-2 px-md-1 px-0" style="margin:4px 0px 0px 0px;">
+	  <div class="content-header-div" style="text-align: center;">
+        <a href="/account/pages">My Pages</a>
+      </div>
+	</div>
+</div>
+
+	   </div>
+	   <div class="col-sm-12 col-md-3 col-lg-2 nopadding" style="text-align: right;overflow: hidden;">
+	    </div>
+	</div>
+	<div class="col-sm-12" data-nosnippet>
+	<div class="row common-footer-page-container"
+		style="margin: 0px; overflow: hidden;">
+		<div class="col-sm-12" style="padding: 1px 10px 4px 10px;">
+			<span id="copywriteSpanTagFooter"
+				style="margin: 0px 5px; white-space: nowrap;"> Copyright
+				@2025 </span> <a
+				style="text-decoration: underline; cursor: pointer; border-radius: 5px; white-space: nowrap; color: white;"
+				href="https://twitter.com/messages/compose?recipient_id=1440676520226275344&ref_src=twsrc%5Etfw"
+				target="_blank">Report an issue</a> <span style="margin: 0px 10px;"
+				id="versionOfAppSpan">6.0.9</span> <a
+				style="text-decoration: underline; cursor: pointer; border-radius: 5px; white-space: nowrap; color: white;"
+				href="/about">About</a>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
