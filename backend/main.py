@@ -1,3 +1,10 @@
+import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
+
 from fastapi import FastAPI, HTTPException, Query, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -5,7 +12,6 @@ from fastapi.middleware.cors import CORSMiddleware
 import base64
 import pandas as pd
 # import joblib
-import os
 import numpy as np
 import requests
 import uvicorn
